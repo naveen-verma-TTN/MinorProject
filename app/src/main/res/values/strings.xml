@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">CloudGallery</string>
+    <string name="app_name">Cloud Gallery</string>
+
+    <string name="forgotPassword_infoBox">If you forgot your password, we can send you a link to create a new password and get back into your account</string>
+    <string name="login_title">LogIn</string>
+    <string name="register_title">Register</string>
+    <string name="forgot_password_title">Forgot password?</string>
+    <string name="email_address_editText">Email Address</string>
+    <string name="submit">Submit</string>
+    <string name="password_editText">Password</string>
+    <string name="signin">SignIn</string>
+    <string name="user_name_editText">User Name</string>
+    <string name="signup">SignUp</string>
 </resources>
