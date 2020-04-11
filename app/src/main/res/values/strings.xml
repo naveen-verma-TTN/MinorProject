@@ -11,4 +11,26 @@
     <string name="signin">SignIn</string>
     <string name="user_name_editText">User Name</string>
     <string name="signup">SignUp</string>
+    <string name="empty_username">User Name shouldn\'t be empty</string>
+    <string name="empty_email">Email Address shouldn\'t be empty</string>
+    <string name="invaild_email">Invalid email. Please enter valid email.</string>
+    <string name="invaild_password">
+                  # Must have at least 6 characters\n
+                  # Must have a digit.\n
+                  # Lower case letter must occur at least once.\n
+                  # An upper case letter must occur at least once.\n
+                  # A special character must occur at least once.\n
+                  # No whitespace.\n
+    </string>
+    <string name="empty_password">Password shouldn\'t be empty</string>
+    <string name="forgotPassword_progressBar">Checking information...</string>
+    <string name="error_verification_mail">Failed to send verification email.</string>
+    <string name="success_verification_mail">\"Verification email sent to \"</string>
+    <string name="error_register_user">createUserWithEmail:failure</string>
+    <string name="success_register_user">createUserWithEmail:success</string>
+    <string name="success_update_profile">User profile updated.</string>
+    <string name="progress_registration">Registering User...</string>
+    <string name="user_email_failure">UserWithEmail:failure</string>
+    <string name="user_email_success">signInWithEmail:success</string>
+    <string name="progress_login">Logging In...</string>
 </resources>

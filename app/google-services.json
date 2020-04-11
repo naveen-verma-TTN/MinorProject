@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "328954741897",
+    "firebase_url": "https://cloud-gallery-minor-project.firebaseio.com",
+    "project_id": "cloud-gallery-minor-project",
+    "storage_bucket": "cloud-gallery-minor-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328954741897:android:afe2caac9ff1841e0e3258",
+        "android_client_info": {
+          "package_name": "com.minorproject.cloudgallery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "328954741897-14d42bpshqcp3b3ke49skqr6c56cenm1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwpcfKDbcBmBYYZSW2nhrkQJX237-P50k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "328954741897-14d42bpshqcp3b3ke49skqr6c56cenm1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

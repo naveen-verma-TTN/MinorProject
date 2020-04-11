@@ -36,6 +36,13 @@
             app:exitAnim="@anim/return_exit"
             app:popEnterAnim="@anim/pop_enter"
             app:popExitAnim="@anim/pop_exit"/>
+        <action
+            android:id="@+id/action_registration_to_forgetPassword"
+            app:destination="@id/forgetPassword"
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit"/>
     </fragment>
     <fragment
         android:id="@+id/forgetPassword"

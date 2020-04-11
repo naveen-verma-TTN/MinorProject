@@ -6,5 +6,6 @@
 
     <color name="white">#FFFFFF</color>
     <color name="textColor">#E44B5A65</color>
+    <color name="hintColor">#6B5A5A</color>
     <color name="textColor_highlighted">#000000</color>
 </resources>
