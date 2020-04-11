@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
             else{
                 startActivity(Intent(this, HomePage::class.java))
                 overridePendingTransition(R.anim.enter, R.anim.exit)
+                finish()
             }
         }, SPLASH_TIME_OUT)
     }
