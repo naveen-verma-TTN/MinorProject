@@ -14,9 +14,6 @@ class MainActivity : AppCompatActivity() {
     private val SPLASH_TIME_OUT: Long = 1000
     private lateinit var mAuth: FirebaseAuth
 
-    override fun onStart() {
-        super.onStart()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +36,6 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, HomePage::class.java))
                 overridePendingTransition(R.anim.enter, R.anim.exit)
             }
-
         }, SPLASH_TIME_OUT)
     }
 }
