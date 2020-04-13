@@ -1,4 +1,4 @@
-package com.minorproject.cloudgallery
+package com.minorproject.cloudgallery.screens.profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-class MainFragment : Fragment() {
+import com.minorproject.cloudgallery.R
+
+class EditDetails : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_auth_main_screen, container, false)
+        return inflater.inflate(R.layout.fragment_edit_details, container, false)
     }
+
 }

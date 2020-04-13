@@ -20,11 +20,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.components.OnSwipeTouchListener
 import com.minorproject.cloudgallery.components.SwipeTouchListener
-import com.minorproject.cloudgallery.screens.HomePage
-import kotlinx.android.synthetic.main.fragment_login_screen.*
-import kotlinx.android.synthetic.main.fragment_login_screen.password_EditText
-import kotlinx.android.synthetic.main.fragment_login_screen.password_toggle
-import kotlinx.android.synthetic.main.fragment_login_screen.register_title
+import com.minorproject.cloudgallery.screens.MainPage
+import kotlinx.android.synthetic.main.fragment_auth_login_screen.*
+import kotlinx.android.synthetic.main.fragment_auth_login_screen.password_EditText
+import kotlinx.android.synthetic.main.fragment_auth_login_screen.password_toggle
+import kotlinx.android.synthetic.main.fragment_auth_login_screen.register_title
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -44,7 +44,7 @@ class LoginScreen : Fragment(), View.OnClickListener, SwipeTouchListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_login_screen, container, false)
+        return inflater.inflate(R.layout.fragment_auth_login_screen, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -138,7 +138,7 @@ class LoginScreen : Fragment(), View.OnClickListener, SwipeTouchListener {
      * function to updateUI
      */
     private fun updateUI() {
-        val intent = Intent(this.context, HomePage::class.java)
+        val intent = Intent(this.context, MainPage::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
         activity?.finish()

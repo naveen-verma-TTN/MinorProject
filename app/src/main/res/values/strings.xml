@@ -33,4 +33,12 @@
     <string name="user_email_failure">UserWithEmail:failure</string>
     <string name="user_email_success">signInWithEmail:success</string>
     <string name="progress_login">Logging In...</string>
+    <string name="home">HOME</string>
+    <string name="timeline">TIMELINE</string>
+    <string name="profile">PROFILE</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit_details">Edit details</string>
+    <string name="user_details">User details</string>
 </resources>

@@ -19,10 +19,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.components.OnSwipeTouchListener
 import com.minorproject.cloudgallery.components.SwipeTouchListener
-import kotlinx.android.synthetic.main.fragment_forget_password.*
-import kotlinx.android.synthetic.main.fragment_forget_password.login_title
-import kotlinx.android.synthetic.main.fragment_forget_password.register_title
-import kotlinx.android.synthetic.main.fragment_login_screen.*
+import kotlinx.android.synthetic.main.fragment_auth_forget_password.*
+import kotlinx.android.synthetic.main.fragment_auth_forget_password.login_title
+import kotlinx.android.synthetic.main.fragment_auth_forget_password.register_title
 import java.util.regex.Pattern
 
 class ForgetPassword : Fragment(), View.OnClickListener, SwipeTouchListener {
@@ -40,7 +39,7 @@ class ForgetPassword : Fragment(), View.OnClickListener, SwipeTouchListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_forget_password, container, false)
+        return inflater.inflate(R.layout.fragment_auth_forget_password, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

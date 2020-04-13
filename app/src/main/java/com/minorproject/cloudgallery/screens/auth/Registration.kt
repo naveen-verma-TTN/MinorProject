@@ -15,11 +15,9 @@ import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -29,9 +27,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.components.OnSwipeTouchListener
 import com.minorproject.cloudgallery.components.SwipeTouchListener
-import com.minorproject.cloudgallery.screens.HomePage
-import kotlinx.android.synthetic.main.fragment_forget_password.login_title
-import kotlinx.android.synthetic.main.fragment_registration.*
+import com.minorproject.cloudgallery.screens.MainPage
+import kotlinx.android.synthetic.main.fragment_auth_forget_password.login_title
+import kotlinx.android.synthetic.main.fragment_auth_registration.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Matcher
@@ -57,7 +55,7 @@ class Registration : Fragment(), View.OnClickListener, SwipeTouchListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_registration, container, false)
+        return inflater.inflate(R.layout.fragment_auth_registration, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -180,7 +178,7 @@ class Registration : Fragment(), View.OnClickListener, SwipeTouchListener {
      */
     private fun updateUserInfoAndUI() {
         mProgressBar!!.hide()
-        val intent = Intent(this.context, HomePage::class.java)
+        val intent = Intent(this.context, MainPage::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
         activity?.finish()
