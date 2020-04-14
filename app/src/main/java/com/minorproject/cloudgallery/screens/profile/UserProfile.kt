@@ -30,7 +30,7 @@ class UserProfile : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this)
+        viewModel = ViewModelProviders.of(activity!!)
             .get(UserProfileViewModel::class.java)
         mAuth = FirebaseAuth.getInstance();
     }

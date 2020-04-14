@@ -37,7 +37,7 @@ class UserDetails : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this)
+        viewModel = ViewModelProviders.of(activity!!)
             .get(UserProfileViewModel::class.java)
         mAuth = FirebaseAuth.getInstance()
     }
@@ -154,6 +154,9 @@ class UserDetails : Fragment() {
         user_detail_page_phone.setText(userDetails?.UserPhoneNumber)
         user_detail_page_dob.text = userDetails?.UserDOB
         user_detail_page_address.setText(userDetails?.UserAddress)
+        if (TextUtils.isEmpty(user_detail_page_dob.text)) {
+            user_detail_page_dob.text = getString(R.string.dob)
+        }
     }
 
     private fun toggleButton() {
