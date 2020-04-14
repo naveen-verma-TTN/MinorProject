@@ -1,39 +1,38 @@
 package com.minorproject.cloudgallery.screens.profile
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.viewpager.widget.ViewPager
-import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.minorproject.cloudgallery.R
+import com.minorproject.cloudgallery.SplashScreen
 import com.minorproject.cloudgallery.viewmodels.UserProfileViewModel
 import kotlinx.android.synthetic.main.collapse_toolbar.*
 import kotlinx.android.synthetic.main.collapse_toolbar.view.*
-import kotlinx.android.synthetic.main.fragment_auth_registration.view.*
 import kotlinx.android.synthetic.main.main_page_layout.*
+import kotlinx.android.synthetic.main.progress_menu.*
 
 
 class UserProfile : Fragment() {
     private lateinit var navController: NavController
     private lateinit var viewModel: UserProfileViewModel
+    private lateinit var mAuth: FirebaseAuth
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this)
             .get(UserProfileViewModel::class.java)
+        mAuth = FirebaseAuth.getInstance();
     }
 
     override fun onCreateView(
@@ -49,12 +48,15 @@ class UserProfile : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        val viewPager = view.findViewById(R.id.viewpager) as ViewPager
-        viewPager.adapter = PagerAdapter(activity?.supportFragmentManager)
-
-        val tabLayout = view.findViewById(R.id.tab_layout) as TabLayout
-
-        tabLayout.setupWithViewPager(viewPager)
+        logout_button.setOnClickListener {
+            Toast.makeText(view.context, "Logging out..", Toast.LENGTH_LONG).show()
+            val currentUser = mAuth.currentUser
+            if (currentUser != null) {
+                mAuth.signOut()
+                startActivity(Intent(this.context, SplashScreen::class.java))
+                activity!!.finish()
+            }
+        }
 
         activity!!.menu.setOnItemSelectedListener {
             when (it) {
@@ -69,29 +71,5 @@ class UserProfile : Fragment() {
                 view.username_textView.text = user?.UserName
                 view.userEmail_textView.text = user?.UserEmail
             })
-    }
-
-
-    internal class PagerAdapter(fragmentManager: FragmentManager?) :
-        FragmentStatePagerAdapter(fragmentManager!!) {
-        override fun getItem(position: Int): Fragment {
-            return if (position == 0) {
-                UserDetails()
-            } else {
-                EditDetails()
-            }
-        }
-
-        override fun getCount(): Int {
-            return 2
-        }
-
-        override fun getPageTitle(position: Int): CharSequence? {
-            return if (position == 0) {
-                "User Details"
-            } else {
-                "Edit Details"
-            }
-        }
     }
 }

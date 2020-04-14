@@ -6,3 +6,11 @@ data class User(
     val UserEmail: String = "",
     val AccountCreatedOn: String = ""
 )
+
+
+data class UserInfo(
+    val UserAdditionalEmail: String = "",
+    val UserPhoneNumber: String = "",
+    val UserDOB: String = "",
+    val UserAddress: String = ""
+)

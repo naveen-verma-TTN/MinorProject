@@ -93,7 +93,7 @@ class LoginScreen : Fragment(), View.OnClickListener, SwipeTouchListener {
                             password_EditText.text.toString()
                         )
                         .addOnCompleteListener { task ->
-                            mProgressBar!!.hide()
+                            mProgressBar!!.dismiss()
                             if (task.isSuccessful) {
                                 // Sign in success, update UI with signed-in user's information
                                 Log.d(TAG, getString(R.string.user_email_success))

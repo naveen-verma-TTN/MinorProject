@@ -6,28 +6,27 @@
     app:expandedTitleGravity="top"
     app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
+
     <ImageView
-        android:id="@+id/background1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:scaleType="centerCrop"
         android:src="@drawable/userback_up" />
 
-    <ImageView
-        android:id="@+id/background2"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#664B1B1B"
         android:fitsSystemWindows="true"
-        android:scaleType="centerCrop"
-        android:src="@drawable/userback_down" />
+        android:scaleType="centerCrop" />
 
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:layout_collapseMode="pin"/>
+        app:layout_collapseMode="pin" />
 
 
     <ImageView
@@ -35,7 +34,7 @@
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="90dp"
+        android:layout_marginBottom="75dp"
         android:src="@drawable/usericon" />
 
     <TextView
@@ -43,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="40dp"
         android:fontFamily="@font/allerta_stencil"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/white"
@@ -54,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="15dp"
         android:fontFamily="@font/allerta"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />

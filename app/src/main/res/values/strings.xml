@@ -41,4 +41,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="edit_details">Edit details</string>
     <string name="user_details">User details</string>
+    <string name="logout">LogOut</string>
+    <string name="address">Address</string>
+    <string name="postal_address">Postal Address</string>
+    <string name="dob">02 Oct, 1990</string>
+    <string name="birthday">Birthday</string>
+    <string name="phone_prefix">+91 -</string>
+    <string name="phone_number">Phone number</string>
+    <string name="email">Additional Email Id</string>
 </resources>
