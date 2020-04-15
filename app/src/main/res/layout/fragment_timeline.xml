@@ -3,14 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_inverted"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".screens.timeline.Timeline">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="20sp"
-        android:text="@string/timeline" />
+    <xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        app:timeLineColor="@color/colorAccent"
+        app:timeLineCircleColor="@color/colorPrimary"
+        app:sectionSubTitleTextSize="15dp"
+        app:sectionTitleTextSize="18dp"
+        app:sectionTitleTextColor="@color/colorAccent"
+        app:sectionSubTitleTextColor="@color/colorPrimary"
+        app:timeLineCircleStrokeColor="@color/white"
+        android:layout_height="wrap_content" />
 
 </FrameLayout>
