@@ -26,7 +26,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.components.OnSwipeTouchListener
-import com.minorproject.cloudgallery.components.SwipeTouchListener
+import com.minorproject.cloudgallery.interfaces.SwipeTouchListener
 import com.minorproject.cloudgallery.screens.MainPage
 import kotlinx.android.synthetic.main.fragment_auth_forget_password.login_title
 import kotlinx.android.synthetic.main.fragment_auth_registration.*
@@ -36,7 +36,8 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
-class Registration : Fragment(), View.OnClickListener, SwipeTouchListener {
+class Registration : Fragment(), View.OnClickListener,
+    SwipeTouchListener {
     var navController: NavController? = null
     private lateinit var mAuth: FirebaseAuth
     private var mDatabaseReference: DatabaseReference? = null

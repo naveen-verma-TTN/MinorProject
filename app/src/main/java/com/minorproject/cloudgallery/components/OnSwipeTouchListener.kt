@@ -1,20 +1,24 @@
 package com.minorproject.cloudgallery.components
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
+import com.minorproject.cloudgallery.interfaces.SwipeTouchListener
 
 
-class OnSwipeTouchListener(ctx: Context?, swipeTouchListener: SwipeTouchListener) : OnTouchListener {
+class OnSwipeTouchListener(ctx: Context?, swipeTouchListener: SwipeTouchListener) :
+    OnTouchListener {
     private val gestureDetector: GestureDetector
 
     init {
         gestureDetector = GestureDetector(ctx, GestureListener(swipeTouchListener))
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         return gestureDetector.onTouchEvent(event)
     }
@@ -24,7 +28,8 @@ class OnSwipeTouchListener(ctx: Context?, swipeTouchListener: SwipeTouchListener
         private const val SWIPE_VELOCITY_THRESHOLD = 100
     }
 
-    private inner class GestureListener(val swipeTouchListener: SwipeTouchListener) : SimpleOnGestureListener() {
+    private inner class GestureListener(val swipeTouchListener: SwipeTouchListener) :
+        SimpleOnGestureListener() {
 
         override fun onDown(e: MotionEvent): Boolean {
             return true

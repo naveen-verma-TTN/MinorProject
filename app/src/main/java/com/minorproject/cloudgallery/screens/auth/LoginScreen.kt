@@ -19,7 +19,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.components.OnSwipeTouchListener
-import com.minorproject.cloudgallery.components.SwipeTouchListener
+import com.minorproject.cloudgallery.interfaces.SwipeTouchListener
 import com.minorproject.cloudgallery.screens.MainPage
 import kotlinx.android.synthetic.main.fragment_auth_login_screen.*
 import kotlinx.android.synthetic.main.fragment_auth_login_screen.password_EditText
@@ -29,7 +29,8 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
-class LoginScreen : Fragment(), View.OnClickListener, SwipeTouchListener {
+class LoginScreen : Fragment(), View.OnClickListener,
+    SwipeTouchListener {
     private var navController: NavController? = null
     private lateinit var mAuth: FirebaseAuth
 

@@ -1,4 +1,4 @@
-package com.minorproject.cloudgallery.components.utilities
+package com.minorproject.cloudgallery.components
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter

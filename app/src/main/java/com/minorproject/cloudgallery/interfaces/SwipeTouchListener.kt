@@ -1,4 +1,4 @@
-package com.minorproject.cloudgallery.components
+package com.minorproject.cloudgallery.interfaces
 
 import android.util.Log
 

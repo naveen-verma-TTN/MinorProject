@@ -8,7 +8,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class ImageRepoTemp {
-    val imageRepo: List<Image>
+    val imageRepo: ArrayList<Image>
         @RequiresApi(Build.VERSION_CODES.O)
         get() {
             val imageRepoList = ArrayList<Image>()

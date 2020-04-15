@@ -1,4 +1,4 @@
-package com.minorproject.cloudgallery.screens.timeline
+package com.minorproject.cloudgallery.interfaces
 
 import com.minorproject.cloudgallery.model.Image
 

@@ -2,32 +2,37 @@ package com.minorproject.cloudgallery.screens.timeline
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
+import androidx.recyclerview.widget.RecyclerView
 import com.minorproject.cloudgallery.R
+import com.minorproject.cloudgallery.components.RecyclerItemTouchHelper
+import com.minorproject.cloudgallery.interfaces.ItemClickListener
 import com.minorproject.cloudgallery.model.Image
 import com.squareup.picasso.Picasso
 import com.stfalcon.imageviewer.StfalconImageViewer
 import kotlinx.android.synthetic.main.main_page_layout.*
-import kotlinx.android.synthetic.main.recycler_row.*
 import xyz.sangcomz.stickytimelineview.RecyclerSectionItemDecoration
 import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class Timeline : Fragment(), ItemClickListener {
+
+class Timeline : Fragment(),
+    ItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     private lateinit var navController: NavController
-    private lateinit var imageList: List<Image>
+    private lateinit var imageList: ArrayList<Image>
+    private lateinit var adapter: ImageAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +55,11 @@ class Timeline : Fragment(), ItemClickListener {
 
         val recyclerView: TimeLineRecyclerView = view.findViewById(R.id.recycler_view)
 
+        val itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
+            RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this)
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView)
+
+
         recyclerView.layoutManager = LinearLayoutManager(
             view.context,
             LinearLayoutManager.VERTICAL,
@@ -57,17 +67,22 @@ class Timeline : Fragment(), ItemClickListener {
         )
 
         //Get data
-        imageList = sortList(getImageList())
+        imageList = getImageList()
+
+        recyclerView.itemAnimator = DefaultItemAnimator()
 
         //Add RecyclerSectionItemDecoration.SectionCallback
         recyclerView.addItemDecoration(getSectionCallback(imageList))
 
         //Set Adapter
-        recyclerView.adapter = ImageAdapter(
+        adapter = ImageAdapter(
             imageList,
             this
         )
+        recyclerView.adapter = adapter
     }
+
+
 
     override fun onItemClicked(position: Int) {
         StfalconImageViewer.Builder<Image>(context, imageList) { view, image ->
@@ -76,8 +91,8 @@ class Timeline : Fragment(), ItemClickListener {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun sortList(imageList: List<Image>): List<Image> {
-        return imageList.sortedWith(Comparator { o1: Image, o2: Image ->
+    private fun sortList(imageList: ArrayList<Image>) {
+        imageList.sortWith(Comparator { o1: Image, o2: Image ->
             if (o1.uploadTime.isAfter(o2.uploadTime)) {
                 -1
             } else {
@@ -88,7 +103,12 @@ class Timeline : Fragment(), ItemClickListener {
 
 
     //Get data method
-    private fun getImageList(): List<Image> = ImageRepoTemp().imageRepo
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getImageList(): ArrayList<Image> {
+        val list = ImageRepoTemp().imageRepo
+        sortList(list)
+        return list
+    }
 
 
     //Get SectionCallback method
@@ -114,4 +134,9 @@ class Timeline : Fragment(), ItemClickListener {
         }
     }
 
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int, position: Int) {
+        Toast.makeText(view?.context,"Delete ${imageList[position].category}",Toast.LENGTH_LONG).show()
+        imageList.removeAt(position)
+        adapter.notifyDataSetChanged();
+    }
 }

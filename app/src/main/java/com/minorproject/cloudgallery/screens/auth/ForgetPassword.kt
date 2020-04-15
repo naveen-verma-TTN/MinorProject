@@ -18,13 +18,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.components.OnSwipeTouchListener
-import com.minorproject.cloudgallery.components.SwipeTouchListener
+import com.minorproject.cloudgallery.interfaces.SwipeTouchListener
 import kotlinx.android.synthetic.main.fragment_auth_forget_password.*
 import kotlinx.android.synthetic.main.fragment_auth_forget_password.login_title
 import kotlinx.android.synthetic.main.fragment_auth_forget_password.register_title
 import java.util.regex.Pattern
 
-class ForgetPassword : Fragment(), View.OnClickListener, SwipeTouchListener {
+class ForgetPassword : Fragment(), View.OnClickListener,
+    SwipeTouchListener {
     private var navController: NavController? = null
     private lateinit var mAuth: FirebaseAuth
 

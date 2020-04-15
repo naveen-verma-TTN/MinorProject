@@ -13,7 +13,7 @@
 
         <variable
             name="itemClick"
-            type="com.minorproject.cloudgallery.screens.timeline.ItemClickListener" />
+            type="com.minorproject.cloudgallery.interfaces.ItemClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,13 +23,43 @@
         android:elevation="50dp"
         android:onClick="@{()-> itemClick.onItemClicked(position)}">
 
-        <ImageView
-            android:id="@+id/link"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"
-            android:src="@mipmap/icon"
-            tools:imageUrl="@{image.link}" />
+            android:background="#C2E52121">
+
+            <RelativeLayout
+                android:id="@+id/view_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/delete_icon"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/delete" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/view_foreground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white">
+
+                <ImageView
+                    android:id="@+id/link"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:padding="10dp"
+                    android:src="@mipmap/icon"
+                    tools:imageUrl="@{image.link}" />
+            </RelativeLayout>
+        </FrameLayout>
 
     </androidx.cardview.widget.CardView>
 </layout>
