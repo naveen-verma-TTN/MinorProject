@@ -51,7 +51,6 @@ class UserProfile : Fragment() {
             val currentUser = mAuth.currentUser
             if (currentUser != null) {
                 mAuth.signOut()
-                startActivity(Intent(this.context, SplashScreenActivity::class.java))
                 activity!!.finish()
             }
         }

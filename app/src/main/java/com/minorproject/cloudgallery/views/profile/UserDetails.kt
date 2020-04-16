@@ -100,9 +100,6 @@ class UserDetails : Fragment() {
         user["UserDOB"] = userInfo.UserDOB
         user["UserAddress"] = userInfo.UserAddress
 
-        Log.e("data", userInfo.toString())
-        Log.e("eee", user.toString())
-
         val rootRef = FirebaseFirestore.getInstance()
         val docIdRef: DocumentReference =
             rootRef.collection("UserDetails").document(currentUser?.uid!!)

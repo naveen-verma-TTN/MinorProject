@@ -1,9 +1,7 @@
 package com.minorproject.cloudgallery.viewmodels
 
-import android.app.ProgressDialog
 import android.text.TextUtils
 import android.util.Log
-import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.BaseObservable
@@ -16,7 +14,6 @@ import com.minorproject.cloudgallery.BR
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.User
 import kotlinx.android.synthetic.main.fragment_auth_forget_password.view.*
-import java.util.regex.Pattern
 
 class ForgetPasswordViewModel: BaseObservable() {
     private var user: User = User()
@@ -41,18 +38,17 @@ class ForgetPasswordViewModel: BaseObservable() {
     fun onClicked(view: View) {
         val email = getUserEmail()
         val context = view.context
-        val progressBar = ProgressDialog(context)
+
         if (TextUtils.isEmpty(email)) {
             view.email_EditText_forgot.error = context.getString(R.string.empty_email)
-        } else if (!validEmail(email.toString())) {
+        } else if (!LoginViewModel.validEmail(email.toString())) {
             view.email_EditText_forgot.error = context.getString(R.string.invaild_email)
         } else {
             mAuth = FirebaseAuth.getInstance()
-            progressBar.setMessage(context.getString(R.string.forgotPassword_progressBar))
-            progressBar.show()
+            view.progressbar_forget_pass.visibility = View.VISIBLE
             mAuth.sendPasswordResetEmail(email.toString())
                 .addOnCompleteListener { task ->
-                    progressBar.hide()
+                    view.progressbar_forget_pass.visibility = View.GONE
                     if (task.isSuccessful) {
                         val message = "Email sent to ${email}."
                         Log.d(TAG, message)
@@ -69,15 +65,6 @@ class ForgetPasswordViewModel: BaseObservable() {
                 }
         }
     }
-
-    /**
-     * function to validate email pattern
-     */
-    private fun validEmail(email: String): Boolean {
-        val pattern: Pattern = Patterns.EMAIL_ADDRESS
-        return pattern.matcher(email).matches()
-    }
-
 
     private fun View.snack(message: String, duration: Int = Snackbar.LENGTH_LONG) {
         Snackbar.make(this, message, duration).show()

@@ -1,6 +1,5 @@
 package com.minorproject.cloudgallery.viewmodels
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.text.InputType
 import android.text.TextUtils
@@ -10,7 +9,6 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
-import androidx.lifecycle.ViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.minorproject.cloudgallery.BR
@@ -18,8 +16,6 @@ import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.User
 import com.minorproject.cloudgallery.views.HomePageActivity
 import kotlinx.android.synthetic.main.fragment_auth_login_screen.view.*
-import kotlinx.android.synthetic.main.fragment_auth_login_screen.view.password_EditText
-import kotlinx.android.synthetic.main.fragment_auth_login_screen.view.password_toggle
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -27,10 +23,6 @@ import java.util.regex.Pattern
 class LoginViewModel : BaseObservable() {
     private var user: User = User()
     private lateinit var mAuth: FirebaseAuth
-
-    companion object {
-        private const val TAG: String = "LoginViewModel"
-    }
 
     fun setUserEmail(email: String?) {
         user.UserEmail = email!!
@@ -68,7 +60,6 @@ class LoginViewModel : BaseObservable() {
         val email = getUserEmail()
         val pass = getUserPassword()
         val context = view.context
-        val progressBar = ProgressDialog(context)
         if (TextUtils.isEmpty(email)) {
             view.email_EditText_login.error = context.getString(R.string.empty_email)
         } else if (!validEmail(email.toString())) {
@@ -81,17 +72,18 @@ class LoginViewModel : BaseObservable() {
             view.password_EditText.error = context.getString(R.string.invaild_password)
         } else {
             mAuth = FirebaseAuth.getInstance()
-            progressBar.setMessage(context.getString(R.string.progress_login))
-            progressBar.show()
+            view.progressbar.visibility = View.VISIBLE
             mAuth.signInWithEmailAndPassword(
                     email.toString(),
                     pass.toString()
                 )
                 .addOnCompleteListener { task ->
-                    progressBar.dismiss()
+                    view.progressbar.visibility = View.GONE
                     if (task.isSuccessful) {
                         // Sign in success, update UI with signed-in user's information
                         Log.d(TAG, context.getString(R.string.user_email_success))
+                        view.email_EditText_login.setText("")
+                        view.password_EditText.setText("")
                         updateUI(view)
                     } else {
                         // If sign in fails, display a message to the user.
@@ -102,37 +94,43 @@ class LoginViewModel : BaseObservable() {
         }
     }
 
-    /**
-     * function to validate email pattern
-     */
-    private fun validEmail(email: String): Boolean {
-        val pattern: Pattern = Patterns.EMAIL_ADDRESS
-        return pattern.matcher(email).matches()
-    }
-
-    /**
-     * function to validate password pattern
-     */
-    private fun validPassword(password: String?): Boolean {
-        val pattern: Pattern
-        val matcher: Matcher
-        val PASSWORD_PATTERN =
-            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$"
-        pattern = Pattern.compile(PASSWORD_PATTERN)
-        matcher = pattern.matcher(password)
-        return matcher.matches()
-    }
-
     private fun View.snack(message: String, duration: Int = Snackbar.LENGTH_LONG) {
         Snackbar.make(this, message, duration).show()
     }
 
-    /**
-     * function to updateUI
-     */
-    private fun updateUI(view : View) {
-        val intent = Intent(view.context, HomePageActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        view.context.startActivity(intent)
+    companion object {
+        private const val TAG: String = "LoginViewModel"
+
+        /**
+         * function to validate email pattern
+         */
+        fun validEmail(email: String): Boolean {
+            val pattern: Pattern = Patterns.EMAIL_ADDRESS
+            return pattern.matcher(email).matches()
+        }
+
+        /**
+         * function to validate password pattern
+         */
+        fun validPassword(password: String?): Boolean {
+            val pattern: Pattern
+            val matcher: Matcher
+            val PASSWORD_PATTERN =
+                "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$"
+            pattern = Pattern.compile(PASSWORD_PATTERN)
+            matcher = pattern.matcher(password)
+            return matcher.matches()
+        }
+
+        /**
+         * function to updateUI
+         */
+        fun updateUI(view : View) {
+            val intent = Intent(view.context, HomePageActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            view.context.startActivity(intent)
+        }
     }
+
+
 }

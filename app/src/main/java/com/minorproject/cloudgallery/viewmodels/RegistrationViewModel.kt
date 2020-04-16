@@ -1,13 +1,10 @@
 package com.minorproject.cloudgallery.viewmodels
 
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.ContentValues
-import android.content.Intent
 import android.text.InputType
 import android.text.TextUtils
 import android.util.Log
-import android.util.Patterns
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
@@ -21,19 +18,16 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.minorproject.cloudgallery.BR
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.User
-import com.minorproject.cloudgallery.views.HomePageActivity
+import kotlinx.android.synthetic.main.fragment_auth_login_screen.view.*
 import kotlinx.android.synthetic.main.fragment_auth_login_screen.view.password_EditText
 import kotlinx.android.synthetic.main.fragment_auth_login_screen.view.password_toggle
 import kotlinx.android.synthetic.main.fragment_auth_registration.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 class RegistrationViewModel : BaseObservable() {
     private var user: User = User()
     private lateinit var mAuth: FirebaseAuth
-    private lateinit var progressBar: ProgressDialog
 
     companion object {
         private const val TAG: String = "RegistrationViewModel"
@@ -88,22 +82,20 @@ class RegistrationViewModel : BaseObservable() {
         val email = getUserEmail()
         val pass = getUserPassword()
         val context = view.context
-        val progressBar = ProgressDialog(context)
         if (TextUtils.isEmpty(username)) {
             view.username_EditText.error = context.getString(R.string.empty_username)
         } else if (TextUtils.isEmpty(email)) {
             view.email_EditText.error = context.getString(R.string.empty_email)
-        } else if (!validEmail(email.toString())) {
+        } else if (!LoginViewModel.validEmail(email.toString())) {
             view.email_EditText.error = context.getString(R.string.invaild_email)
         } else if (TextUtils.isEmpty(pass)) {
             view.password_EditText.error = context.getString(R.string.empty_password)
-        } else if (!(validPassword(pass.toString())
+        } else if (!(LoginViewModel.validPassword(pass.toString())
                     && pass.toString().length >= 6)
         ) {
             view.password_EditText.error = context.getString(R.string.invaild_password)
         } else {
-            progressBar.setMessage(context.getString(R.string.progress_registration))
-            progressBar.show()
+            view.progressbar_register.visibility = View.VISIBLE
             mAuth = FirebaseAuth.getInstance()
             mAuth.createUserWithEmailAndPassword(
                     email.toString(),
@@ -125,43 +117,45 @@ class RegistrationViewModel : BaseObservable() {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, context.getString(R.string.success_register_user))
                         val userId = mAuth.currentUser!!.uid
-                        //Verify Email
 
                         //update user profile information
-
                         val data = HashMap<String, Any>()
 
                         data["UserId"] = userId
                         data["UserName"] = username.toString()
                         data["UserEmail"] = email.toString()
-                        data["AccountCreatedOn"] =  SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+                        data["AccountCreatedOn"] = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
                             .format(Date())
 
                         FirebaseFirestore.getInstance().collection("UserDetails").document(userId)
                             .set(data)
                             .addOnSuccessListener {
                                 Log.d(TAG, "DocumentSnapshot successfully written!")
-                                progressBar.dismiss()
+                                view.progressbar_register.visibility = View.GONE
                                 verifyEmail(view)
                             }
                             .addOnFailureListener { e ->
                                 Log.w(TAG, "Error writing document", e)
-                                progressBar.dismiss()
+                                view.progressbar.visibility = View.GONE
                             }
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, context.getString(R.string.error_register_user), task.exception)
-                        progressBar.dismiss()
+                        view.progressbar.visibility = View.GONE
                         view.snack(task.exception?.message.toString())
                     }
                 }
         }
     }
 
+    private fun View.snack(message: String, duration: Int = Snackbar.LENGTH_LONG) {
+        Snackbar.make(this, message, duration).show()
+    }
+
     /**
      * verification mail to verify user
      */
-    private fun verifyEmail(view : View) {
+    private fun verifyEmail(view: View) {
         val mUser = mAuth.currentUser
         mUser!!.sendEmailVerification()
             .addOnCompleteListener { task ->
@@ -172,57 +166,21 @@ class RegistrationViewModel : BaseObservable() {
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    Log.e(ContentValues.TAG, view.context.getString(R.string.error_verification_mail), task.exception)
+                    Log.e(
+                        ContentValues.TAG,
+                        view.context.getString(R.string.error_verification_mail),
+                        task.exception
+                    )
                     Toast.makeText(
                         view.context,
                         view.context.getString(R.string.error_verification_mail),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                updateUserInfoAndUI(view)
+                view.username_EditText.setText("")
+                view.email_EditText.setText("")
+                view.password_EditText.setText("")
+                LoginViewModel.updateUI(view)
             }
-    }
-
-    /**
-     * function to updateUI
-     */
-    private fun updateUserInfoAndUI(view : View) {
-        val intent = Intent(view.context, HomePageActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        view.context.startActivity(intent)
-    }
-
-    /**
-     * function to validate email pattern
-     */
-    private fun validEmail(email: String): Boolean {
-        val pattern: Pattern = Patterns.EMAIL_ADDRESS
-        return pattern.matcher(email).matches()
-    }
-
-    /**
-     * function to validate password pattern
-     */
-    private fun validPassword(password: String?): Boolean {
-        val pattern: Pattern
-        val matcher: Matcher
-        val PASSWORD_PATTERN =
-            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$"
-        pattern = Pattern.compile(PASSWORD_PATTERN)
-        matcher = pattern.matcher(password)
-        return matcher.matches()
-    }
-
-    private fun View.snack(message: String, duration: Int = Snackbar.LENGTH_LONG) {
-        Snackbar.make(this, message, duration).show()
-    }
-
-    /**
-     * function to updateUI
-     */
-    private fun updateUI(view: View) {
-        val intent = Intent(view.context, HomePageActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        view.context.startActivity(intent)
     }
 }
