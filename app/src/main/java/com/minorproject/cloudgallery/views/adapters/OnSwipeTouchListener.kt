@@ -1,4 +1,4 @@
-package com.minorproject.cloudgallery.components
+package com.minorproject.cloudgallery.views.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,7 +7,7 @@ import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
-import com.minorproject.cloudgallery.interfaces.SwipeTouchListener
+import com.minorproject.cloudgallery.views.interfaces.SwipeTouchListener
 
 
 class OnSwipeTouchListener(ctx: Context?, swipeTouchListener: SwipeTouchListener) :
@@ -46,9 +46,9 @@ class OnSwipeTouchListener(ctx: Context?, swipeTouchListener: SwipeTouchListener
                 val diffY = e2.y - e1.y
                 val diffX = e2.x - e1.x
                 if (Math.abs(diffX) > Math.abs(diffY)) {
-                    if (Math.abs(diffX) > Companion.SWIPE_THRESHOLD && Math.abs(
+                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(
                             velocityX
-                        ) > Companion.SWIPE_VELOCITY_THRESHOLD
+                        ) > SWIPE_VELOCITY_THRESHOLD
                     ) {
                         if (diffX > 0) {
                             swipeTouchListener.onSwipeRight()
@@ -57,9 +57,9 @@ class OnSwipeTouchListener(ctx: Context?, swipeTouchListener: SwipeTouchListener
                         }
                         result = true
                     }
-                } else if (Math.abs(diffY) > Companion.SWIPE_THRESHOLD && Math.abs(
+                } else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(
                         velocityY
-                    ) > Companion.SWIPE_VELOCITY_THRESHOLD
+                    ) > SWIPE_VELOCITY_THRESHOLD
                 ) {
                     if (diffY > 0) {
                         swipeTouchListener.onSwipeBottom()

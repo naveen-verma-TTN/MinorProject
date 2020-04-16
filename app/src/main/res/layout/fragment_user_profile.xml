@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".screens.profile.UserProfile">
+    tools:context=".views.profile.UserProfile">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -40,7 +40,7 @@
 
             <fragment
                 android:id="@+id/user_detail_page"
-                class="com.minorproject.cloudgallery.screens.profile.UserDetails"
+                class="com.minorproject.cloudgallery.views.profile.UserDetails"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

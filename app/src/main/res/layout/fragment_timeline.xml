@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".screens.timeline.Timeline">
+    tools:context=".views.timeline.Timeline">
 
     <xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
         android:id="@+id/recycler_view"
@@ -16,6 +16,6 @@
         app:sectionTitleTextColor="@color/colorAccent"
         app:sectionSubTitleTextColor="@color/colorPrimary"
         app:timeLineCircleStrokeColor="@color/white"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>

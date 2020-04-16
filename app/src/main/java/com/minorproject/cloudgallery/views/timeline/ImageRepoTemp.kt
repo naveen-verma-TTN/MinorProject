@@ -1,10 +1,9 @@
-package com.minorproject.cloudgallery.screens.timeline
+package com.minorproject.cloudgallery.views.timeline
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.minorproject.cloudgallery.model.Image
 import java.time.LocalDate
-import java.util.*
 import kotlin.collections.ArrayList
 
 class ImageRepoTemp {

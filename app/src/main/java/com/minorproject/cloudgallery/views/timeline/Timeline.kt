@@ -1,4 +1,4 @@
-package com.minorproject.cloudgallery.screens.timeline
+package com.minorproject.cloudgallery.views.timeline
 
 import android.os.Build
 import android.os.Bundle
@@ -8,19 +8,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.minorproject.cloudgallery.R
-import com.minorproject.cloudgallery.components.RecyclerItemTouchHelper
-import com.minorproject.cloudgallery.interfaces.ItemClickListener
 import com.minorproject.cloudgallery.model.Image
+import com.minorproject.cloudgallery.views.adapters.RecyclerItemTouchHelper
+import com.minorproject.cloudgallery.views.interfaces.ItemClickListener
 import com.squareup.picasso.Picasso
 import com.stfalcon.imageviewer.StfalconImageViewer
-import kotlinx.android.synthetic.main.main_page_layout.*
 import xyz.sangcomz.stickytimelineview.RecyclerSectionItemDecoration
 import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
@@ -30,7 +27,6 @@ import java.time.format.DateTimeFormatter
 
 class Timeline : Fragment(),
     ItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
-    private lateinit var navController: NavController
     private lateinit var imageList: ArrayList<Image>
     private lateinit var adapter: ImageAdapter
 
@@ -44,19 +40,15 @@ class Timeline : Fragment(),
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
-
-        activity!!.menu.setOnItemSelectedListener {
-            when (it) {
-                R.id.home -> navController.navigate(R.id.action_timeline2_to_home2)
-                R.id.profile -> navController.navigate(R.id.action_timeline2_to_userProfile)
-            }
-        }
 
         val recyclerView: TimeLineRecyclerView = view.findViewById(R.id.recycler_view)
 
         val itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
-            RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this)
+            RecyclerItemTouchHelper(
+                0,
+                ItemTouchHelper.RIGHT,
+                this
+            )
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView)
 
 
@@ -81,7 +73,6 @@ class Timeline : Fragment(),
         )
         recyclerView.adapter = adapter
     }
-
 
 
     override fun onItemClicked(position: Int) {
@@ -129,13 +120,15 @@ class Timeline : Fragment(),
             override fun getSectionHeader(position: Int): SectionInfo? =
                 SectionInfo(
                     dateFormatting(imageList[position].uploadTime),
-                    imageList[position].category
+                    imageList[position].category,
+                    view?.resources?.getDrawable(R.drawable.icon)
                 )
         }
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int, position: Int) {
-        Toast.makeText(view?.context,"Delete ${imageList[position].category}",Toast.LENGTH_LONG).show()
+        Toast.makeText(view?.context, "Delete ${imageList[position].category}", Toast.LENGTH_LONG)
+            .show()
         imageList.removeAt(position)
         adapter.notifyDataSetChanged();
     }

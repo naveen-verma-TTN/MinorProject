@@ -1,6 +1,4 @@
-package com.minorproject.cloudgallery.interfaces
-
-import android.util.Log
+package com.minorproject.cloudgallery.views.interfaces
 
 interface SwipeTouchListener {
     fun onSwipeRight()

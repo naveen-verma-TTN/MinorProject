@@ -1,4 +1,4 @@
-package com.minorproject.cloudgallery.screens.profile
+package com.minorproject.cloudgallery.views.profile
 
 import android.app.DatePickerDialog
 import android.os.Build
@@ -16,9 +16,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.minorproject.cloudgallery.R
-import com.minorproject.cloudgallery.model.UserInfo
-import com.minorproject.cloudgallery.viewmodels.UserProfileViewModel
-import kotlinx.android.synthetic.main.collapse_toolbar.view.*
+import com.minorproject.cloudgallery.model.User
+import com.minorproject.cloudgallery.viewmodels.UserViewModel
 import kotlinx.android.synthetic.main.fragment_user_details.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -27,9 +26,9 @@ import java.util.regex.Pattern
 
 
 class UserDetails : Fragment() {
-    private var userDetails: UserInfo? = null
+    private var userDetails: User? = null
     private lateinit var mAuth: FirebaseAuth
-    private lateinit var viewModel: UserProfileViewModel
+    private lateinit var viewModel: UserViewModel
 
     companion object {
         private const val TAG: String = "UserDetails"
@@ -37,8 +36,8 @@ class UserDetails : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!)
-            .get(UserProfileViewModel::class.java)
+        viewModel = ViewModelProviders.of(this)
+            .get(UserViewModel::class.java)
         mAuth = FirebaseAuth.getInstance()
     }
 
@@ -54,7 +53,7 @@ class UserDetails : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        viewModel.getUserInfoData().observe(
+        viewModel.getUserData().observe(
             requireActivity(),
             androidx.lifecycle.Observer { user ->
                 userDetails = user
@@ -90,7 +89,7 @@ class UserDetails : Fragment() {
     }
 
 
-    private fun writeDataOnFireStore(userInfo: UserInfo?) {
+    private fun writeDataOnFireStore(userInfo: User?) {
 
         val user = HashMap<String, Any>()
 
@@ -100,6 +99,9 @@ class UserDetails : Fragment() {
         user["UserPhoneNumber"] = userInfo.UserPhoneNumber
         user["UserDOB"] = userInfo.UserDOB
         user["UserAddress"] = userInfo.UserAddress
+
+        Log.e("data", userInfo.toString())
+        Log.e("eee", user.toString())
 
         val rootRef = FirebaseFirestore.getInstance()
         val docIdRef: DocumentReference =
@@ -141,10 +143,14 @@ class UserDetails : Fragment() {
     }
 
     private fun saveValues() {
-        userDetails = UserInfo(
+        userDetails = User(
+            UserAdditionalEmail =
             user_detail_page_email.text.toString().trim(),
+            UserPhoneNumber =
             user_detail_page_phone.text.toString().trim(),
+            UserDOB =
             user_detail_page_dob.text.toString().trim(),
+            UserAddress =
             user_detail_page_address.text.toString().trim()
         )
     }
@@ -182,15 +188,16 @@ class UserDetails : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun clickDataPicker() {
-        val year = 1990
-        val month = 9
-        val day = 2
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         val dpd = DatePickerDialog(
             this.requireContext(),
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                 val formatter = DateTimeFormatter.ofPattern("dd MMM, yyyy")
-                val date = LocalDate.of(year, month + 1, dayOfMonth)
+                val date = LocalDate.of(year, monthOfYear + 1, dayOfMonth)
                 val formatted = date.format(formatter)
                 user_detail_page_dob.text = formatted
             },
@@ -200,6 +207,4 @@ class UserDetails : Fragment() {
         )
         dpd.show()
     }
-
-
 }

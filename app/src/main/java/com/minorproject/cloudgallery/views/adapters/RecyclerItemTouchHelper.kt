@@ -1,10 +1,10 @@
-package com.minorproject.cloudgallery.components
+package com.minorproject.cloudgallery.views.adapters
 
 import android.graphics.Canvas
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.minorproject.cloudgallery.screens.timeline.ImageAdapter
+import com.minorproject.cloudgallery.views.timeline.ImageAdapter
 
 class RecyclerItemTouchHelper(
     dragDirs: Int,

@@ -13,7 +13,7 @@
 
         <variable
             name="itemClick"
-            type="com.minorproject.cloudgallery.interfaces.ItemClickListener" />
+            type="com.minorproject.cloudgallery.views.interfaces.ItemClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -35,8 +35,8 @@
 
                 <ImageView
                     android:id="@+id/delete_icon"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="10dp"
