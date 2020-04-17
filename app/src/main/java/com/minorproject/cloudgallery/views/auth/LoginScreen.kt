@@ -1,6 +1,7 @@
 package com.minorproject.cloudgallery.views.auth
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.google.android.material.snackbar.Snackbar
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.databinding.FragmentAuthLoginScreenBinding
 import com.minorproject.cloudgallery.viewmodels.LoginViewModel
@@ -33,6 +35,15 @@ class LoginScreen : Fragment(), View.OnClickListener, SwipeTouchListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val value = activity?.intent?.extras?.getString("Key")
+
+        Handler().postDelayed({
+            if (value == "LOGOUT") {
+                view.snack(getString(R.string.logout_message))
+            }
+        }, 1000)
+
         navController = Navigation.findNavController(view)
         view.setOnTouchListener(
             OnSwipeTouchListener(
@@ -54,6 +65,10 @@ class LoginScreen : Fragment(), View.OnClickListener, SwipeTouchListener {
                 R.id.action_loginScreen3_to_forgetPassword
             )
         }
+    }
+
+    private fun View.snack(message: String, duration: Int = Snackbar.LENGTH_LONG) {
+        Snackbar.make(this, message, duration).show()
     }
 
     override fun onSwipeRight() {}

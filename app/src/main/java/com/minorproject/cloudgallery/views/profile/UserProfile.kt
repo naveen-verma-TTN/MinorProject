@@ -10,15 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
 import com.minorproject.cloudgallery.R
-import com.minorproject.cloudgallery.views.SplashScreenActivity
 import com.minorproject.cloudgallery.viewmodels.UserViewModel
+import com.minorproject.cloudgallery.views.SplashScreenActivity
 import kotlinx.android.synthetic.main.collapse_toolbar.*
 import kotlinx.android.synthetic.main.collapse_toolbar.view.*
-import kotlinx.android.synthetic.main.home_page_layout.*
 import kotlinx.android.synthetic.main.progress_menu.*
 
 
@@ -47,10 +44,14 @@ class UserProfile : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         logout_button.setOnClickListener {
-            Toast.makeText(view.context, "LogOut", Toast.LENGTH_LONG).show()
             val currentUser = mAuth.currentUser
             if (currentUser != null) {
+                val intent = Intent(view.context, SplashScreenActivity::class.java)
+                val bundle = Bundle()
+                bundle.putString("Key", "LOGOUT")
+                intent.putExtras(bundle)
                 mAuth.signOut()
+                startActivity(intent)
                 activity!!.finish()
             }
         }

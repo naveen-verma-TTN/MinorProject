@@ -177,9 +177,6 @@ class RegistrationViewModel : BaseObservable() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                view.username_EditText.setText("")
-                view.email_EditText.setText("")
-                view.password_EditText.setText("")
                 LoginViewModel.updateUI(view)
             }
     }

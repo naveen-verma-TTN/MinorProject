@@ -1,5 +1,6 @@
 package com.minorproject.cloudgallery.viewmodels
 
+import android.app.Activity
 import android.content.Intent
 import android.text.InputType
 import android.text.TextUtils
@@ -15,7 +16,9 @@ import com.minorproject.cloudgallery.BR
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.User
 import com.minorproject.cloudgallery.views.HomePageActivity
+import com.minorproject.cloudgallery.views.SplashScreenActivity
 import kotlinx.android.synthetic.main.fragment_auth_login_screen.view.*
+import java.security.AccessController.getContext
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -82,8 +85,6 @@ class LoginViewModel : BaseObservable() {
                     if (task.isSuccessful) {
                         // Sign in success, update UI with signed-in user's information
                         Log.d(TAG, context.getString(R.string.user_email_success))
-                        view.email_EditText_login.setText("")
-                        view.password_EditText.setText("")
                         updateUI(view)
                     } else {
                         // If sign in fails, display a message to the user.
@@ -129,6 +130,7 @@ class LoginViewModel : BaseObservable() {
             val intent = Intent(view.context, HomePageActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             view.context.startActivity(intent)
+            (view.context as SplashScreenActivity).finish()
         }
     }
 

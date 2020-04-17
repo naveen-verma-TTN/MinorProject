@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.views.auth.AuthHomeFragment
@@ -15,12 +16,15 @@ class SplashScreenActivity : AppCompatActivity() {
     private val SPLASH_TIME_OUT: Long = 1000
     private lateinit var mAuth: FirebaseAuth
 
+    override fun onStart() {
+        super.onStart()
+        mAuth = FirebaseAuth.getInstance()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splashscreen_layout)
-
-        mAuth = FirebaseAuth.getInstance();
 
         Handler().postDelayed({
             if (mAuth.currentUser == null) {
