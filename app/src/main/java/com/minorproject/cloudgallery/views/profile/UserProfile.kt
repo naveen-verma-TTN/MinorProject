@@ -95,7 +95,7 @@ class UserProfile : Fragment() {
     }
 
     companion object {
-        private val REQUEST_SELECT_IMAGE_IN_ALBUM = 101
+        private val REQUEST_SELECT_IMAGE_IN_ALBUM = 102
     }
 
     private fun selectImageInAlbum() {
