@@ -41,7 +41,9 @@ object UploadImage {
         if (filePath != null) {
             val ref =
                 storageReference!!.child("${mAuth?.uid}/UserProfile/" + mAuth?.uid)
+
             /*       ref.putFile(getThumbnail(filePath, context)!!)*/
+
             ref.putFile(filePath)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
