@@ -4,6 +4,7 @@ data class User(
     var UserId: String = "",
     var UserName: String = "",
     var UserEmail: String = "",
+    var UserProfile: String = "",
     var UserPassword: String = "",
     var AccountCreatedOn: String = "",
     var UserAdditionalEmail: String = "",

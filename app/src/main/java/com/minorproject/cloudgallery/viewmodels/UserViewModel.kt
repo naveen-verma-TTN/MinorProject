@@ -1,15 +1,24 @@
 package com.minorproject.cloudgallery.viewmodels
 
+import android.app.Application
+import android.net.Uri
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.work.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.minorproject.cloudgallery.model.User
+import com.minorproject.cloudgallery.repo.UploadImage
+import com.minorproject.cloudgallery.repo.UploadImageWorker
 
-class UserViewModel : ViewModel() {
+
+class UserViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
         private const val TAG: String = "UserProfileViewModel"
     }
@@ -49,5 +58,27 @@ class UserViewModel : ViewModel() {
             }.addOnFailureListener { e ->
                 Log.e(TAG, "Error writing document", e)
             }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun setProfilePic(filePath: Uri) {
+        val workManager = WorkManager.getInstance()
+        val oneTimeWorkRequest = OneTimeWorkRequest.Builder(
+                UploadImageWorker::class.java
+            )
+            .setInputData(createInputData(filePath))
+            .setConstraints(
+                Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+            )
+            .addTag("imageUploadWork")
+            .build()
+        workManager.enqueue(oneTimeWorkRequest)
+    }
+
+
+    private fun createInputData(url: Uri?): Data {
+        return Data.Builder()
+            .putString("FILE_URL", url.toString())
+            .build()
     }
 }

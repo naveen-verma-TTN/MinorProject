@@ -115,15 +115,6 @@ class UserDetails : Fragment() {
                             )
                         }
                         .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-                } else {
-                    docIdRef.set(user)
-                        .addOnSuccessListener {
-                            Log.d(
-                                TAG,
-                                "DocumentSnapshot successfully written!"
-                            )
-                        }
-                        .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
                 }
             } else {
                 Log.d(TAG, "Failed with: ", task.exception)
@@ -186,21 +177,21 @@ class UserDetails : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun clickDataPicker() {
         val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val y = calendar.get(Calendar.YEAR)
+        val m = calendar.get(Calendar.MONTH)
+        val d = calendar.get(Calendar.DAY_OF_MONTH)
 
         val dpd = DatePickerDialog(
             this.requireContext(),
-            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                 val formatter = DateTimeFormatter.ofPattern("dd MMM, yyyy")
                 val date = LocalDate.of(year, monthOfYear + 1, dayOfMonth)
                 val formatted = date.format(formatter)
                 user_detail_page_dob.text = formatted
             },
-            year,
-            month,
-            day
+            y,
+            m,
+            d
         )
         dpd.show()
     }

@@ -34,6 +34,8 @@ android {
 dependencies {
     def nav_version = "2.3.0-alpha04"
     def lifecycle_version = "2.2.0"
+    def work_version = "2.3.4"
+    def anko_version = '0.10.8'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -44,6 +46,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.google.firebase:firebase-database:19.2.1'
     implementation 'com.google.firebase:firebase-firestore:21.4.2'
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -63,6 +66,17 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation 'com.github.stfalcon:stfalcon-imageviewer:1.0.1'
-    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    //Work Manager
+    implementation "android.arch.work:work-runtime-ktx:$work_version"
+    implementation 'com.google.guava:guava:27.0.1-android'
+
+    // Anko Library
+    implementation "org.jetbrains.anko:anko:$anko_version"
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    implementation 'com.iceteck.silicompressorr:silicompressor:2.2.3'
 
 }

@@ -74,8 +74,7 @@ class ForgetPasswordViewModel: BaseObservable() {
      * function to updateUI
      */
     private fun updateUI(view : View) {
-        var navController: NavController? = null
-        navController = Navigation.findNavController(view)
+        val navController: NavController = Navigation.findNavController(view)
         navController.navigate(
             R.id.action_forgetPassword_to_loginScreen3
         )

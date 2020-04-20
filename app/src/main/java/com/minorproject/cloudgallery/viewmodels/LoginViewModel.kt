@@ -119,7 +119,7 @@ class LoginViewModel : BaseObservable() {
             val PASSWORD_PATTERN =
                 "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$"
             pattern = Pattern.compile(PASSWORD_PATTERN)
-            matcher = pattern.matcher(password)
+            matcher = pattern.matcher(password.toString())
             return matcher.matches()
         }
 
