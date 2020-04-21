@@ -35,7 +35,7 @@ class UserProfile : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this)
+        viewModel = ViewModelProviders.of(activity!!)
             .get(UserViewModel::class.java)
         mAuth = FirebaseAuth.getInstance()
     }
@@ -65,7 +65,7 @@ class UserProfile : Fragment() {
             }
         }
 
-        viewModel.getUserData().observe(
+        viewModel.userMutableLiveData.observe(
             requireActivity(),
             Observer { user ->
                 view.username_textView.text = user?.UserName

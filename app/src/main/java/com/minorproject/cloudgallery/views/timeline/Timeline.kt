@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.Image
 import com.minorproject.cloudgallery.repo.ImageRepoTemp
+import com.minorproject.cloudgallery.views.adapters.ImageAdapter
 import com.minorproject.cloudgallery.views.adapters.RecyclerItemTouchHelper
 import com.minorproject.cloudgallery.views.interfaces.ItemClickListener
 import com.stfalcon.imageviewer.StfalconImageViewer

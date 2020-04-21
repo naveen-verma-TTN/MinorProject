@@ -13,6 +13,7 @@ import androidx.work.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.minorproject.cloudgallery.model.Category
 import com.minorproject.cloudgallery.model.User
 import com.minorproject.cloudgallery.repo.UploadImage
 import com.minorproject.cloudgallery.repo.UploadImageWorker
@@ -23,7 +24,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         private const val TAG: String = "UserProfileViewModel"
     }
 
-    private val user: MutableLiveData<User?> = MutableLiveData()
+    val userMutableLiveData: MutableLiveData<User> = MutableLiveData()
 
     private var mAuth: FirebaseAuth? = null
 
@@ -32,12 +33,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         readDataFromFireStore()
     }
 
-    fun getUserData(): LiveData<User?> {
-        return user
-    }
 
-
-    private fun readDataFromFireStore() {
+    private fun readDataFromFireStore(){
         val fireStore = FirebaseFirestore.getInstance()
         fireStore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
 
@@ -47,7 +44,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             .addOnSuccessListener { document ->
                 try {
                     if (document != null) {
-                        user.value = document.toObject(User::class.java) ?: User()
+                        userMutableLiveData.value = document.toObject(User::class.java) ?: User()
                         Log.d("viewModel", "DocumentSnapshot read successfully!")
                     } else {
                         Log.e("viewModel", "No such document!")

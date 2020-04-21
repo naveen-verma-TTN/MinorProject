@@ -1,4 +1,4 @@
-package com.minorproject.cloudgallery.views.timeline
+package com.minorproject.cloudgallery.views.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -19,7 +19,9 @@ class ImageAdapter(
         val binding: RecyclerRowBinding = RecyclerRowBinding.inflate(
             layoutInflater, parent, false
         )
-        return ViewHolder(binding)
+        return ViewHolder(
+            binding
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

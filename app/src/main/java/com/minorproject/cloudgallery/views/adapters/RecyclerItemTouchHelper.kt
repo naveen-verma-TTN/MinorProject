@@ -4,7 +4,6 @@ import android.graphics.Canvas
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.minorproject.cloudgallery.views.timeline.ImageAdapter
 
 class RecyclerItemTouchHelper(
     dragDirs: Int,

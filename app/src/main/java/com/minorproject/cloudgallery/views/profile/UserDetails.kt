@@ -53,7 +53,7 @@ class UserDetails : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        viewModel.getUserData().observe(
+        viewModel.userMutableLiveData.observe(
             requireActivity(),
             androidx.lifecycle.Observer { user ->
                 userDetails = user
