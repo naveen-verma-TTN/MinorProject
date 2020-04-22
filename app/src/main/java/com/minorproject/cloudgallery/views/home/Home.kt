@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,17 +16,17 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.Category
-import com.minorproject.cloudgallery.model.Image
-import com.minorproject.cloudgallery.repo.ImageRepoTemp
 import com.minorproject.cloudgallery.viewmodels.CategoryViewModel
+import com.minorproject.cloudgallery.views.adapters.HomeRecyclerAdapter
 import com.minorproject.cloudgallery.views.interfaces.HomeItemClick
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.home_recycler
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 class Home : Fragment(), HomeItemClick {
     private lateinit var viewModel: CategoryViewModel
     private lateinit var adapter: HomeRecyclerAdapter
+    private var list: ArrayList<Category> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,8 +60,6 @@ class Home : Fragment(), HomeItemClick {
             })
     }
 
-    private var list: ArrayList<Category> = ArrayList()
-
 
     /**
      * Initialize the recycler View
@@ -69,11 +68,19 @@ class Home : Fragment(), HomeItemClick {
     private fun initRecyclerView(view: View) {
         view.home_recycler.layoutManager =
             GridLayoutManager(view.context, 2, RecyclerView.VERTICAL, false)
-        adapter = HomeRecyclerAdapter(list, this)
+        adapter =
+            HomeRecyclerAdapter(
+                list,
+                this
+            )
         home_recycler.adapter = adapter
     }
 
-    override fun onItemClicked(category: Category) {
-        Log.e("category", category.CategoryName)
+
+
+    override fun onItemClicked(category: Category, position: Int) {
+       val categoryDetailPage = CategoryDetailPage.newInstance(category)
+        activity!!.supportFragmentManager.beginTransaction().addToBackStack("CategoryDetailPage")
+            .add(R.id.home_layout, categoryDetailPage).commit()
     }
 }

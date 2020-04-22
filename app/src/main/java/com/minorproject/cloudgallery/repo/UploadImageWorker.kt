@@ -16,11 +16,11 @@ class UploadImageWorker(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
-        val value = inputData.getString("FILE_URL")
+        val uri = Uri.parse(inputData.getString("FILE_URI"))
+        val compress = inputData.getBoolean("COMPRESS", false)
         return try {
             Log.d(TAG, "Uploading Work Started")
-            val myUri: Uri = Uri.parse(value)
-            UploadImage.saveUserProfilePicToFireStore(context, myUri)
+            UploadImage.saveUserProfilePicToFireStore(context, uri,compress)
             Result.success()
         } catch (throwable: Throwable) {
             Log.d(TAG, "Error: " + throwable.message)

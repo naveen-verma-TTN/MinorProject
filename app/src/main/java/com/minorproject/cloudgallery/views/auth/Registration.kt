@@ -13,7 +13,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.databinding.FragmentAuthRegistrationBinding
-import com.minorproject.cloudgallery.viewmodels.RegistrationViewModel
+import com.minorproject.cloudgallery.viewmodels.RegistrationBinderClass
 import com.minorproject.cloudgallery.views.adapters.OnSwipeTouchListener
 import com.minorproject.cloudgallery.views.interfaces.SwipeTouchListener
 import kotlinx.android.synthetic.main.fragment_auth_forget_password.login_title
@@ -43,7 +43,7 @@ class Registration : Fragment(), View.OnClickListener,
             inflater, R.layout.fragment_auth_registration, container, false
         )
         binding.fragment = this
-        binding.viewModel = RegistrationViewModel()
+        binding.viewModel = RegistrationBinderClass()
         return binding.root
     }
 

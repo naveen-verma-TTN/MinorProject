@@ -5,6 +5,9 @@
 
     <data>
         <variable
+            name="position"
+            type="Integer" />
+        <variable
             name="homeItemClick"
             type="com.minorproject.cloudgallery.views.interfaces.HomeItemClick" />
         <variable
@@ -21,7 +24,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{()->homeItemClick.onItemClicked(category)}">
+            android:onClick="@{()->homeItemClick.onItemClicked(category, position)}">
 
 
             <TextView

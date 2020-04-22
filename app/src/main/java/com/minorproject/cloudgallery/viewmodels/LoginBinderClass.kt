@@ -23,7 +23,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
-class LoginViewModel : BaseObservable() {
+class LoginBinderClass : BaseObservable() {
     private var user: User = User()
     private lateinit var mAuth: FirebaseAuth
 

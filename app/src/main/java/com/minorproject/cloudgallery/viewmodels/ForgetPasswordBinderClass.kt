@@ -15,7 +15,7 @@ import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.User
 import kotlinx.android.synthetic.main.fragment_auth_forget_password.view.*
 
-class ForgetPasswordViewModel: BaseObservable() {
+class ForgetPasswordBinderClass: BaseObservable() {
     private var user: User = User()
     private lateinit var mAuth: FirebaseAuth
 
@@ -41,7 +41,7 @@ class ForgetPasswordViewModel: BaseObservable() {
 
         if (TextUtils.isEmpty(email)) {
             view.email_EditText_forgot.error = context.getString(R.string.empty_email)
-        } else if (!LoginViewModel.validEmail(email.toString())) {
+        } else if (!LoginBinderClass.validEmail(email.toString())) {
             view.email_EditText_forgot.error = context.getString(R.string.invaild_email)
         } else {
             mAuth = FirebaseAuth.getInstance()

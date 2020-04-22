@@ -12,7 +12,7 @@ import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.databinding.FragmentAuthLoginScreenBinding
-import com.minorproject.cloudgallery.viewmodels.LoginViewModel
+import com.minorproject.cloudgallery.viewmodels.LoginBinderClass
 import com.minorproject.cloudgallery.views.adapters.OnSwipeTouchListener
 import com.minorproject.cloudgallery.views.interfaces.SwipeTouchListener
 import kotlinx.android.synthetic.main.fragment_auth_login_screen.*
@@ -29,7 +29,7 @@ class LoginScreen : Fragment(), View.OnClickListener, SwipeTouchListener {
             inflater, R.layout.fragment_auth_login_screen, container, false
         )
         binding.fragment = this
-        binding.viewModel = LoginViewModel()
+        binding.viewModel = LoginBinderClass()
         return binding.root
     }
 

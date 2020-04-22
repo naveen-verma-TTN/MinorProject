@@ -35,7 +35,7 @@ class UserProfile : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!)
+        viewModel = ViewModelProviders.of(this)
             .get(UserViewModel::class.java)
         mAuth = FirebaseAuth.getInstance()
     }
@@ -88,7 +88,7 @@ class UserProfile : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
-            viewModel.setProfilePic(data?.data!!)
+            viewModel.setProfilePic(data?.data!!, true)
             Glide.with(view?.context!!).load(data.data)
                 .placeholder(ContextCompat.getDrawable(view?.context!!,R.drawable.user_icon)).into(avatar)
         }

@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_auth_registration.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class RegistrationViewModel : BaseObservable() {
+class RegistrationBinderClass : BaseObservable() {
     private var user: User = User()
     private lateinit var mAuth: FirebaseAuth
 
@@ -86,11 +86,11 @@ class RegistrationViewModel : BaseObservable() {
             view.username_EditText.error = context.getString(R.string.empty_username)
         } else if (TextUtils.isEmpty(email)) {
             view.email_EditText.error = context.getString(R.string.empty_email)
-        } else if (!LoginViewModel.validEmail(email.toString())) {
+        } else if (!LoginBinderClass.validEmail(email.toString())) {
             view.email_EditText.error = context.getString(R.string.invaild_email)
         } else if (TextUtils.isEmpty(pass)) {
             view.password_EditText.error = context.getString(R.string.empty_password)
-        } else if (!(LoginViewModel.validPassword(pass.toString())
+        } else if (!(LoginBinderClass.validPassword(pass.toString())
                     && pass.toString().length >= 6)
         ) {
             view.password_EditText.error = context.getString(R.string.invaild_password)
@@ -177,7 +177,7 @@ class RegistrationViewModel : BaseObservable() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                LoginViewModel.updateUI(view)
+                LoginBinderClass.updateUI(view)
             }
     }
 }

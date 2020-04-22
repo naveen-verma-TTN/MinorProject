@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="position"
+            type="Integer" />
+
+        <variable
+            name="itemClick"
+            type="com.minorproject.cloudgallery.views.interfaces.HomeItemClick" />
+
+        <variable
+            name="category"
+            type="com.minorproject.cloudgallery.model.Category" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:onClick="@{()->itemClick.onItemClicked(category, position)}">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon"
+            tools:imageUrl="@{category.categoryThumbLink}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

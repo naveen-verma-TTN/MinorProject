@@ -29,7 +29,8 @@ import java.time.format.DateTimeFormatter
 
 
 class Timeline : Fragment(),
-    ItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+    ItemClickListener {
+    /*ItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {*/
     private lateinit var imageList: ArrayList<Image>
     private lateinit var adapter: ImageAdapter
 
@@ -46,13 +47,13 @@ class Timeline : Fragment(),
 
         val recyclerView: TimeLineRecyclerView = view.findViewById(R.id.recycler_view)
 
-        val itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
+/*        val itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
             RecyclerItemTouchHelper(
                 0,
                 ItemTouchHelper.RIGHT,
                 this
             )
-        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView)
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView)*/
 
 
         recyclerView.layoutManager = LinearLayoutManager(
@@ -129,10 +130,10 @@ class Timeline : Fragment(),
         }
     }
 
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int, position: Int) {
+/*    override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int, position: Int) {
         Toast.makeText(view?.context, "Delete ${imageList[position].category}", Toast.LENGTH_LONG)
             .show()
         imageList.removeAt(position)
-        adapter.notifyDataSetChanged();
-    }
+        adapter.notifyDataSetChanged()
+    }*/
 }

@@ -10,7 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.databinding.FragmentAuthForgetPasswordBinding
-import com.minorproject.cloudgallery.viewmodels.ForgetPasswordViewModel
+import com.minorproject.cloudgallery.viewmodels.ForgetPasswordBinderClass
 import com.minorproject.cloudgallery.views.adapters.OnSwipeTouchListener
 import com.minorproject.cloudgallery.views.interfaces.SwipeTouchListener
 import kotlinx.android.synthetic.main.fragment_auth_forget_password.*
@@ -29,7 +29,7 @@ class ForgetPassword : Fragment(), View.OnClickListener,
             inflater, R.layout.fragment_auth_forget_password, container, false
         )
         binding.fragment = this
-        binding.viewModel = ForgetPasswordViewModel()
+        binding.viewModel = ForgetPasswordBinderClass()
         return binding.root
     }
 

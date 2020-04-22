@@ -42,10 +42,6 @@ class HomePageActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
     }
 
 
-    override fun onBackPressed() {
-        moveTaskToBack(true)
-    }
-
     internal class PagerAdapter(
         fragmentManager: FragmentManager?,
         behaviorResumeOnlyCurrentFragment: Int

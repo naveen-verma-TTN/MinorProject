@@ -8,15 +8,20 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.work.*
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.minorproject.cloudgallery.model.Category
 import com.minorproject.cloudgallery.model.User
+import com.minorproject.cloudgallery.repo.Compress
 import com.minorproject.cloudgallery.repo.UploadImage
 import com.minorproject.cloudgallery.repo.UploadImageWorker
+import java.util.HashMap
+import java.util.concurrent.Executor
 
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
@@ -34,7 +39,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    private fun readDataFromFireStore(){
+    private fun readDataFromFireStore() {
         val fireStore = FirebaseFirestore.getInstance()
         fireStore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
 
@@ -58,12 +63,12 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun setProfilePic(filePath: Uri) {
+    fun setProfilePic(filePath: Uri, compress: Boolean) {
         val workManager = WorkManager.getInstance()
         val oneTimeWorkRequest = OneTimeWorkRequest.Builder(
-                UploadImageWorker::class.java
-            )
-            .setInputData(createInputData(filePath))
+            UploadImageWorker::class.java
+        )
+            .setInputData(createInputData(filePath, compress))
             .setConstraints(
                 Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
             )
@@ -73,9 +78,42 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    private fun createInputData(url: Uri?): Data {
+    private fun createInputData(url: Uri?, compress: Boolean): Data {
         return Data.Builder()
-            .putString("FILE_URL", url.toString())
+            .putString("FILE_URI", url.toString())
+            .putBoolean("COMPRESS", compress)
             .build()
+    }
+
+    fun updateUserDetails(user: User): LiveData<Boolean> {
+        val result: MutableLiveData<Boolean> = MutableLiveData()
+        val userHashMap = HashMap<String, Any>()
+        mAuth = FirebaseAuth.getInstance()
+
+        userHashMap["UserAdditionalEmail"] = user.UserAdditionalEmail
+        userHashMap["UserPhoneNumber"] = user.UserPhoneNumber
+        userHashMap["UserDOB"] = user.UserDOB
+        userHashMap["UserAddress"] = user.UserAddress
+
+        val rootRef = FirebaseFirestore.getInstance()
+        val docIdRef: DocumentReference =
+            rootRef.collection("UserDetails").document(mAuth?.uid!!)
+        docIdRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val document = task.result
+                if (document!!.exists()) {
+                    docIdRef.update(userHashMap)
+                        .addOnSuccessListener {
+                            result.value = true
+                        }
+                        .addOnFailureListener { e ->
+                            result.value = false
+                        }
+                }
+            } else {
+                result.value = false
+            }
+        }
+        return result
     }
 }
