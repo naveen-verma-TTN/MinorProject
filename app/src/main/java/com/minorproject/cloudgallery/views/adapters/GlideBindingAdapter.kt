@@ -23,7 +23,6 @@ object GlideBindingAdapter {
     @JvmStatic
     @BindingAdapter("userProfileImageUrl")
     fun setUserProfileImage(view: ImageView?, imageUrl: String?) {
-        Log.e("sd: ",imageUrl.toString())
         if(imageUrl != null){
             Glide.with(view!!.context).load(imageUrl.trim()).placeholder(R.drawable.user_icon).into(view)
         }
