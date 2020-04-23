@@ -26,11 +26,17 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splashscreen_layout)
 
+
+        val value = intent?.extras?.getString("Key")
+
         Handler().postDelayed({
             if (mAuth.currentUser == null) {
                 Handler().postDelayed({
                     main_logo_layout.visibility = View.GONE
-                }, 20)
+                    if (value == "LOGOUT") {
+                        splashScreen_layout.snack(getString(R.string.logout_message))
+                    }
+                }, 10)
                 val fragmentTransaction = supportFragmentManager.beginTransaction()
                 fragmentTransaction.setCustomAnimations(
                     R.anim.slide_up,
@@ -51,5 +57,9 @@ class SplashScreenActivity : AppCompatActivity() {
                 finish()
             }
         }, SPLASH_TIME_OUT)
+    }
+
+    private fun View.snack(message: String, duration: Int = Snackbar.LENGTH_LONG) {
+        Snackbar.make(this, message, duration).show()
     }
 }

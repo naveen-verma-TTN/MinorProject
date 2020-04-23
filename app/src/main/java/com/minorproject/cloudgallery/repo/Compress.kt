@@ -5,13 +5,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
-import android.provider.MediaStore
+import android.os.Environment
 import androidx.annotation.RequiresApi
-import java.io.ByteArrayOutputStream
-import java.io.FileNotFoundException
-import java.io.IOException
-import java.io.InputStream
-import java.lang.Math.floor
+import java.io.*
 
 class Compress {
     companion object {
@@ -36,22 +32,25 @@ class Compress {
             input = context.contentResolver.openInputStream(uri)
             val bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions)
             input?.close()
-            val result = getImageUri(context, bitmap!!)
+            val result = getImageUri(bitmap!!)
             return result
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
-        private fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            inImage.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream)
-            val path: String =
-                MediaStore.Images.Media.insertImage(
-                    inContext.contentResolver,
-                    inImage,
-                    "data_${System.currentTimeMillis()}.png",
-                    null
-                )
-            return Uri.parse(path)
+        private fun getImageUri(inImage: Bitmap): Uri? {
+            val tempDir: File = Environment.getExternalStorageDirectory()
+            tempDir.mkdir()
+            val tempFile: File = File.createTempFile("data_","${System.currentTimeMillis()}.jpg"
+            )
+            val bytes = ByteArrayOutputStream()
+            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+            val bitmapData = bytes.toByteArray()
+
+            val fos = FileOutputStream(tempFile)
+            fos.write(bitmapData)
+            fos.flush()
+            fos.close()
+            return Uri.fromFile(tempFile)
         }
 
         private fun getPowerOfTwoForSampleRatio(ratio: Double): Int {

@@ -1,50 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".views.profile.UserProfile">
+<layout>
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical">
+        android:fitsSystemWindows="true"
+        tools:context=".views.pages.profile.UserProfile">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:scrollbars="vertical">
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/app_bar"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                android:theme="@style/AppTheme.AppBarOverlay"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+
+                <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/app_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fitsSystemWindows="true"
+                    android:theme="@style/AppTheme.AppBarOverlay"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <include
+                        android:id="@+id/collapse_toolbar"
+                        layout="@layout/collapse_toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp" />
+
+                    <include
+                        android:id="@+id/progress_menu"
+                        layout="@layout/progress_menu"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp" />
+                </com.google.android.material.appbar.AppBarLayout>
+
+
 
                 <include
-                    layout="@layout/collapse_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp" />
+                    android:id="@+id/userDetail"
+                    layout="@layout/fragment_user_details" />
 
-                <include
-                    layout="@layout/progress_menu"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp" />
-            </com.google.android.material.appbar.AppBarLayout>
+            </LinearLayout>
+        </ScrollView>
 
-            <fragment
-                android:id="@+id/user_detail_page"
-                class="com.minorproject.cloudgallery.views.profile.UserDetails"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-    </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

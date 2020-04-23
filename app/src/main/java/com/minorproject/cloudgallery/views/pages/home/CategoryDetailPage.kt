@@ -1,14 +1,11 @@
-package com.minorproject.cloudgallery.views.home
+package com.minorproject.cloudgallery.views.pages.home
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toolbar
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -18,17 +15,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.Category
-import com.minorproject.cloudgallery.model.Image
 import com.minorproject.cloudgallery.viewmodels.CategoryViewModel
-import com.minorproject.cloudgallery.views.adapters.HomeRecyclerAdapter
+import com.minorproject.cloudgallery.views.adapters.HomeDetailAdapter
 import com.minorproject.cloudgallery.views.interfaces.HomeItemClick
 import com.stfalcon.imageviewer.StfalconImageViewer
 import kotlinx.android.synthetic.main.fragment_category_detail_page.*
 import kotlinx.android.synthetic.main.fragment_category_detail_page.view.*
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.fragment_home.view.home_recycler
-import org.jetbrains.anko.view
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -63,7 +55,8 @@ class CategoryDetailPage : Fragment(), HomeItemClick {
         category = arguments?.get("CATEGORY") as Category
 
         toolbar.title = category.CategoryName.toUpperCase(Locale.getDefault())
-        toolbar.subtitle = category.ListImage?.size.toString()
+
+        category.ListImage?.size?:toolbar.subtitle
 
         toolbar.setNavigationIcon(R.drawable.back_button)
 

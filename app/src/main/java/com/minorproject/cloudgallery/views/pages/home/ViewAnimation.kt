@@ -1,9 +1,8 @@
-package com.minorproject.cloudgallery.views.home
+package com.minorproject.cloudgallery.views.pages.home
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.view.View
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ViewAnimation {
     companion object {

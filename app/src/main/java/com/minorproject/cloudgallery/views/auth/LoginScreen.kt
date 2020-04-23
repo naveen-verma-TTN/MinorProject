@@ -36,14 +36,6 @@ class LoginScreen : Fragment(), View.OnClickListener, SwipeTouchListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val value = activity?.intent?.extras?.getString("Key")
-
-        Handler().postDelayed({
-            if (value == "LOGOUT") {
-                view.snack(getString(R.string.logout_message))
-            }
-        }, 1000)
-
         navController = Navigation.findNavController(view)
         view.setOnTouchListener(
             OnSwipeTouchListener(
@@ -67,9 +59,6 @@ class LoginScreen : Fragment(), View.OnClickListener, SwipeTouchListener {
         }
     }
 
-    private fun View.snack(message: String, duration: Int = Snackbar.LENGTH_LONG) {
-        Snackbar.make(this, message, duration).show()
-    }
 
     override fun onSwipeRight() {}
 

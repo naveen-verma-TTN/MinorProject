@@ -1,24 +1,20 @@
-package com.minorproject.cloudgallery.views.timeline
+package com.minorproject.cloudgallery.views.pages.timeline
 
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.Image
 import com.minorproject.cloudgallery.repo.ImageRepoTemp
 import com.minorproject.cloudgallery.views.adapters.ImageAdapter
-import com.minorproject.cloudgallery.views.adapters.RecyclerItemTouchHelper
 import com.minorproject.cloudgallery.views.interfaces.ItemClickListener
 import com.stfalcon.imageviewer.StfalconImageViewer
 import xyz.sangcomz.stickytimelineview.RecyclerSectionItemDecoration

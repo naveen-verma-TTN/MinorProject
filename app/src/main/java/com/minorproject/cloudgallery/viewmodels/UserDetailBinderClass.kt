@@ -1,16 +1,25 @@
 package com.minorproject.cloudgallery.viewmodels
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.annotation.RequiresApi
 import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
 import androidx.fragment.app.FragmentActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.minorproject.cloudgallery.BR
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.User
 import com.minorproject.cloudgallery.viewmodels.LoginBinderClass.Companion.validEmail
+import com.minorproject.cloudgallery.views.HomePageActivity
+import com.minorproject.cloudgallery.views.SplashScreenActivity
 import kotlinx.android.synthetic.main.fragment_user_details.view.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -38,27 +47,19 @@ class UserDetailBinderClass(
         )
     }
 
+    var isEnable: Boolean = false
+    var isVisibility: Int = VISIBLE
+
     fun toggleButton(view: View) {
         saveValues(view)
-
-        if (view.user_detail_page_edit.visibility == View.VISIBLE) {
-            toggleEnable(view, true)
-            view.user_detail_page_edit.visibility = View.GONE
-            view.user_detail_page_cancel.visibility = View.VISIBLE
-            view.user_detail_page_correct.visibility = View.VISIBLE
+        if (!isEnable) {
+            isEnable = true
+            isVisibility = GONE
         } else {
-            toggleEnable(view, false)
-            view.user_detail_page_edit.visibility = View.VISIBLE
-            view.user_detail_page_cancel.visibility = View.GONE
-            view.user_detail_page_correct.visibility = View.GONE
+            isEnable = false
+            isVisibility = VISIBLE
         }
-    }
-
-    private fun toggleEnable(view: View, isEnable: Boolean) {
-        view.user_detail_page_email.isEnabled = isEnable
-        view.user_detail_page_phone.isEnabled = isEnable
-        view.user_detail_page_dob.isEnabled = isEnable
-        view.user_detail_page_address.isEnabled = isEnable
+        notifyChange()
     }
 
     fun resetValues(view: View) {
@@ -116,7 +117,20 @@ class UserDetailBinderClass(
                     }
                 }
             )
+        }
+    }
 
+    fun logout(view: View) {
+        val mAuth: FirebaseAuth? = FirebaseAuth.getInstance()
+        if (mAuth?.currentUser != null) {
+            val intent = Intent(view.context, SplashScreenActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            val bundle = Bundle()
+            bundle.putString("Key", "LOGOUT")
+            intent.putExtras(bundle)
+            mAuth.signOut()
+            view.context.startActivity(intent)
+            (view.context as HomePageActivity).finish()
         }
     }
 }

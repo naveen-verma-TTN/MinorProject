@@ -1,14 +1,12 @@
-package com.minorproject.cloudgallery.views.home
+package com.minorproject.cloudgallery.views.pages.home
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.Category
 import com.minorproject.cloudgallery.viewmodels.CategoryViewModel
+import com.minorproject.cloudgallery.views.adapters.HomeDetailAdapter
 import com.minorproject.cloudgallery.views.adapters.HomeRecyclerAdapter
 import com.minorproject.cloudgallery.views.interfaces.HomeItemClick
 import kotlinx.android.synthetic.main.fragment_home.*

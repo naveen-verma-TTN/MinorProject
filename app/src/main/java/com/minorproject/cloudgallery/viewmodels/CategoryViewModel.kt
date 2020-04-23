@@ -53,7 +53,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                         CategoryName = map["CategoryName"] as String,
                         CategoryUploadTime = map["CategoryUploadTime"] as Timestamp,
                         CategoryThumbLink = map["CategoryThumbLink"] as String?,
-                        ListImage = map["ListImage"] as List<Image>?
+                        ListImage = map["ListImage"] as ArrayList<Image>?
                     )
                     list.add(category)
                 }

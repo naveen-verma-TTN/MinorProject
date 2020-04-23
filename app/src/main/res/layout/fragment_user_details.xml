@@ -3,9 +3,11 @@
 
     <data>
 
+        <import type="android.view.View"/>
+
         <variable
             name="context"
-            type="com.minorproject.cloudgallery.views.profile.UserDetails" />
+            type="com.minorproject.cloudgallery.views.pages.profile.UserProfile" />
 
         <variable
             name="viewModel"
@@ -25,7 +27,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".views.profile.UserDetails">
+        tools:context=".views.pages.profile.UserDetails">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,7 +49,7 @@
                     android:onClick="@{()-> binder.resetValues(context.view)}"
                     android:src="@drawable/cancel"
                     android:tooltipText="Cancel"
-                    android:visibility="gone"
+                    android:visibility="@{binder.isVisibility==View.VISIBLE?View.GONE : View.VISIBLE }"
                     tools:targetApi="o" />
 
                 <ImageView
@@ -58,7 +60,7 @@
                     android:onClick="@{()-> binder.writeDataOnFireStore(context.view, viewModel)}"
                     android:src="@drawable/correct"
                     android:tooltipText="Save details"
-                    android:visibility="gone"
+                    android:visibility="@{binder.isVisibility==View.VISIBLE?View.GONE : View.VISIBLE }"
                     tools:targetApi="o" />
 
                 <ImageView
@@ -66,7 +68,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:onClick="@{()-> binder.toggleButton(context.view)}"
+                    android:visibility="@{binder.isVisibility}"
+                    android:onClick="@{()->binder.toggleButton(context.view)}"
                     android:src="@drawable/edit_button"
                     android:tooltipText="Edit details"
                     tools:targetApi="o" />
@@ -107,7 +110,7 @@
                         android:layout_marginBottom="20dp"
                         android:background="@null"
                         android:elevation="20dp"
-                        android:enabled="false"
+                        android:enabled="@{binder.enable}"
                         android:fontFamily="@font/allerta_stencil"
                         android:hint="@string/email_address_editText"
                         android:inputType="textEmailAddress"
@@ -173,7 +176,7 @@
                         android:layout_marginBottom="20dp"
                         android:background="@null"
                         android:elevation="20dp"
-                        android:enabled="false"
+                        android:enabled="@{binder.enable}"
                         android:fontFamily="@font/allerta_stencil"
                         android:hint="@string/phone_number"
                         android:inputType="phone"
@@ -221,7 +224,7 @@
                         android:layout_marginBottom="20dp"
                         android:background="@null"
                         android:elevation="20dp"
-                        android:enabled="false"
+                        android:enabled="@{binder.enable}"
                         android:fontFamily="@font/allerta_stencil"
                         android:hint="@string/dob"
                         android:onClick="@{()-> binder.clickDataPicker(context.view)}"
@@ -267,7 +270,7 @@
                         android:layout_marginBottom="20dp"
                         android:background="@null"
                         android:elevation="20dp"
-                        android:enabled="false"
+                        android:enabled="@{binder.enable}"
                         android:fontFamily="@font/allerta_stencil"
                         android:hint="@string/address"
                         android:inputType="textPostalAddress"

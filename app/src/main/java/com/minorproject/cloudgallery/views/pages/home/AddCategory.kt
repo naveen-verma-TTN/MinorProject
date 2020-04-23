@@ -1,8 +1,7 @@
-package com.minorproject.cloudgallery.views.home
+package com.minorproject.cloudgallery.views.pages.home
 
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
