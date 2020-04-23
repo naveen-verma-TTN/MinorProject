@@ -12,6 +12,7 @@
         app:timeLineColor="@color/colorAccent"
         app:timeLineCircleColor="@color/colorPrimary"
         app:sectionSubTitleTextSize="15dp"
+        android:paddingBottom="75dp"
         app:sectionTitleTextSize="18dp"
         app:sectionTitleTextColor="@color/colorAccent"
         app:sectionSubTitleTextColor="@color/colorPrimary"

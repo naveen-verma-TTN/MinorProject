@@ -1,4 +1,4 @@
-package com.minorproject.cloudgallery.views.pages.home
+package com.minorproject.cloudgallery.views.pages.category
 
 import android.os.Build
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.minorproject.cloudgallery.views.pages.home
+package com.minorproject.cloudgallery.views.pages.category
 
 import android.os.Build
 import android.os.Bundle
@@ -15,14 +15,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.Category
 import com.minorproject.cloudgallery.viewmodels.CategoryViewModel
-import com.minorproject.cloudgallery.views.adapters.HomeDetailAdapter
 import com.minorproject.cloudgallery.views.adapters.HomeRecyclerAdapter
 import com.minorproject.cloudgallery.views.interfaces.HomeItemClick
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.view.home_recycler
+import kotlinx.android.synthetic.main.fragment_category.*
+import kotlinx.android.synthetic.main.fragment_category.view.home_recycler
 
 @RequiresApi(Build.VERSION_CODES.O)
-class Home : Fragment(), HomeItemClick {
+class CategoryPage : Fragment(), HomeItemClick {
     private lateinit var viewModel: CategoryViewModel
     private lateinit var adapter: HomeRecyclerAdapter
     private var list: ArrayList<Category> = ArrayList()
@@ -31,7 +30,7 @@ class Home : Fragment(), HomeItemClick {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_category, container, false)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/home_layout"
-    tools:context=".views.pages.home.Home">
+    tools:context=".views.pages.category.CategoryPage">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
             android:id="@+id/home_recycler"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            tools:listitem="@layout/home_item"
+            tools:listitem="@layout/category_page_item"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

@@ -3,8 +3,7 @@ package com.minorproject.cloudgallery.views.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.minorproject.cloudgallery.databinding.HomeDetailItemBinding
-import com.minorproject.cloudgallery.databinding.HomeItemBinding
+import com.minorproject.cloudgallery.databinding.CategoryDetailPageItemBinding
 import com.minorproject.cloudgallery.model.Category
 import com.minorproject.cloudgallery.views.interfaces.HomeItemClick
 
@@ -20,7 +19,7 @@ class HomeDetailAdapter internal constructor(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
-            val binding: HomeDetailItemBinding = HomeDetailItemBinding.inflate(
+            val binding: CategoryDetailPageItemBinding = CategoryDetailPageItemBinding.inflate(
                 layoutInflater, parent, false
             )
             return CategoryViewHolder(
@@ -47,7 +46,7 @@ class HomeDetailAdapter internal constructor(
     /**
      * Inner ViewHolder class
      */
-    class CategoryViewHolder(private val binding: HomeDetailItemBinding) :
+    class CategoryViewHolder(private val binding: CategoryDetailPageItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
             category: Any?,

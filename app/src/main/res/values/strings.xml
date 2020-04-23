@@ -33,7 +33,7 @@
     <string name="user_email_failure">UserWithEmail:failure</string>
     <string name="user_email_success">signInWithEmail:success</string>
     <string name="progress_login">Logging In...</string>
-    <string name="home">HOME</string>
+    <string name="home">CATEGORY</string>
     <string name="timeline">TIMELINE</string>
     <string name="profile">PROFILE</string>
 

@@ -1,9 +1,7 @@
 package com.minorproject.cloudgallery.views
 
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -12,7 +10,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
 import androidx.viewpager.widget.ViewPager
 import com.minorproject.cloudgallery.R
-import com.minorproject.cloudgallery.views.pages.home.Home
+import com.minorproject.cloudgallery.views.pages.category.CategoryPage
 import com.minorproject.cloudgallery.views.pages.profile.UserProfile
 import com.minorproject.cloudgallery.views.pages.timeline.Timeline
 import kotlinx.android.synthetic.main.home_page_layout.*
@@ -67,7 +65,7 @@ class HomePageActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
                     Timeline()
                 }
                 1 -> {
-                    Home()
+                    CategoryPage()
                 }
                 else -> {
                     UserProfile()
