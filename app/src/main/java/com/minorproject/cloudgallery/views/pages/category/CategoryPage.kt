@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.Category
 import com.minorproject.cloudgallery.viewmodels.CategoryViewModel
-import com.minorproject.cloudgallery.views.adapters.HomeRecyclerAdapter
+import com.minorproject.cloudgallery.views.adapters.CategoryPageRecyclerAdapter
 import com.minorproject.cloudgallery.views.interfaces.HomeItemClick
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.fragment_category.view.home_recycler
@@ -23,8 +23,14 @@ import kotlinx.android.synthetic.main.fragment_category.view.home_recycler
 @RequiresApi(Build.VERSION_CODES.O)
 class CategoryPage : Fragment(), HomeItemClick {
     private lateinit var viewModel: CategoryViewModel
-    private lateinit var adapter: HomeRecyclerAdapter
+    private lateinit var adapter: CategoryPageRecyclerAdapter
     private var list: ArrayList<Category> = ArrayList()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(activity!!)
+            .get(CategoryViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,8 +53,6 @@ class CategoryPage : Fragment(), HomeItemClick {
             dialogFragment.show(transaction, null)
         }
 
-        viewModel = ViewModelProviders.of(this)
-            .get(CategoryViewModel::class.java)
 
         viewModel.allCategories.observe(
             requireActivity(),
@@ -67,7 +71,7 @@ class CategoryPage : Fragment(), HomeItemClick {
         view.home_recycler.layoutManager =
             GridLayoutManager(view.context, 2, RecyclerView.VERTICAL, false)
         adapter =
-            HomeRecyclerAdapter(
+            CategoryPageRecyclerAdapter(
                 list,
                 this
             )
@@ -81,4 +85,6 @@ class CategoryPage : Fragment(), HomeItemClick {
         activity!!.supportFragmentManager.beginTransaction().addToBackStack("CategoryDetailPage")
             .add(R.id.home_layout, categoryDetailPage).commit()
     }
+
+    override fun onItemClicked(imageUrl: String, position: Int) {}
 }

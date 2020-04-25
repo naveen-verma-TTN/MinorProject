@@ -50,4 +50,6 @@
     <string name="phone_number">Phone number</string>
     <string name="email">Additional Email Id</string>
     <string name="logout_message">LogOut Successfully</string>
+    <string name="permission_denied">Permission Denied. Please go to settings and enable required permissions.</string>
+    <string name="permission_denied_short_message">Permission Denied</string>
 </resources>

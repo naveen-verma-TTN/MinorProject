@@ -14,12 +14,14 @@
             name="category"
             type="com.minorproject.cloudgallery.model.Category" />
     </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:elevation="50dp"
-        app:cardCornerRadius="10dp"
-        android:layout_margin="5dp">
+        android:id="@+id/category_page_layout"
+        app:cardCornerRadius="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -46,14 +48,14 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
+                android:layout_margin="5dp"
+                android:scaleType="fitXY"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:scaleType="fitXY"
-                android:layout_margin="5dp"
-                tools:imageUrl="@{category.categoryThumbLink}"
-                app:srcCompat="@drawable/icon" />
+                app:srcCompat="@drawable/icon"
+                tools:imageUrl="@{category.categoryThumbLink}" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

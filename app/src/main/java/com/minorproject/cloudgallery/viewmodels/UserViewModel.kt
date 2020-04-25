@@ -1,35 +1,22 @@
 package com.minorproject.cloudgallery.viewmodels
 
 import android.app.Application
-import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.work.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.minorproject.cloudgallery.model.Category
 import com.minorproject.cloudgallery.model.User
 import com.minorproject.cloudgallery.repo.Compress
-import com.minorproject.cloudgallery.repo.UploadImage
-import com.minorproject.cloudgallery.repo.UploadImageWorker
-import com.minorproject.cloudgallery.views.HomePageActivity
-import com.minorproject.cloudgallery.views.SplashScreenActivity
 import java.util.HashMap
-import java.util.concurrent.Executor
 
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
@@ -73,21 +60,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun uploadPic(filePath: Uri, compress: Boolean) {
-        val workManager = WorkManager.getInstance()
-        val oneTimeWorkRequest = OneTimeWorkRequest.Builder(
-            UploadImageWorker::class.java
-        )
-            .setInputData(createInputData(filePath, compress))
-            .setConstraints(
-                Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-            )
-            .addTag("imageUploadWork")
-            .build()
-        workManager.enqueue(oneTimeWorkRequest)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
     fun setProfilePic(uri: Uri, compress: Boolean) {
         storage = FirebaseStorage.getInstance()
         storageReference = storage?.reference
@@ -123,13 +95,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             }
     }
 
-
-    private fun createInputData(url: Uri?, compress: Boolean): Data {
-        return Data.Builder()
-            .putString("FILE_URI", url.toString())
-            .putBoolean("COMPRESS", compress)
-            .build()
-    }
 
     fun updateUserDetails(user: User): LiveData<Boolean> {
         val result: MutableLiveData<Boolean> = MutableLiveData()

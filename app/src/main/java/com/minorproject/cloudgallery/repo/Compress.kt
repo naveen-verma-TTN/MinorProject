@@ -9,6 +9,7 @@ import android.os.Environment
 import androidx.annotation.RequiresApi
 import java.io.*
 
+@Suppress("DEPRECATION")
 class Compress {
     companion object {
         @RequiresApi(Build.VERSION_CODES.O)
@@ -32,16 +33,14 @@ class Compress {
             input = context.contentResolver.openInputStream(uri)
             val bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions)
             input?.close()
-            val result = getImageUri(bitmap!!)
-            return result
+            return getImageUri(bitmap!!, "thumb_", "${System.currentTimeMillis()}.jpg")
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
-        private fun getImageUri(inImage: Bitmap): Uri? {
+         fun getImageUri(inImage: Bitmap, preName: String, suffixName: String): Uri {
             val tempDir: File = Environment.getExternalStorageDirectory()
             tempDir.mkdir()
-            val tempFile: File = File.createTempFile("data_","${System.currentTimeMillis()}.jpg"
-            )
+            val tempFile: File = File.createTempFile(preName, suffixName)
             val bytes = ByteArrayOutputStream()
             inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
             val bitmapData = bytes.toByteArray()

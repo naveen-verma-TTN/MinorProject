@@ -4,17 +4,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.minorproject.cloudgallery.databinding.CategoryDetailPageItemBinding
-import com.minorproject.cloudgallery.model.Category
+import com.minorproject.cloudgallery.model.Image
 import com.minorproject.cloudgallery.views.interfaces.HomeItemClick
 
-class HomeDetailAdapter internal constructor(
-    private var category: ArrayList<Category>,
+class CategoryPageDetailAdapter internal constructor(
+    private var image: ArrayList<Image>,
     private val homeItemClick: HomeItemClick
 )
-    : RecyclerView.Adapter<HomeDetailAdapter.CategoryViewHolder>() {
+    : RecyclerView.Adapter<CategoryPageDetailAdapter.CategoryViewHolder>() {
 
     private companion object {
-        private const val TAG = "HomeDetailAdapter"
+        private const val TAG = "CategoryPageDetailAdapter"
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
@@ -28,19 +28,17 @@ class HomeDetailAdapter internal constructor(
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        holder.bind(category[position], homeItemClick, position)
+        holder.bind(image[position], homeItemClick, position)
     }
 
 
     override fun getItemCount(): Int {
-        return category.size
+        return image.size
     }
 
-    fun setList(category: ArrayList<Category>) {
-        this.category = category
+    fun setList(image: ArrayList<Image>) {
+        this.image = image
     }
-
-
 
 
     /**
@@ -49,11 +47,11 @@ class HomeDetailAdapter internal constructor(
     class CategoryViewHolder(private val binding: CategoryDetailPageItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
-            category: Any?,
+            image: Image,
             homeItemClick: HomeItemClick,
             position: Int
         ) {
-            binding.category = category as Category?
+            binding.image = image
             binding.itemClick = homeItemClick
             binding.position = position
         }

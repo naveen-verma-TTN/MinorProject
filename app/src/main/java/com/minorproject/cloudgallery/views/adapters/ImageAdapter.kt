@@ -6,11 +6,11 @@ import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.minorproject.cloudgallery.databinding.TimelineRowItemBinding
 import com.minorproject.cloudgallery.views.interfaces.ItemClickListener
-import com.minorproject.cloudgallery.model.Image
+import com.minorproject.cloudgallery.model.TimeImage
 
 
 class ImageAdapter(
-    private val ImageList: List<Image>,
+    private val ImageList: List<TimeImage>,
     private val itemClickListener: ItemClickListener
 ) : RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
 
@@ -35,7 +35,7 @@ class ImageAdapter(
     class ViewHolder(private val binding: TimelineRowItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         var viewForeground:RelativeLayout? = null
-        fun bind(image: Image, itemClickListener: ItemClickListener, position: Int) {
+        fun bind(image: TimeImage, itemClickListener: ItemClickListener, position: Int) {
             binding.image = image
             binding.position = position
             binding.itemClick = itemClickListener

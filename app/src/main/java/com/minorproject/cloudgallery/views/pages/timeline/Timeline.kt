@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.minorproject.cloudgallery.R
-import com.minorproject.cloudgallery.model.Image
+import com.minorproject.cloudgallery.model.TimeImage
 import com.minorproject.cloudgallery.repo.ImageRepoTemp
 import com.minorproject.cloudgallery.views.adapters.ImageAdapter
 import com.minorproject.cloudgallery.views.interfaces.ItemClickListener
@@ -27,7 +27,7 @@ import java.time.format.DateTimeFormatter
 class Timeline : Fragment(),
     ItemClickListener {
     /*ItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {*/
-    private lateinit var imageList: ArrayList<Image>
+    private lateinit var imageList: ArrayList<TimeImage>
     private lateinit var adapter: ImageAdapter
 
     override fun onCreateView(
@@ -76,14 +76,14 @@ class Timeline : Fragment(),
 
 
     override fun onItemClicked(position: Int) {
-        StfalconImageViewer.Builder<Image>(context, imageList) { view, image ->
+        StfalconImageViewer.Builder<TimeImage>(context, imageList) { view, image ->
             Glide.with(view!!.context).load(image.link).into(view)
         }.withStartPosition(position).withHiddenStatusBar(false).show()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun sortList(imageList: ArrayList<Image>) {
-        imageList.sortWith(Comparator { o1: Image, o2: Image ->
+    private fun sortList(imageList: ArrayList<TimeImage>) {
+        imageList.sortWith(Comparator { o1: TimeImage, o2: TimeImage ->
             if (o1.uploadTime.isAfter(o2.uploadTime)) {
                 -1
             } else {
@@ -95,7 +95,7 @@ class Timeline : Fragment(),
 
     //Get data method
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getImageList(): ArrayList<Image> {
+    private fun getImageList(): ArrayList<TimeImage> {
         val list = ImageRepoTemp().imageRepo
         sortList(list)
         return list
@@ -103,7 +103,7 @@ class Timeline : Fragment(),
 
 
     //Get SectionCallback method
-    private fun getSectionCallback(imageList: List<Image>): RecyclerSectionItemDecoration.SectionCallback {
+    private fun getSectionCallback(imageList: List<TimeImage>): RecyclerSectionItemDecoration.SectionCallback {
         return object : RecyclerSectionItemDecoration.SectionCallback {
             //In your data, implement a method to determine if this is a section.
             override fun isSection(position: Int): Boolean =

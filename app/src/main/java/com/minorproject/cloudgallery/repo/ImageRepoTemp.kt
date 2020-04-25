@@ -3,17 +3,18 @@ package com.minorproject.cloudgallery.repo
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.minorproject.cloudgallery.model.Image
+import com.minorproject.cloudgallery.model.TimeImage
 import java.time.LocalDate
 import kotlin.collections.ArrayList
 
 class ImageRepoTemp {
-    val imageRepo: ArrayList<Image>
+    val imageRepo: ArrayList<TimeImage>
         @RequiresApi(Build.VERSION_CODES.O)
         get() {
-            val imageRepoList = ArrayList<Image>()
+            val imageRepoList = ArrayList<TimeImage>()
 
             imageRepoList.add(
-                Image(
+                TimeImage(
                     "abc1234",
                     "Category 1",
                     "image_name",
@@ -24,7 +25,7 @@ class ImageRepoTemp {
             )
 
             imageRepoList.add(
-                Image(
+                TimeImage(
                     "abc1234",
                     "Category 2",
                     "image_name",
@@ -35,7 +36,7 @@ class ImageRepoTemp {
             )
 
             imageRepoList.add(
-                Image(
+                TimeImage(
                     "abc1234",
                     "Category 2",
                     "image_name",
@@ -46,7 +47,7 @@ class ImageRepoTemp {
             )
 
             imageRepoList.add(
-                Image(
+                TimeImage(
                     "abc1234",
                     "Category 3",
                     "image_name",
@@ -57,7 +58,7 @@ class ImageRepoTemp {
             )
 
             imageRepoList.add(
-                Image(
+                TimeImage(
                     "abc1234",
                     "Category 3",
                     "image_name",
@@ -68,7 +69,7 @@ class ImageRepoTemp {
             )
 
             imageRepoList.add(
-                Image(
+                TimeImage(
                     "abc1234",
                     "Category 3",
                     "image_name",
@@ -79,7 +80,7 @@ class ImageRepoTemp {
             )
 
             imageRepoList.add(
-                Image(
+                TimeImage(
                     "abc1234",
                     "Category 1",
                     "image_name",
@@ -90,7 +91,7 @@ class ImageRepoTemp {
             )
 
             imageRepoList.add(
-                Image(
+                TimeImage(
                     "abc1234",
                     "Category 1",
                     "image_name",
@@ -101,7 +102,7 @@ class ImageRepoTemp {
             )
 
             imageRepoList.add(
-                Image(
+                TimeImage(
                     "abc1234",
                     "Category 2",
                     "image_name",
@@ -112,7 +113,7 @@ class ImageRepoTemp {
             )
 
             imageRepoList.add(
-                Image(
+                TimeImage(
                     "abc1234",
                     "Category 2",
                     "image_name",
@@ -123,7 +124,7 @@ class ImageRepoTemp {
             )
 
             imageRepoList.add(
-                Image(
+                TimeImage(
                     "abc1234",
                     "Category 3",
                     "image_name",
@@ -134,7 +135,7 @@ class ImageRepoTemp {
             )
 
             imageRepoList.add(
-                Image(
+                TimeImage(
                     "abc1234",
                     "Category 3",
                     "image_name",
@@ -145,7 +146,7 @@ class ImageRepoTemp {
             )
 
             imageRepoList.add(
-                Image(
+                TimeImage(
                     "abc1234",
                     "Category 3",
                     "image_name",
@@ -156,7 +157,7 @@ class ImageRepoTemp {
             )
 
             imageRepoList.add(
-                Image(
+                TimeImage(
                     "abc1234",
                     "Category 1",
                     "image_name",

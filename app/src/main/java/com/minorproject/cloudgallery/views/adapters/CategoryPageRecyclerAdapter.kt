@@ -7,13 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.minorproject.cloudgallery.databinding.CategoryPageItemBinding
 import com.minorproject.cloudgallery.model.Category
 import com.minorproject.cloudgallery.views.interfaces.HomeItemClick
+import kotlinx.android.synthetic.main.category_page_item.view.*
 
 
-class HomeRecyclerAdapter internal constructor(
+class CategoryPageRecyclerAdapter internal constructor(
     private var category: ArrayList<Category>,
     private val homeItemClick: HomeItemClick
 ) :
-    RecyclerView.Adapter<HomeRecyclerAdapter.MyViewHolder>() {
+    RecyclerView.Adapter<CategoryPageRecyclerAdapter.MyViewHolder>() {
 
     private companion object {
         private const val TAG = "HomeRecyclerAdapter"
