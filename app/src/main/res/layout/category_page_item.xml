@@ -16,12 +16,13 @@
     </data>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/category_page_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:elevation="50dp"
-        android:id="@+id/category_page_layout"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="10dp"
+        app:cardElevation="20dp"
+        app:cardMaxElevation="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -35,7 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="@font/abril_fatface"
+                android:fontFamily="@font/allerta"
+                android:letterSpacing="0.2"
                 android:text="@{category.categoryName.toUpperCase()}"
                 android:textColor="@color/colorAccent"
                 android:textSize="25sp"
