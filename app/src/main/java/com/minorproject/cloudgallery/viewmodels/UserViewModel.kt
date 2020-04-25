@@ -60,16 +60,12 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun setProfilePic(uri: Uri, compress: Boolean) {
+    fun setProfilePic(uri: Uri) {
         storage = FirebaseStorage.getInstance()
         storageReference = storage?.reference
         val ref =
             storageReference!!.child("${mAuth?.uid}/UserProfile/" + mAuth?.uid)
-        if (compress) {
             ref.putFile(Compress.getThumbnail(uri, getApplication())!!)
-        } else {
-            ref.putFile(uri)
-        }
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     ref.downloadUrl

@@ -33,7 +33,7 @@ class Compress {
             input = context.contentResolver.openInputStream(uri)
             val bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions)
             input?.close()
-            return getImageUri(bitmap!!, "thumb_", "${System.currentTimeMillis()}.jpg")
+            return getImageUri(bitmap!!, "thumb_", "${System.currentTimeMillis()}.png")
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
@@ -42,7 +42,7 @@ class Compress {
             tempDir.mkdir()
             val tempFile: File = File.createTempFile(preName, suffixName)
             val bytes = ByteArrayOutputStream()
-            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+            inImage.compress(Bitmap.CompressFormat.PNG, 100,bytes)
             val bitmapData = bytes.toByteArray()
 
             val fos = FileOutputStream(tempFile)

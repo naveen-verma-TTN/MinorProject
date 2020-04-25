@@ -1,11 +1,15 @@
 package com.minorproject.cloudgallery.views.pages.category
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
@@ -13,7 +17,6 @@ import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.viewmodels.CategoryViewModel
 import kotlinx.android.synthetic.main.fragment_add_category.*
 import kotlinx.android.synthetic.main.fragment_add_category.view.*
-import kotlinx.android.synthetic.main.fragment_add_category.view.category_name
 
 
 class AddCategory : DialogFragment(), View.OnClickListener {
@@ -29,6 +32,14 @@ class AddCategory : DialogFragment(), View.OnClickListener {
                 .apply {
                     viewModel = _viewModel
                 }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog: Dialog = super.onCreateDialog(savedInstanceState)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        return dialog
     }
 
     override fun onCreateView(

@@ -1,61 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="20dp">
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:gravity="center">
 
-    <TextView
-        android:id="@+id/title"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="Add Category"
-        android:textColor="#4CAF50"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:layout_height="250dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/category_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
-        android:hint="Category Name"
-        android:inputType="text"
-        android:textSize="25sp"
-        android:textStyle="bold" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="300dp"
+            android:layout_height="165dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="15dp">
 
 
-    <ImageButton
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:layout_marginTop="14dp"
+                android:text="Add Category"
+                android:textColor="@color/colorAccent"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/category_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:hint="Category Name"
+                android:inputType="text"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+    <FrameLayout
         android:id="@+id/cancel"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/category_name"
-        android:layout_margin="10dp"
-        android:background="#0003DAC5"
-        android:elevation="50dp"
-        android:gravity="center"
-        android:padding="10dp"
-        android:src="@android:drawable/ic_delete"
-        android:textSize="15sp"
-        android:tooltipText="Cancel"
-        tools:targetApi="o" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="45dp">
 
-    <ImageButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/close"
+            android:src="@drawable/close"
+            app:backgroundTint="#7E0D0D"
+            app:maxImageSize="35dp" />
+    </FrameLayout>
+
+    <FrameLayout
         android:id="@+id/add"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/category_name"
-        android:layout_margin="10dp"
-        android:layout_toEndOf="@+id/cancel"
-        android:background="#0003DAC5"
-        android:elevation="50dp"
-        android:gravity="center"
-        android:layout_alignParentEnd="true"
-        android:padding="10dp"
-        android:src="@drawable/tick"
-        android:textSize="15sp"
-        android:tooltipText="Add"
-        tools:targetApi="o" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="75dp">
 
-</RelativeLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ok"
+            app:backgroundTint="#4CAF50"
+            app:maxImageSize="35dp" />
+    </FrameLayout>
+</FrameLayout>
+

@@ -81,7 +81,7 @@ class UserProfile : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
-            viewModel.setProfilePic(data?.data!!, true)
+            viewModel.setProfilePic(data?.data!!)
         }
     }
 
