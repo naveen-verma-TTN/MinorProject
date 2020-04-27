@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.Category
+import com.minorproject.cloudgallery.model.Image
 import com.minorproject.cloudgallery.viewmodels.CategoryViewModel
 import com.minorproject.cloudgallery.views.adapters.CategoryPageRecyclerAdapter
 import com.minorproject.cloudgallery.views.interfaces.HomeItemClick

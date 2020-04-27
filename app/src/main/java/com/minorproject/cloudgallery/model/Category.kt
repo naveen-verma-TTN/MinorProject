@@ -11,7 +11,7 @@ data class Category(
     val CategoryName: String,
     val CategoryUploadTime: Timestamp,
     val CategoryThumbLink: String?,
-    val ImagesLink: ArrayList<Image>?
+    val ImagesList: ArrayList<Image>?
 ) : Parcelable
 
 @Parcelize
@@ -20,15 +20,5 @@ data class Image(
     val name: String,
     val size: Long,
     val uploadTime: Timestamp,
-    var link: String
-) : Parcelable
-
-@Parcelize
-data class TimeImage(
-    val id: String,
-    val category: String,
-    val name: String,
-    val size: Long,
-    val uploadTime: LocalDate,
     var link: String
 ) : Parcelable

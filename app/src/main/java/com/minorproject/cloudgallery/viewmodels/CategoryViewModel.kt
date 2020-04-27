@@ -23,13 +23,19 @@ import com.minorproject.cloudgallery.model.Category
 import com.minorproject.cloudgallery.model.Image
 
 
+@Suppress("UNCHECKED_CAST", "CAST_NEVER_SUCCEEDS")
 @RequiresApi(Build.VERSION_CODES.O)
 class CategoryViewModel(application: Application) : AndroidViewModel(application) {
     val allCategories: MutableLiveData<ArrayList<Category>> = MutableLiveData()
     private var list: ArrayList<Category> = ArrayList()
-
-    var storage: FirebaseStorage? = null
+    private var storage: FirebaseStorage? = null
     private var storageReference: StorageReference? = null
+    private lateinit var notificationManager: NotificationManagerCompat
+    private val channelId = "Progress Notification"
+    private lateinit var notification: NotificationCompat.Builder
+
+    private val context = getApplication<Application>().applicationContext
+
 
     companion object {
         private const val TAG: String = "CategoryViewModel"
@@ -57,17 +63,18 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
 
                     var category: Category
 
+
                     if (map["ListImage"] != null) {
-                        val imageList: List<HashMap<String, Image>> =
+                        val imageHashMap: List<HashMap<String, Image>> =
                             map["ListImage"] as List<HashMap<String, Image>>
-                        val ilist: ArrayList<Image> = convertHashMapToListOfImages(imageList)
+                        val imageList: ArrayList<Image> = convertHashMapToListOfImages(imageHashMap)
 
                         category = Category(
                             UserID = map["UserId"] as String,
                             CategoryName = map["CategoryName"] as String,
                             CategoryUploadTime = map["CategoryUploadTime"] as Timestamp,
                             CategoryThumbLink = map["CategoryThumbLink"] as String?,
-                            ImagesLink = ilist
+                            ImagesList = imageList
                         )
                     } else {
                         category = Category(
@@ -75,7 +82,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                             CategoryName = map["CategoryName"] as String,
                             CategoryUploadTime = map["CategoryUploadTime"] as Timestamp,
                             CategoryThumbLink = map["CategoryThumbLink"] as String?,
-                            ImagesLink = null
+                            ImagesList = null
                         )
                     }
                     list.add(category)
@@ -95,7 +102,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                     category = item["category"].toString(),
                     name = item["name"].toString(),
                     size = item["size"].toString().toLong(),
-                    uploadTime = Timestamp.now(),
+                    uploadTime = item["uploadTime"] as Timestamp,
                     link = item["link"].toString()
                 )
             )
@@ -123,7 +130,6 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
         categoryHashMap["CategoryName"] = category.CategoryName
         categoryHashMap["CategoryUploadTime"] = category.CategoryUploadTime
 
-
         val rootRef = FirebaseFirestore.getInstance()
         val docIdRef: DocumentReference =
             rootRef.collection("Categories").document(id)
@@ -141,13 +147,13 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
     }
 
-    fun saveImageToFireStore(filePath: Uri?, newCategory: Category) {
+    fun saveImageToFireStore(filePath: Uri?, categoryName: String) {
         var downloadUri: String?
         storage = FirebaseStorage.getInstance()
         storageReference = storage?.reference
         val filename = "image_" + "${System.currentTimeMillis()}.jpg"
         val path =
-            "${mAuth?.uid}/Category/" + newCategory.CategoryName + "/" + filename
+            "${mAuth?.uid}/Category/" + categoryName + "/" + filename
         if (filePath != null) {
             val ref = storageReference!!.child(path)
             sendNotification(filename)
@@ -160,7 +166,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                             ref.metadata.addOnSuccessListener { metaData ->
 
                                 val image = Image(
-                                    newCategory.CategoryName,
+                                    categoryName,
                                     filename,
                                     metaData.sizeBytes,
                                     Timestamp.now(),
@@ -170,7 +176,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                                 val rootRef = FirebaseFirestore.getInstance()
                                 val docIdRef: DocumentReference =
                                     rootRef.collection("Categories")
-                                        .document(mAuth?.uid!! + "_" + newCategory.CategoryName)
+                                        .document(mAuth?.uid!! + "_" + categoryName)
                                 docIdRef.get().addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
                                         val document = task.result
@@ -187,7 +193,10 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                                                     notification.setContentText("Uploading Completed")
                                                         .setOngoing(false)
 
-                                                    notificationManager.notify(1, notification.build())
+                                                    notificationManager.notify(
+                                                        1,
+                                                        notification.build()
+                                                    )
                                                     Log.d(
                                                         TAG,
                                                         "DocumentSnapshot successfully written!"
@@ -205,18 +214,17 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                         }
                     } else {
                         Log.e(
-                            "Uploaded",
+                            TAG,
                             "Error happened during the upload process"
                         )
                     }
                 }.addOnProgressListener { taskSnapshot ->
-
                     val progress =
                         100.0 * taskSnapshot.bytesTransferred / taskSnapshot
                             .totalByteCount
-                        notification.setContentText(progress.toInt().toString()+" %")
-                            .setProgress(100, progress.toInt(), false)
-                            .setOngoing(false)
+                    notification.setContentText(progress.toInt().toString() + " %")
+                        .setProgress(100, progress.toInt(), false)
+                        .setOngoing(false)
 
                     notificationManager.notify(1, notification.build())
                 }.addOnFailureListener { e ->
@@ -225,23 +233,16 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-
-        private lateinit var notificationManager: NotificationManagerCompat
-        private val channelId = "Progress Notification"
-        private lateinit var notification: NotificationCompat.Builder
-
-        private val context = getApplication<Application>().applicationContext
-
-        private fun sendNotification(fileName: String) {
-            notificationManager = NotificationManagerCompat.from(context)
-            notification = NotificationCompat.Builder(context, channelId)
-                    .setSmallIcon(R.drawable.icon)
-                    .setContentTitle(fileName)
-                    .setContentText("Uploading")
-                    .setPriority(NotificationCompat.PRIORITY_LOW)
-                    .setOngoing(true)
-                    .setOnlyAlertOnce(true)
-                    .setProgress(100, 0, true)
-                    .setAutoCancel(true)
-        }
+    private fun sendNotification(fileName: String) {
+        notificationManager = NotificationManagerCompat.from(context)
+        notification = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(R.drawable.icon)
+            .setContentTitle(fileName)
+            .setContentText("Uploading")
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setOngoing(true)
+            .setOnlyAlertOnce(true)
+            .setProgress(100, 0, true)
+            .setAutoCancel(true)
+    }
 }

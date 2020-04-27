@@ -7,7 +7,7 @@
 
         <variable
             name="image"
-            type="com.minorproject.cloudgallery.model.TimeImage" />
+            type="com.minorproject.cloudgallery.model.Image" />
 
         <variable
             name="position"

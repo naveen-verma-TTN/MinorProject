@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +20,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.firebase.Timestamp
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.Category
 import com.minorproject.cloudgallery.model.Image
@@ -107,8 +105,8 @@ class CategoryDetailPage : Fragment(), HomeItemClick {
             requireActivity(),
             Observer { category ->
                 list = getImageList(category)!!
-                if(toolbar!= null)
-                toolbar.subtitle = list.size.toString()
+                if (toolbar != null)
+                    toolbar.subtitle = list.size.toString()
                 adapter.setList(list)
                 adapter.notifyDataSetChanged()
             })
@@ -126,8 +124,8 @@ class CategoryDetailPage : Fragment(), HomeItemClick {
     private fun getImageList(categoryList: ArrayList<Category>?): ArrayList<Image>? {
         var list: ArrayList<Image>? = ArrayList()
         categoryList?.forEach { item ->
-            if (item.CategoryName.equals(category.CategoryName, true) && item.ImagesLink != null) {
-                list = item.ImagesLink
+            if (item.CategoryName.equals(category.CategoryName, true) && item.ImagesList != null) {
+                list = item.ImagesList
             }
         }
         return list
@@ -175,16 +173,15 @@ class CategoryDetailPage : Fragment(), HomeItemClick {
         if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM) {
             if (data != null) {
                 val contentURI = data.data
-                viewModel.saveImageToFireStore(contentURI, category)
+                viewModel.saveImageToFireStore(contentURI, category.CategoryName)
             }
 
         } else if (requestCode == REQUEST_SELECT_IMAGE_IN_CAMERA) {
 
-            Log.e("sd", "sdsd")
             val bitmap: Bitmap = data!!.extras!!.get("data") as Bitmap
             val contentURI: Uri =
                 Compress.getImageUri(bitmap, "image_", "${System.currentTimeMillis()}.jpg")
-            viewModel.saveImageToFireStore(contentURI, category)
+            viewModel.saveImageToFireStore(contentURI, category.CategoryName)
         }
 
     }
