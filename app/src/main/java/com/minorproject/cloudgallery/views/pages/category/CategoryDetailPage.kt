@@ -237,6 +237,8 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
         adapter.setTracker(tracker)
     }
 
+    ///////..................Problem...............//////////////////////////
+
     override fun onItemClicked(imageUrl: String, position: Int) {
         if (!tracker!!.hasSelection()) {
             StfalconImageViewer.Builder(context, list) { view, image ->
@@ -244,6 +246,8 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
             }.withStartPosition(position).withHiddenStatusBar(false).show()
         }
     }
+
+    ///////.................................//////////////////////////
 
     private fun selectImageInAlbum() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
