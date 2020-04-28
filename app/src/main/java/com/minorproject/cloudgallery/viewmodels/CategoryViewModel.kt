@@ -101,7 +101,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                 Image(
                     category = item["category"].toString(),
                     name = item["name"].toString(),
-                    size = item["size"].toString().toLong(),
+                    size = item["size"].toString().toDouble(),
                     uploadTime = item["uploadTime"] as Timestamp,
                     link = item["link"].toString()
                 )
@@ -168,7 +168,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                                 val image = Image(
                                     categoryName,
                                     filename,
-                                    metaData.sizeBytes,
+                                    metaData.sizeBytes.toDouble(),
                                     Timestamp.now(),
                                     downloadUri!!
                                 )
@@ -244,5 +244,35 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
             .setOnlyAlertOnce(true)
             .setProgress(100, 0, true)
             .setAutoCancel(true)
+    }
+
+    fun deleteImagesFromFirebase(image: Image) {
+        val rootRef = FirebaseFirestore.getInstance()
+        val docIdRef: DocumentReference =
+            rootRef.collection("Categories")
+                .document(mAuth?.uid!! + "_" + image.category)
+        docIdRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val document = task.result
+                if (document!!.exists()) {
+                    docIdRef.update(
+                        "ListImage",
+                        FieldValue.arrayRemove(image)
+                    )
+                        .addOnSuccessListener {
+                            readCategoriesFromFireStore()
+                            Log.d(
+                                TAG,
+                                "Deletion successfully written!"
+                            )
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(TAG, "Error in Deletion", e)
+                        }
+                } else {
+                    Log.d(TAG, "Failed with: ", task.exception)
+                }
+            }
+        }
     }
 }

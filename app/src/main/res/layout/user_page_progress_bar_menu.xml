@@ -18,6 +18,14 @@
         <variable
             name="binder"
             type="com.minorproject.cloudgallery.viewmodels.UserDetailBinderClass" />
+
+        <variable
+            name="size"
+            type="String" />
+
+        <variable
+            name="progress"
+            type="Integer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -34,7 +42,7 @@
             android:layout_height="30dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="5dp"
-            android:progress="54"
+            android:progress="@{progress}"
             android:progressDrawable="@drawable/custom_progressbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:fontFamily="@font/allerta"
-            android:text="3.5 GB / 5 GB"
+            android:text="@{size}"
             android:textColor="@color/colorAccent"
             android:textSize="15sp"
             android:textStyle="bold"

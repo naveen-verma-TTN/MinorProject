@@ -33,7 +33,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="10dp"
                 android:layout_marginTop="14dp"
-                android:text="Add Category"
+                android:text="@string/add_category"
                 android:textColor="@color/colorAccent"
                 android:textSize="25sp"
                 android:textStyle="bold" />
@@ -45,7 +45,8 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:hint="Category Name"
+                android:hint="@string/category_name"
+                android:textAllCaps="true"
                 android:inputType="text"
                 android:textSize="20sp"
                 android:textStyle="bold" />

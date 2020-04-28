@@ -127,7 +127,8 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
             requireActivity(),
             Observer { category ->
                 list = getImageList(category)!!
-                toolbar.subtitle = list.size.toString()
+                if (toolbar != null)
+                    toolbar.subtitle = list.size.toString()
                 adapter.setList(list)
                 adapter.notifyDataSetChanged()
             })
@@ -146,49 +147,53 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
                 override fun onSelectionChanged() {
                     val nItems: Int? = tracker?.selection?.size()
                     if (nItems != null && nItems > 0) {
+                        if (toolbar != null) {
+                            toolbar.navigationIcon = resources.getDrawable(R.drawable.close)
 
-                        toolbar.navigationIcon = resources.getDrawable(R.drawable.close)
+                            toolbar.setNavigationOnClickListener {
+                                tracker!!.clearSelection()
+                            }
 
-                        toolbar.setNavigationOnClickListener {
-                            tracker!!.clearSelection()
-                        }
+                            toolbar.menu.findItem(R.id.delete).isVisible = true
 
-                        toolbar.menu.findItem(R.id.delete).isVisible = true
-
-                        toolbar.setOnMenuItemClickListener {
-                            return@setOnMenuItemClickListener when (it.itemId) {
-                                R.id.delete -> {
-                                    tracker!!.selection.forEach { item ->
-                                        Log.e(TAG, "Delete: $item")
+                            toolbar.setOnMenuItemClickListener {
+                                return@setOnMenuItemClickListener when (it.itemId) {
+                                    R.id.delete -> {
+                                        tracker!!.selection.forEach { item ->
+                                            viewModel.deleteImagesFromFirebase(list[item.toInt()])
+                                            Log.e(TAG, "Delete: $item")
+                                        }
+                                        tracker!!.clearSelection()
+                                        true
                                     }
-                                    tracker!!.clearSelection()
-                                    true
-                                }
-                                else -> {
-                                    false
+                                    else -> {
+                                        false
+                                    }
                                 }
                             }
-                        }
 
-                        toolbar.title = "$nItems items selected"
-                        toolbar.setBackgroundDrawable(
-                            ColorDrawable(getColor(view.context, R.color.colorPrimary))
-                        )
+                            toolbar.title = "$nItems items selected"
+                            toolbar.setBackgroundDrawable(
+                                ColorDrawable(getColor(view.context, R.color.colorPrimary))
+                            )
+                        }
                     } else {
+                        if (toolbar != null) {
+                            toolbar.title = category.CategoryName.toUpperCase(Locale.getDefault())
 
-                        toolbar.title = category.CategoryName.toUpperCase(Locale.getDefault())
+                            toolbar.setNavigationIcon(R.drawable.back_button)
 
-                        toolbar.setNavigationIcon(R.drawable.back_button)
+                            if (toolbar.menu.findItem(R.id.delete) != null)
+                                toolbar.menu.findItem(R.id.delete).isVisible = false
 
-                        if (toolbar.menu.findItem(R.id.delete) != null)
-                            toolbar.menu.findItem(R.id.delete).isVisible = false
-
-                        toolbar.setNavigationOnClickListener {
-                            activity!!.supportFragmentManager.popBackStack()
+                            toolbar.setNavigationOnClickListener {
+                                activity!!.supportFragmentManager.popBackStack()
+                            }
+                            toolbar.setBackgroundDrawable(
+                                ColorDrawable(getColor(view.context, R.color.colorAccent))
+                            )
                         }
-                        toolbar.setBackgroundDrawable(
-                            ColorDrawable(getColor(view.context, R.color.colorAccent))
-                        )
+
                     }
                 }
             })
@@ -225,7 +230,7 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
 
         home_detail_recycler.adapter = adapter
 
-        tracker = SelectionTracker.Builder<Long>(
+        tracker = SelectionTracker.Builder(
             "selection-1",
             view.home_detail_recycler,
             StableIdKeyProvider(view.home_detail_recycler),

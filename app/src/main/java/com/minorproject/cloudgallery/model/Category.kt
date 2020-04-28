@@ -18,7 +18,7 @@ data class Category(
 data class Image(
     val category: String,
     val name: String,
-    val size: Long,
+    val size: Double,
     val uploadTime: Timestamp,
     var link: String
 ) : Parcelable

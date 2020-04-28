@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +15,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.databinding.FragmentUserProfileBinding
+import com.minorproject.cloudgallery.model.Category
+import com.minorproject.cloudgallery.model.Image
+import com.minorproject.cloudgallery.viewmodels.CategoryViewModel
 import com.minorproject.cloudgallery.viewmodels.UserDetailBinderClass
 import com.minorproject.cloudgallery.viewmodels.UserViewModel
 import kotlinx.android.synthetic.main.collapse_toolbar.*
+import kotlinx.android.synthetic.main.collapse_toolbar.toolbar
+import kotlinx.android.synthetic.main.fragment_category_detail_page.*
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 
 class UserProfile : Fragment() {
+    private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var viewModel: UserViewModel
     private lateinit var binding: FragmentUserProfileBinding
 
@@ -32,6 +41,9 @@ class UserProfile : Fragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!)
             .get(UserViewModel::class.java)
+
+        categoryViewModel = ViewModelProviders.of(activity!!)
+            .get(CategoryViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -71,9 +83,38 @@ class UserProfile : Fragment() {
             }
         )
 
+        categoryViewModel.allCategories.observe(
+            requireActivity(),
+            Observer { category ->
+                val size = getTotalStorageSize(category)
+                val totalSize = "%.2f".format(size).toDouble().toString() + " MB / 1024 MB"
+
+                binding.progressMenu.size = totalSize
+
+                var progress = 0.0
+                if (size != null) {
+                    progress = (size / 1024) * 100
+                }
+
+                binding.progressMenu.progress = progress.toInt()
+            })
+
         avatar.setOnClickListener {
             selectImageInAlbum()
         }
+    }
+
+    private fun getTotalStorageSize(category: ArrayList<Category>?): Double? {
+        var size = 0.0
+        category?.forEach { item ->
+            if (item.ImagesList != null) {
+                item.ImagesList.forEach { image ->
+                    size += image.size
+                }
+                size /= (1024 * 1024)
+            }
+        }
+        return size
     }
 
 

@@ -67,7 +67,7 @@
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="40dp"
             android:fontFamily="@font/allerta_stencil"
-            android:text="@{user.userName}"
+            android:text="@{user.userName.toUpperCase()}"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white"
             android:textStyle="bold" />
