@@ -180,8 +180,8 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
 
                         toolbar.setNavigationIcon(R.drawable.back_button)
 
-                        if(toolbar.menu.findItem(R.id.delete) != null)
-                        toolbar.menu.findItem(R.id.delete).isVisible = false
+                        if (toolbar.menu.findItem(R.id.delete) != null)
+                            toolbar.menu.findItem(R.id.delete).isVisible = false
 
                         toolbar.setNavigationOnClickListener {
                             activity!!.supportFragmentManager.popBackStack()
@@ -234,7 +234,6 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
         ).withSelectionPredicate(
             SelectionPredicates.createSelectAnything()
         ).build()
-
         adapter.setTracker(tracker)
     }
 
