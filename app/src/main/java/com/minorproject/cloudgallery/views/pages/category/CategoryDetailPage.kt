@@ -267,13 +267,13 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
             }
 
         } else if (requestCode == REQUEST_SELECT_IMAGE_IN_CAMERA) {
-
-            val bitmap: Bitmap = data!!.extras!!.get("data") as Bitmap
-            val contentURI: Uri =
-                Compress.getImageUri(bitmap, "image_", "${System.currentTimeMillis()}.jpg")
-            viewModel.saveImageToFireStore(contentURI, category.CategoryName)
+            if (data != null) {
+                val bitmap: Bitmap = data.extras!!.get("data") as Bitmap
+                val contentURI: Uri =
+                    Compress.getImageUri(bitmap, "image_", "${System.currentTimeMillis()}.jpg")
+                viewModel.saveImageToFireStore(contentURI, category.CategoryName)
+            }
         }
-
     }
 
 
