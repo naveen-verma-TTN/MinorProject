@@ -7,7 +7,6 @@ import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
-import com.minorproject.cloudgallery.views.interfaces.SwipeTouchListener
 
 
 class OnSwipeTouchListener(ctx: Context?, swipeTouchListener: SwipeTouchListener) :
@@ -74,4 +73,11 @@ class OnSwipeTouchListener(ctx: Context?, swipeTouchListener: SwipeTouchListener
             return result
         }
     }
+}
+
+interface SwipeTouchListener {
+    fun onSwipeRight()
+    fun onSwipeLeft()
+    fun onSwipeTop()
+    fun onSwipeBottom()
 }

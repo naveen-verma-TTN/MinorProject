@@ -1,14 +1,11 @@
 package com.minorproject.cloudgallery.views.pages.category
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -17,15 +14,14 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.model.Category
-import com.minorproject.cloudgallery.model.Image
 import com.minorproject.cloudgallery.viewmodels.CategoryViewModel
+import com.minorproject.cloudgallery.views.adapters.CategoryPageItemClick
 import com.minorproject.cloudgallery.views.adapters.CategoryPageRecyclerAdapter
-import com.minorproject.cloudgallery.views.interfaces.HomeItemClick
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.fragment_category.view.home_recycler
 
 @RequiresApi(Build.VERSION_CODES.O)
-class CategoryPage : Fragment(), HomeItemClick {
+class CategoryPage : Fragment(), CategoryPageItemClick {
     private lateinit var viewModel: CategoryViewModel
     private lateinit var adapter: CategoryPageRecyclerAdapter
     private var list: ArrayList<Category> = ArrayList()
@@ -57,7 +53,6 @@ class CategoryPage : Fragment(), HomeItemClick {
             dialogFragment.show(transaction, null)
         }
 
-
         viewModel.allCategories.observe(
             requireActivity(),
             Observer { category ->
@@ -65,7 +60,6 @@ class CategoryPage : Fragment(), HomeItemClick {
                 adapter.notifyDataSetChanged()
             })
     }
-
 
     /**
      * Initialize the recycler View
@@ -82,13 +76,9 @@ class CategoryPage : Fragment(), HomeItemClick {
         home_recycler.adapter = adapter
     }
 
-
-
     override fun onItemClicked(category: Category, position: Int) {
-       val categoryDetailPage = CategoryDetailPage.newInstance(category)
+        val categoryDetailPage = CategoryDetailPage.newInstance(category)
         activity!!.supportFragmentManager.beginTransaction().addToBackStack("CategoryDetailPage")
             .add(R.id.home_layout, categoryDetailPage).commit()
     }
-
-    override fun onItemClicked(imageUrl: String, position: Int) {}
 }

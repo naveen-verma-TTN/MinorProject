@@ -1,7 +1,6 @@
 package com.minorproject.cloudgallery.views.auth
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +8,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.google.android.material.snackbar.Snackbar
 import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.databinding.FragmentAuthLoginScreenBinding
 import com.minorproject.cloudgallery.viewmodels.LoginBinderClass
 import com.minorproject.cloudgallery.views.adapters.OnSwipeTouchListener
-import com.minorproject.cloudgallery.views.interfaces.SwipeTouchListener
+import com.minorproject.cloudgallery.views.adapters.SwipeTouchListener
 import kotlinx.android.synthetic.main.fragment_auth_login_screen.*
 
 

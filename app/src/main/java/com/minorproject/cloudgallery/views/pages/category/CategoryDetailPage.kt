@@ -1,22 +1,30 @@
 package com.minorproject.cloudgallery.views.pages.category
 
-import android.Manifest.permission.*
+import android.Manifest.permission.CAMERA
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StableIdKeyProvider
+import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -26,7 +34,7 @@ import com.minorproject.cloudgallery.model.Image
 import com.minorproject.cloudgallery.repo.Compress
 import com.minorproject.cloudgallery.viewmodels.CategoryViewModel
 import com.minorproject.cloudgallery.views.adapters.CategoryPageDetailAdapter
-import com.minorproject.cloudgallery.views.interfaces.HomeItemClick
+import com.minorproject.cloudgallery.views.adapters.CategoryPageDetailItemClick
 import com.stfalcon.imageviewer.StfalconImageViewer
 import kotlinx.android.synthetic.main.fragment_category_detail_page.*
 import kotlinx.android.synthetic.main.fragment_category_detail_page.view.*
@@ -34,13 +42,16 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
+@Suppress("DEPRECATION")
 @RequiresApi(Build.VERSION_CODES.O)
-class CategoryDetailPage : Fragment(), HomeItemClick {
+class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
     private lateinit var viewModel: CategoryViewModel
     private var isRotate = false
     private lateinit var adapter: CategoryPageDetailAdapter
     private var list: ArrayList<Image> = ArrayList()
     private lateinit var category: Category
+
+    private var tracker: SelectionTracker<Long>? = null
 
     companion object {
         private const val TAG: String = "CategoryDetailPage"
@@ -63,13 +74,24 @@ class CategoryDetailPage : Fragment(), HomeItemClick {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!)
             .get(CategoryViewModel::class.java)
+
+        tracker?.onRestoreInstanceState(savedInstanceState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        tracker?.onSaveInstanceState(outState)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_category_detail_page, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_category_detail_page, container, false)
+        val toolbar: Toolbar = view.findViewById(R.id.toolbar) as Toolbar
+        (activity as AppCompatActivity?)?.setSupportActionBar(toolbar)
+        setHasOptionsMenu(true)
+        return view
     }
 
 
@@ -105,8 +127,7 @@ class CategoryDetailPage : Fragment(), HomeItemClick {
             requireActivity(),
             Observer { category ->
                 list = getImageList(category)!!
-                if (toolbar != null)
-                    toolbar.subtitle = list.size.toString()
+                toolbar.subtitle = list.size.toString()
                 adapter.setList(list)
                 adapter.notifyDataSetChanged()
             })
@@ -119,7 +140,64 @@ class CategoryDetailPage : Fragment(), HomeItemClick {
         home_detail_fab_camera.setOnClickListener {
             if (checkPermission()) takePhotoFromCamera() else requestPermission()
         }
+
+        tracker?.addObserver(
+            object : SelectionTracker.SelectionObserver<Long>() {
+                override fun onSelectionChanged() {
+                    val nItems: Int? = tracker?.selection?.size()
+                    if (nItems != null && nItems > 0) {
+
+                        toolbar.navigationIcon = resources.getDrawable(R.drawable.close)
+
+                        toolbar.setNavigationOnClickListener {
+                            tracker!!.clearSelection()
+                        }
+
+                        toolbar.menu.findItem(R.id.delete).isVisible = true
+
+                        toolbar.setOnMenuItemClickListener {
+                            return@setOnMenuItemClickListener when (it.itemId) {
+                                R.id.delete -> {
+                                    tracker!!.selection.forEach { item ->
+                                        Log.e(TAG, "Delete: $item")
+                                    }
+                                    tracker!!.clearSelection()
+                                    true
+                                }
+                                else -> {
+                                    false
+                                }
+                            }
+                        }
+
+                        toolbar.title = "$nItems items selected"
+                        toolbar.setBackgroundDrawable(
+                            ColorDrawable(getColor(view.context, R.color.colorPrimary))
+                        )
+                    } else {
+
+                        toolbar.title = category.CategoryName.toUpperCase(Locale.getDefault())
+
+                        toolbar.setNavigationIcon(R.drawable.back_button)
+
+                        if(toolbar.menu.findItem(R.id.delete) != null)
+                        toolbar.menu.findItem(R.id.delete).isVisible = false
+
+                        toolbar.setNavigationOnClickListener {
+                            activity!!.supportFragmentManager.popBackStack()
+                        }
+                        toolbar.setBackgroundDrawable(
+                            ColorDrawable(getColor(view.context, R.color.colorAccent))
+                        )
+                    }
+                }
+            })
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.detail_page_menu, menu)
+    }
+
 
     private fun getImageList(categoryList: ArrayList<Category>?): ArrayList<Image>? {
         var list: ArrayList<Image>? = ArrayList()
@@ -144,15 +222,28 @@ class CategoryDetailPage : Fragment(), HomeItemClick {
                 list,
                 this
             )
+
         home_detail_recycler.adapter = adapter
+
+        tracker = SelectionTracker.Builder<Long>(
+            "selection-1",
+            view.home_detail_recycler,
+            StableIdKeyProvider(view.home_detail_recycler),
+            CategoryPageDetailAdapter.MyLookup(view.home_detail_recycler),
+            StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+            SelectionPredicates.createSelectAnything()
+        ).build()
+
+        adapter.setTracker(tracker)
     }
 
-    override fun onItemClicked(category: Category, position: Int) {}
-
     override fun onItemClicked(imageUrl: String, position: Int) {
-        StfalconImageViewer.Builder(context, list) { view, image ->
-            Glide.with(this).load(image.link).into(view)
-        }.withStartPosition(position).withHiddenStatusBar(false).show()
+        if (!tracker!!.hasSelection()) {
+            StfalconImageViewer.Builder(context, list) { view, image ->
+                Glide.with(this).load(image.link).into(view)
+            }.withStartPosition(position).withHiddenStatusBar(false).show()
+        }
     }
 
     private fun selectImageInAlbum() {

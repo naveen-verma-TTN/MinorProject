@@ -2,7 +2,6 @@ package com.minorproject.cloudgallery.views.pages.timeline
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +19,7 @@ import com.minorproject.cloudgallery.model.Category
 import com.minorproject.cloudgallery.model.Image
 import com.minorproject.cloudgallery.viewmodels.CategoryViewModel
 import com.minorproject.cloudgallery.views.adapters.ImageAdapter
-import com.minorproject.cloudgallery.views.interfaces.ItemClickListener
+import com.minorproject.cloudgallery.views.adapters.ImageItemClickListener
 import com.stfalcon.imageviewer.StfalconImageViewer
 import xyz.sangcomz.stickytimelineview.RecyclerSectionItemDecoration
 import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
@@ -35,7 +34,7 @@ import kotlin.collections.ArrayList
 
 @Suppress("DEPRECATION")
 class Timeline : Fragment(),
-    ItemClickListener {
+    ImageItemClickListener {
     /*ItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {*/
     private var imageList: ArrayList<Image> = ArrayList()
     private var adapter: ImageAdapter? = null

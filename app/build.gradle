@@ -70,7 +70,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     //Work Manager
-    implementation "android.arch.work:work-runtime-ktx:$work_version"
+    implementation 'androidx.work:work-runtime-ktx:2.0.1'
     implementation 'com.google.guava:guava:27.0.1-android'
 
     // Anko Library
@@ -80,5 +80,7 @@ dependencies {
     implementation 'com.iceteck.silicompressorr:silicompressor:2.2.3'
 
     implementation 'com.google.code.gson:gson:2.8.5'
+
+    implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
 
 }

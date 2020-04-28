@@ -8,8 +8,8 @@
             name="position"
             type="Integer" />
         <variable
-            name="homeItemClick"
-            type="com.minorproject.cloudgallery.views.interfaces.HomeItemClick" />
+            name="categoryPageItemClick"
+            type="com.minorproject.cloudgallery.views.adapters.CategoryPageItemClick" />
         <variable
             name="category"
             type="com.minorproject.cloudgallery.model.Category" />
@@ -27,7 +27,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{()->homeItemClick.onItemClicked(category, position)}">
+            android:onClick="@{()->categoryPageItemClick.onItemClicked(category, position)}">
 
 
             <TextView

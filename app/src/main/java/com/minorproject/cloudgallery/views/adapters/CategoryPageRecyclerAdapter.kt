@@ -6,13 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.minorproject.cloudgallery.databinding.CategoryPageItemBinding
 import com.minorproject.cloudgallery.model.Category
-import com.minorproject.cloudgallery.views.interfaces.HomeItemClick
-import kotlinx.android.synthetic.main.category_page_item.view.*
 
 
 class CategoryPageRecyclerAdapter internal constructor(
     private var category: ArrayList<Category>,
-    private val homeItemClick: HomeItemClick
+    private val categoryPageItemClick: CategoryPageItemClick
 ) :
     RecyclerView.Adapter<CategoryPageRecyclerAdapter.MyViewHolder>() {
 
@@ -31,7 +29,7 @@ class CategoryPageRecyclerAdapter internal constructor(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(category[position], homeItemClick, position)
+        holder.bind(category[position], categoryPageItemClick, position)
     }
 
     override fun getItemCount(): Int {
@@ -50,12 +48,16 @@ class CategoryPageRecyclerAdapter internal constructor(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
             category: Category,
-            homeItemClick: HomeItemClick,
+            categoryPageItemClick: CategoryPageItemClick,
             position: Int
         ) {
             binding.category = category
-            binding.homeItemClick = homeItemClick
+            binding.categoryPageItemClick = categoryPageItemClick
             binding.position = position
         }
     }
+}
+
+interface CategoryPageItemClick {
+    fun onItemClicked(category: Category, position: Int)
 }

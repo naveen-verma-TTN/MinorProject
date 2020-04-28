@@ -12,7 +12,7 @@ import com.minorproject.cloudgallery.R
 import com.minorproject.cloudgallery.databinding.FragmentAuthForgetPasswordBinding
 import com.minorproject.cloudgallery.viewmodels.ForgetPasswordBinderClass
 import com.minorproject.cloudgallery.views.adapters.OnSwipeTouchListener
-import com.minorproject.cloudgallery.views.interfaces.SwipeTouchListener
+import com.minorproject.cloudgallery.views.adapters.SwipeTouchListener
 import kotlinx.android.synthetic.main.fragment_auth_forget_password.*
 import kotlinx.android.synthetic.main.fragment_auth_forget_password.login_title
 import kotlinx.android.synthetic.main.fragment_auth_forget_password.register_title
