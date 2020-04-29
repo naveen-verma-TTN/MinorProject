@@ -109,7 +109,7 @@ class UserProfile : Fragment() {
         category?.forEach { item ->
             if (item.ImagesList != null) {
                 item.ImagesList.forEach { image ->
-                    size += (image.size/ (1024 * 1024 * 1.85))
+                    size += (image.size/ (1024 * 1024))
                 }
             }
         }
