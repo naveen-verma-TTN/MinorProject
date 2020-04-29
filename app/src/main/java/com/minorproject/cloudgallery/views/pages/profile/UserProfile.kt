@@ -87,13 +87,13 @@ class UserProfile : Fragment() {
             requireActivity(),
             Observer { category ->
                 val size = getTotalStorageSize(category)
-                val totalSize = "%.2f".format(size).toDouble().toString() + " MB / 1024 MB"
+                val totalSize = "%.2f".format(size).toDouble().toString() + " MB / 500 MB"
 
                 binding.progressMenu.size = totalSize
 
                 var progress = 0.0
                 if (size != null) {
-                    progress = (size / 1024) * 100
+                    progress = (size / 500) * 100
                 }
 
                 binding.progressMenu.progress = progress.toInt()
@@ -105,13 +105,12 @@ class UserProfile : Fragment() {
     }
 
     private fun getTotalStorageSize(category: ArrayList<Category>?): Double? {
-        var size = 0.0
+        var size= 0.0
         category?.forEach { item ->
             if (item.ImagesList != null) {
                 item.ImagesList.forEach { image ->
-                    size += image.size
+                    size += (image.size/ (1024 * 1024 * 1.85))
                 }
-                size /= (1024 * 1024)
             }
         }
         return size
