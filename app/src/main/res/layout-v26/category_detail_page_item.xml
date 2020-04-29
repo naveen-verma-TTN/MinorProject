@@ -9,10 +9,10 @@
 
         <variable
             name="itemClick"
-            type="com.minorproject.cloudgallery.views.adapters.CategoryPageDetailItemClick" />
+            type="com.minorProject.cloudGallery.views.adapters.CategoryPageDetailItemClick" />
         <variable
             name="image"
-            type="com.minorproject.cloudgallery.model.Image" />
+            type="com.minorProject.cloudGallery.model.Image" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -27,7 +27,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:background="#86000000"
             android:src="@mipmap/icon"
             tools:imageUrl="@{image.link}" />
 

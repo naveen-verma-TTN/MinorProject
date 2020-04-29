@@ -6,7 +6,7 @@
     app:startDestination="@id/loginScreen3">
     <fragment
         android:id="@+id/loginScreen3"
-        android:name="com.minorproject.cloudgallery.views.auth.LoginScreen"
+        android:name="com.minorProject.cloudGallery.views.auth.LoginScreen"
         android:label="fragment_login_screen"
         tools:layout="@layout/fragment_auth_login_screen" >
         <action
@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/registration"
-        android:name="com.minorproject.cloudgallery.views.auth.Registration"
+        android:name="com.minorProject.cloudGallery.views.auth.Registration"
         android:label="fragment_registration"
         tools:layout="@layout/fragment_auth_registration" >
         <action
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/forgetPassword"
-        android:name="com.minorproject.cloudgallery.views.auth.ForgetPassword"
+        android:name="com.minorProject.cloudGallery.views.auth.ForgotPassword"
         android:label="fragment_forget_password"
         tools:layout="@layout/fragment_auth_forget_password" >
         <action

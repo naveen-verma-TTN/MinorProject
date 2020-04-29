@@ -5,11 +5,11 @@
 
         <variable
             name="fragment"
-            type="com.minorproject.cloudgallery.views.auth.LoginScreen" />
+            type="com.minorProject.cloudGallery.views.auth.LoginScreen" />
 
         <variable
             name="viewModel"
-            type="com.minorproject.cloudgallery.viewmodels.LoginBinderClass" />
+            type="com.minorProject.cloudGallery.viewModels.LoginBinderClass" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -7,7 +7,7 @@
 
         <variable
             name="image"
-            type="com.minorproject.cloudgallery.model.Image" />
+            type="com.minorProject.cloudGallery.model.Image" />
 
         <variable
             name="position"
@@ -15,7 +15,7 @@
 
         <variable
             name="itemClick"
-            type="com.minorproject.cloudgallery.views.adapters.ImageItemClickListener" />
+            type="com.minorProject.cloudGallery.views.adapters.ImageItemClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView

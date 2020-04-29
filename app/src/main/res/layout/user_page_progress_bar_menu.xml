@@ -5,19 +5,19 @@
 
         <variable
             name="context"
-            type="com.minorproject.cloudgallery.views.pages.profile.UserProfile" />
+            type="com.minorProject.cloudGallery.views.pages.profile.UserProfile" />
 
         <variable
             name="viewModel"
-            type="com.minorproject.cloudgallery.viewmodels.UserViewModel" />
+            type="com.minorProject.cloudGallery.viewModels.UserViewModel" />
 
         <variable
             name="user"
-            type="com.minorproject.cloudgallery.model.User" />
+            type="com.minorProject.cloudGallery.model.User" />
 
         <variable
             name="binder"
-            type="com.minorproject.cloudgallery.viewmodels.UserDetailBinderClass" />
+            type="com.minorProject.cloudGallery.viewModels.UserDetailBinderClass" />
 
         <variable
             name="size"

@@ -6,11 +6,11 @@
 
         <variable
             name="fragment"
-            type="com.minorproject.cloudgallery.views.auth.Registration" />
+            type="com.minorProject.cloudGallery.views.auth.Registration" />
 
         <variable
             name="viewModel"
-            type="com.minorproject.cloudgallery.viewmodels.RegistrationBinderClass" />
+            type="com.minorProject.cloudGallery.viewModels.RegistrationBinderClass" />
     </data>
 
     <FrameLayout

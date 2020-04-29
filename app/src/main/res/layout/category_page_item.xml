@@ -9,10 +9,10 @@
             type="Integer" />
         <variable
             name="categoryPageItemClick"
-            type="com.minorproject.cloudgallery.views.adapters.CategoryPageItemClick" />
+            type="com.minorProject.cloudGallery.views.adapters.CategoryPageItemClick" />
         <variable
             name="category"
-            type="com.minorproject.cloudgallery.model.Category" />
+            type="com.minorProject.cloudGallery.model.Category" />
     </data>
 
     <androidx.cardview.widget.CardView
