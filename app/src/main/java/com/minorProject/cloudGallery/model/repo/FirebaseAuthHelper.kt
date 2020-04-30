@@ -3,27 +3,21 @@ package com.minorProject.cloudGallery.model.repo
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.util.Log
-import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
-import com.minorProject.cloudGallery.R
-import com.minorProject.cloudGallery.model.bindingClass.LoginBinderClass
-import com.minorProject.cloudGallery.util.HelperClass.snack
-import kotlinx.android.synthetic.main.f_auth_login_screen.view.*
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
-object FirebaseNetworkClass {
+object FirebaseAuthHelper {
     private val mAuth = FirebaseAuth.getInstance()
 
-    private val TAG: String = FirebaseNetworkClass::class.java.name
+    private val TAG: String = FirebaseAuthHelper::class.java.name
 
     @SuppressLint("SimpleDateFormat")
     fun onRegisterClicked(username: String, email: String, pass: String): LiveData<Result<Any?>> {
