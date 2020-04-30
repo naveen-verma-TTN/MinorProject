@@ -14,7 +14,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.minorProject.cloudGallery.model.User
+import com.minorProject.cloudGallery.model.bean.User
+import com.minorProject.cloudGallery.util.Compress
 import java.util.HashMap
 
 /**
@@ -29,7 +30,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private var storageReference: StorageReference? = null
 
     companion object {
-        private const val TAG: String = "UserViewModel"
+        private val TAG: String = UserViewModel::class.java.name
     }
 
     init {

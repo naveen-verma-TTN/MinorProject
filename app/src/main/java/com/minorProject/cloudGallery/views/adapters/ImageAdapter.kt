@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.minorProject.cloudGallery.databinding.TimelineRowItemBinding
-import com.minorProject.cloudGallery.model.Image
+import com.minorProject.cloudGallery.databinding.CustomTimelineRowItemBinding
+import com.minorProject.cloudGallery.model.bean.Image
 
 /**
  * Image Adapter class
@@ -17,7 +17,7 @@ class ImageAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding: TimelineRowItemBinding = TimelineRowItemBinding.inflate(
+        val binding: CustomTimelineRowItemBinding = CustomTimelineRowItemBinding.inflate(
             layoutInflater, parent, false
         )
         return ViewHolder(
@@ -39,7 +39,7 @@ class ImageAdapter(
     /**
      * ViewHolder inner class
      */
-    class ViewHolder(private val binding: TimelineRowItemBinding) :
+    class ViewHolder(private val binding: CustomTimelineRowItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         var viewForeground:RelativeLayout? = null
         fun bind(image: Image, itemClickListener: ImageItemClickListener, position: Int) {

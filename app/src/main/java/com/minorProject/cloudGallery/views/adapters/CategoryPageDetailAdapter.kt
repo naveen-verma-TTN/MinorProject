@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
-import com.minorProject.cloudGallery.databinding.CategoryDetailPageItemBinding
-import com.minorProject.cloudGallery.model.Image
-import kotlinx.android.synthetic.main.category_detail_page_item.view.*
+import com.minorProject.cloudGallery.databinding.CustomCategoryDetailPageItemBinding
+import com.minorProject.cloudGallery.model.bean.Image
+import kotlinx.android.synthetic.main.custom_category_detail_page_item.view.*
 
 /**
  * CategoryPageDetail Adapter class
@@ -21,7 +21,7 @@ class CategoryPageDetailAdapter internal constructor(
     private var tracker: SelectionTracker<Long>? = null
 
     private companion object {
-        private const val TAG = "CategoryPageDetailAdapter"
+        private val TAG: String = CategoryPageDetailItemClick::class.java.name
     }
 
     //setting up the stable id's to different items in recyclerview
@@ -31,7 +31,7 @@ class CategoryPageDetailAdapter internal constructor(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding: CategoryDetailPageItemBinding = CategoryDetailPageItemBinding.inflate(
+        val binding: CustomCategoryDetailPageItemBinding = CustomCategoryDetailPageItemBinding.inflate(
             layoutInflater, parent, false
         )
         return CategoryViewHolder(
@@ -68,7 +68,7 @@ class CategoryPageDetailAdapter internal constructor(
     /**
      * Inner ViewHolder class
      */
-    class CategoryViewHolder(private val binding: CategoryDetailPageItemBinding) :
+    class CategoryViewHolder(private val binding: CustomCategoryDetailPageItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
             image: Image,

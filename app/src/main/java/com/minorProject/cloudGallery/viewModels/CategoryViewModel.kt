@@ -19,8 +19,8 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.minorProject.cloudGallery.R
-import com.minorProject.cloudGallery.model.Category
-import com.minorProject.cloudGallery.model.Image
+import com.minorProject.cloudGallery.model.bean.Category
+import com.minorProject.cloudGallery.model.bean.Image
 
 /**
  * CategoryViewModel class
@@ -42,7 +42,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
     private val context = getApplication<Application>().applicationContext
 
     companion object {
-        private const val TAG: String = "CategoryViewModel"
+        private val TAG: String = CategoryViewModel::class.java.name
     }
 
     init {
@@ -168,13 +168,14 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                     if (task.isSuccessful) {
                         ref.downloadUrl.addOnSuccessListener { link ->
                             ref.metadata.addOnSuccessListener { metaData ->
-                                val image = Image(
-                                    categoryName,
-                                    filename,
-                                    metaData.sizeBytes.toDouble(),
-                                    Timestamp.now(),
-                                    link.toString()
-                                )
+                                val image =
+                                    Image(
+                                        categoryName,
+                                        filename,
+                                        metaData.sizeBytes.toDouble(),
+                                        Timestamp.now(),
+                                        link.toString()
+                                    )
 
                                 val docIdRef: DocumentReference =
                                     firebaseFireStore.collection("Categories")

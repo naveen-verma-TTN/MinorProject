@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="fragment"
+            type="com.minorProject.cloudGallery.views.fragments.auth.RegistrationFragment" />
+
+        <variable
+            name="viewModel"
+            type="com.minorProject.cloudGallery.viewModels.AuthViewModel" />
+
+        <variable
+            name="binder"
+            type="com.minorProject.cloudGallery.model.bindingClass.RegistrationBinderClass" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.fragments.auth.RegistrationFragment">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom">
+
+            <TextView
+                android:id="@+id/login_title"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:fontFamily="@font/abril_fatface"
+                android:letterSpacing="0.08"
+                android:padding="10dp"
+                android:text="@string/login_title"
+                android:textColor="@color/textColor"
+                android:textSize="20sp"
+                tools:targetApi="lollipop" />
+
+
+            <TextView
+                android:id="@+id/register_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/login_title"
+                android:fontFamily="@font/abril_fatface"
+                android:letterSpacing="0.08"
+                android:padding="10dp"
+                android:text="@string/register_title"
+                android:textColor="@color/textColor_highlighted"
+                android:textSize="20sp"
+                tools:targetApi="lollipop" />
+
+
+            <ImageView
+                android:id="@+id/pointer"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/login_title"
+                android:layout_alignStart="@+id/register_title"
+                android:layout_alignEnd="@id/register_title"
+                android:padding="10dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/textpointer" />
+
+
+            <TextView
+                android:id="@+id/forgotPassword_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:fontFamily="@font/abril_fatface"
+                android:letterSpacing="0.08"
+                android:padding="10dp"
+                android:text="@string/forgot_password_title"
+                android:textColor="@color/textColor"
+                android:textSize="20sp"
+                tools:targetApi="lollipop" />
+
+
+            <EditText
+                android:id="@+id/username_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pointer"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/allerta"
+                android:hint="@string/user_name_editText"
+                android:text="@={binder.userName}"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:shadowColor="@color/textColor_highlighted"
+                android:textColor="@color/textColor_highlighted"
+                android:textColorHint="@color/hintColor"
+                tools:targetApi="lollipop" />
+
+            <EditText
+                android:id="@+id/email_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/username_EditText"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/edittext_background"
+                android:fontFamily="@font/allerta"
+                android:hint="@string/email_address_editText"
+                android:inputType="textEmailAddress"
+                android:padding="10dp"
+                android:shadowColor="@color/textColor_highlighted"
+                android:text="@={binder.userEmail}"
+                android:textColor="@color/textColor_highlighted"
+                android:textColorHint="@color/hintColor"
+                tools:targetApi="lollipop" />
+
+            <EditText
+                android:id="@+id/password_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/email_EditText"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="20dp"
+                android:layout_toStartOf="@id/password_toggle"
+                android:background="@drawable/edittext_password"
+                android:fontFamily="@font/allerta"
+                android:hint="@string/password_editText"
+                android:inputType="textPassword"
+                android:text="@={binder.userPassword}"
+                android:padding="10dp"
+                android:textColor="@color/textColor_highlighted"
+                android:textColorHint="@color/hintColor"
+                tools:targetApi="lollipop" />
+
+            <ImageView
+                android:id="@+id/password_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/email_EditText"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="2dp"
+                android:onClick="@{()-> binder.passToggle(fragment.view)}"
+                android:layout_marginEnd="20dp"
+                android:background="@color/textColor"
+                android:padding="10dp"
+                android:src="@drawable/hide_show_password" />
+
+            <ProgressBar
+                android:id="@+id/progressbar_register"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:max="100"
+                android:visibility="gone"
+                android:layout_above="@id/register_Button"
+                android:background="@color/white"
+                android:indeterminateTint="@color/colorAccent"
+                android:layout_marginTop="7dp"/>
+
+            <Button
+                android:id="@+id/register_Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/password_EditText"
+                android:background="@drawable/button_background"
+                android:fontFamily="@font/abril_fatface"
+                android:letterSpacing="0.1"
+                android:padding="10dp"
+                android:text="@string/signup"
+                android:onClick="@{()-> binder.onRegisterClicked(viewModel, fragment.view)}"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                tools:targetApi="lollipop" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+</layout>

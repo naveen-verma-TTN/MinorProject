@@ -4,8 +4,8 @@ package com.minorProject.cloudGallery.views.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.minorProject.cloudGallery.databinding.CategoryPageItemBinding
-import com.minorProject.cloudGallery.model.Category
+import com.minorProject.cloudGallery.databinding.CustomCategoryPageItemBinding
+import com.minorProject.cloudGallery.model.bean.Category
 
 /**
  * CategoryPage Adapter class
@@ -17,12 +17,12 @@ class CategoryPageAdapter internal constructor(
     RecyclerView.Adapter<CategoryPageAdapter.MyViewHolder>() {
 
     private companion object {
-        private const val TAG = "CategoryPageAdapter"
+        private val TAG: String = CategoryPageAdapter::class.java.name
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding: CategoryPageItemBinding = CategoryPageItemBinding.inflate(
+        val binding: CustomCategoryPageItemBinding = CustomCategoryPageItemBinding.inflate(
             layoutInflater, parent, false
         )
         return MyViewHolder(
@@ -46,7 +46,7 @@ class CategoryPageAdapter internal constructor(
     /**
      * Inner ViewHolder class
      */
-    class MyViewHolder(private val binding: CategoryPageItemBinding) :
+    class MyViewHolder(private val binding: CustomCategoryPageItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
             category: Category,

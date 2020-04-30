@@ -26,9 +26,6 @@
     <string name="forgotPassword_progressBar">Checking information...</string>
     <string name="error_verification_mail">Failed to send verification email.</string>
     <string name="success_verification_mail">\"Verification email sent to \"</string>
-    <string name="error_register_user">createUserWithEmail:failure</string>
-    <string name="success_register_user">createUserWithEmail:success</string>
-    <string name="success_update_profile">User profile updated.</string>
     <string name="progress_registration">Registering User...</string>
     <string name="user_email_failure">UserWithEmail:failure</string>
     <string name="user_email_success">signInWithEmail:success</string>

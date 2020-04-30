@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="context"
+            type="com.minorProject.cloudGallery.views.fragments.profile.UserProfile" />
+
+        <variable
+            name="viewModel"
+            type="com.minorProject.cloudGallery.viewModels.UserViewModel" />
+
+        <variable
+            name="user"
+            type="com.minorProject.cloudGallery.model.bean.User" />
+
+        <variable
+            name="binder"
+            type="com.minorProject.cloudGallery.model.bindingClass.UserDetailBinderClass" />
+    </data>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.fragments.profile.UserDetails">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/user_detail_page_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:onClick="@{()-> binder.resetValues(context.view)}"
+                    android:src="@drawable/cancel"
+                    android:tooltipText="Cancel"
+                    android:visibility="@{binder.isVisibility==View.VISIBLE?View.GONE : View.VISIBLE }"
+                    tools:targetApi="o" />
+
+                <ImageView
+                    android:id="@+id/user_detail_page_correct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:onClick="@{()-> binder.writeDataOnFireStore(context.view, viewModel)}"
+                    android:src="@drawable/correct"
+                    android:tooltipText="Save details"
+                    android:visibility="@{binder.isVisibility==View.VISIBLE?View.GONE : View.VISIBLE }"
+                    tools:targetApi="o" />
+
+                <ImageView
+                    android:id="@+id/user_detail_page_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:visibility="@{binder.isVisibility}"
+                    android:onClick="@{()->binder.toggleButton(context.view)}"
+                    android:src="@drawable/edit_button"
+                    android:tooltipText="Edit details"
+                    tools:targetApi="o" />
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                app:cardElevation="@{binder.enable?20:5}"
+                app:cardCornerRadius="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/allerta"
+                        android:text="@string/email"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/user_detail_page_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@null"
+                        android:elevation="20dp"
+                        android:enabled="@{binder.enable}"
+                        android:fontFamily="@font/allerta_stencil"
+                        android:hint="@string/email_address_editText"
+                        android:inputType="textEmailAddress"
+                        android:text="@={user.userAdditionalEmail}" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                app:cardElevation="@{binder.enable?20:5}"
+                app:cardCornerRadius="5dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/allerta"
+                        android:text="@string/phone_number"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toTopOf="@+id/user_detail_page_phone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:fontFamily="@font/allerta"
+                        android:text="@string/phone_prefix"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/user_detail_page_phone"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView3"
+                        app:layout_constraintVertical_bias="1.0" />
+
+                    <EditText
+                        android:id="@+id/user_detail_page_phone"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@null"
+                        android:elevation="20dp"
+                        android:enabled="@{binder.enable}"
+                        android:fontFamily="@font/allerta_stencil"
+                        android:hint="@string/phone_number"
+                        android:inputType="phone"
+                        android:text="@={user.userPhoneNumber}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView2"
+                        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                app:cardElevation="@{binder.enable?20:5}"
+                app:cardCornerRadius="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/allerta"
+                        android:text="@string/birthday"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/user_detail_page_dob"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@null"
+                        android:elevation="20dp"
+                        android:enabled="@{binder.enable}"
+                        android:fontFamily="@font/allerta_stencil"
+                        android:hint="@string/dob"
+                        android:onClick="@{()-> binder.clickDataPicker(context.view)}"
+                        android:text="@={user.userDOB}"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="100dp"
+                app:cardElevation="@{binder.enable?20:5}"
+                app:cardCornerRadius="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/allerta"
+
+                        android:text="@string/postal_address"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/user_detail_page_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@null"
+                        android:elevation="20dp"
+                        android:enabled="@{binder.enable}"
+                        android:fontFamily="@font/allerta_stencil"
+                        android:hint="@string/address"
+                        android:inputType="textPostalAddress"
+                        android:text="@={user.userAddress}" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </FrameLayout>
+</layout>
