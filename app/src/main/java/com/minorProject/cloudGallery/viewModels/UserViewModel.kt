@@ -7,132 +7,86 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.minorProject.cloudGallery.model.bean.User
-import com.minorProject.cloudGallery.util.Compress
-import java.util.HashMap
+import com.minorProject.cloudGallery.model.repo.Failure
+import com.minorProject.cloudGallery.model.repo.FirebaseDatabaseHelper
+import com.minorProject.cloudGallery.model.repo.Result
+import com.minorProject.cloudGallery.model.repo.Success
 
-/**
- * UserViewModel class
- */
 class UserViewModel(application: Application) : AndroidViewModel(application) {
-    val userMutableLiveData: MutableLiveData<User> = MutableLiveData()
-
-    private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    private var storage: FirebaseStorage? = null
-    private val firebaseFireStore = FirebaseFirestore.getInstance()
-    private var storageReference: StorageReference? = null
+    private val context = getApplication<Application>().applicationContext
+    private val user: MutableLiveData<User> = MutableLiveData()
 
     companion object {
         private val TAG: String = UserViewModel::class.java.name
     }
 
     init {
-        storage = FirebaseStorage.getInstance()
-        storageReference = storage?.reference
-        readDataFromFireStore()
+        readUserDetailsFromFireStore()
     }
 
-    /**
-     * fun to read user details from firebase
-     */
-    private fun readDataFromFireStore() {
-        val fireStore = FirebaseFirestore.getInstance()
-        fireStore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
+    fun getUserDetails(): LiveData<User?> = user
 
-        fireStore
-            .collection("UserDetails").document(mAuth.currentUser?.uid!!)
-            .get()
-            .addOnSuccessListener { document ->
-                try {
-                    if (document != null) {
-                        userMutableLiveData.value = document.toObject(User::class.java) ?: User()
-                        Log.d("viewModel", "DocumentSnapshot read successfully!")
-                    } else {
-                        Log.e("viewModel", "No such document!")
-                    }
-                } catch (ex: Exception) {
-                    Log.e(TAG, ex.message!!)
+    private fun readUserDetailsFromFireStore() =
+        FirebaseDatabaseHelper.readUserDetailsFromFireStore().observeForever { response ->
+            when (response) {
+                is Success -> {
+                    user.value = response.value as User
                 }
-            }.addOnFailureListener { e ->
-                Log.e(TAG, "Error writing document", e)
+                is Failure -> {
+                    Log.e(TAG, response.e.message.toString())
+                }
             }
-    }
+        }
 
-    /**
-     * fun to update user profile picture
-     */
     @RequiresApi(Build.VERSION_CODES.O)
-    fun setProfilePic(uri: Uri) {
-        val ref =
-            storageReference!!.child("${mAuth.uid}/UserProfile/" + mAuth.uid)
-            ref.putFile(Compress.getThumbnail(uri, getApplication())!!)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    ref.downloadUrl
-                        .addOnSuccessListener { uri ->
-                            val user = userMutableLiveData.value
-                            user?.UserProfile = uri.toString()
-                            userMutableLiveData.value = user
-                            updateUserDetails(user!!)
-                        }
-                } else {
-                    Log.e(
-                        "Uploaded",
-                        "Error happened during the upload process"
-                    )
+    fun setProfilePic(data: Uri) {
+        FirebaseDatabaseHelper.setProfilePic(context, user.value!!, data)
+            .observeForever { response ->
+                when (response) {
+                    is Success -> {
+                        user.value = response.value as User
+                    }
+                    is Failure -> {
+                        Log.e(TAG, response.e.message.toString())
+                    }
                 }
-            }.addOnProgressListener { taskSnapshot ->
-                val progress =
-                    100.0 * taskSnapshot.bytesTransferred / taskSnapshot
-                        .totalByteCount
-                Log.e("upload:", progress.toString())
-            }.addOnFailureListener { e ->
-                Log.e("Uploaded", "failed: ${e.message}")
             }
     }
 
-    /**
-     * fun to update user details
-     */
-    fun updateUserDetails(user: User): LiveData<Boolean> {
-        val result: MutableLiveData<Boolean> = MutableLiveData()
-        val userHashMap = HashMap<String, Any>()
-
-        userHashMap["UserAdditionalEmail"] = user.UserAdditionalEmail
-        userHashMap["UserPhoneNumber"] = user.UserPhoneNumber
-        userHashMap["UserDOB"] = user.UserDOB
-        userHashMap["UserAddress"] = user.UserAddress
-        if(user.UserProfile != ""){
-            userHashMap["UserProfile"] = user.UserProfile
-        }
-
-        val docIdRef: DocumentReference =
-            firebaseFireStore.collection("UserDetails").document(mAuth.uid!!)
-        docIdRef.get().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val document = task.result
-                if (document!!.exists()) {
-                    docIdRef.update(userHashMap)
-                        .addOnSuccessListener {
-                            Log.e("status", "success")
-                            result.value = true
-                        }
-                        .addOnFailureListener { e ->
-                            Log.e("status", "failed: "+ e.message)
-                            result.value = false
-                        }
+    fun updateUserDetailsToFireStore(userDefault: User): LiveData<Result<Any?>> {
+        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
+        FirebaseDatabaseHelper.updateUserDetailsToFireStore(userDefault)
+            .observeForever { response ->
+                when (response) {
+                    is Success -> {
+                        user.value = response.value as User
+                        result.value = Success(response.value)
+                    }
+                    is Failure -> {
+                        Log.e(TAG, response.e.message.toString())
+                        result.value = Failure(response.e)
+                    }
                 }
-            } else {
-                result.value = false
             }
-        }
+        return result
+    }
+
+    fun logout(): LiveData<Result<Any?>> {
+        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
+        FirebaseDatabaseHelper.logout()
+            .observeForever { response ->
+                when (response) {
+                    is Success -> {
+                        result.value = Success(response)
+                    }
+                    is Failure -> {
+                        result.value = Failure(response.e)
+                    }
+                }
+            }
         return result
     }
 }

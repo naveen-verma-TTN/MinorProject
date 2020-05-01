@@ -71,7 +71,7 @@
             android:layout_height="50dp"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="10dp"
-            android:onClick="@{()-> binder.logout(context.view)}"
+            android:onClick="@{()-> binder.logout(viewModel,context.view)}"
             android:src="@drawable/logout_button"
             android:tooltipText="LogOut"
             app:layout_constraintBottom_toBottomOf="parent"

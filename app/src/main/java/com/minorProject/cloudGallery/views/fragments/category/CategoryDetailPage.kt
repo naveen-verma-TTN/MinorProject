@@ -31,7 +31,7 @@ import com.bumptech.glide.Glide
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
-import com.minorProject.cloudGallery.util.Compress
+import com.minorProject.cloudGallery.model.repo.Compress
 import com.minorProject.cloudGallery.viewModels.CategoryViewModel
 import com.minorProject.cloudGallery.views.adapters.CategoryPageDetailAdapter
 import com.minorProject.cloudGallery.views.adapters.CategoryPageDetailItemClick

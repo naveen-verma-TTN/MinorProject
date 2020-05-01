@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.minorProject.cloudGallery.R
+import com.minorProject.cloudGallery.viewModels.AuthViewModel
 import com.minorProject.cloudGallery.views.fragments.auth.AuthHomeFragment
 import kotlinx.android.synthetic.main.a_splashscreen.*
 
@@ -17,11 +19,16 @@ import kotlinx.android.synthetic.main.a_splashscreen.*
 class SplashScreenActivity : AppCompatActivity() {
     companion object {
         private const val SPLASH_TIME_OUT: Long = 1000
-
         private val TAG: String = SplashScreenActivity::class.java.name
     }
 
-    private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var authViewModel: AuthViewModel
+
+    override fun onStart() {
+        super.onStart()
+        authViewModel = ViewModelProviders.of(this)
+            .get(AuthViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,35 +36,38 @@ class SplashScreenActivity : AppCompatActivity() {
 
         // work for logout
         val value = intent?.extras?.getString("Key")
-
-        Handler().postDelayed({
-            if (mAuth.currentUser == null) {
-                Handler().postDelayed({
-                    main_logo_layout.visibility = View.GONE
-                    if (value == "LOGOUT") {
-                        splashScreen_layout.snack(getString(R.string.logout_message))
-                    }
-                }, 5)
-                val fragmentTransaction = supportFragmentManager.beginTransaction()
-                fragmentTransaction.setCustomAnimations(
-                    R.anim.slide_up,
-                    R.anim.slide_down
-                )
-                fragmentTransaction
-                    .replace(
-                        R.id.nav_host_fragment,
-                        AuthHomeFragment()
-                    )
-                    .commit()
-            } else {
-                startActivity(Intent(this, HomePageActivity::class.java))
-                overridePendingTransition(
-                    R.anim.enter,
-                    R.anim.exit
-                )
-                finish()
-            }
-        },
+        Handler().postDelayed(
+            {
+                authViewModel.checkIfUserSignInOrNot().observe(this,
+                    Observer { isSignIn ->
+                        if (isSignIn) {
+                            startActivity(Intent(this, HomePageActivity::class.java))
+                            overridePendingTransition(
+                                R.anim.enter,
+                                R.anim.exit
+                            )
+                            finish()
+                        } else {
+                            Handler().postDelayed({
+                                main_logo_layout.visibility = View.GONE
+                                if (value == "LOGOUT") {
+                                    splashScreen_layout.snack(getString(R.string.logout_message))
+                                }
+                            }, 5)
+                            val fragmentTransaction = supportFragmentManager.beginTransaction()
+                            fragmentTransaction.setCustomAnimations(
+                                R.anim.slide_up,
+                                R.anim.slide_down
+                            )
+                            fragmentTransaction
+                                .replace(
+                                    R.id.nav_host_fragment,
+                                    AuthHomeFragment()
+                                )
+                                .commit()
+                        }
+                    })
+            },
             SPLASH_TIME_OUT
         )
     }

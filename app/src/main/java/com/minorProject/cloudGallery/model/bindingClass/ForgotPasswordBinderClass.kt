@@ -18,9 +18,7 @@ import com.minorProject.cloudGallery.util.HelperClass.snack
 import com.minorProject.cloudGallery.util.HelperClass.validEmail
 import com.minorProject.cloudGallery.viewModels.AuthViewModel
 import com.minorProject.cloudGallery.views.fragments.auth.ForgotPasswordFragment
-import kotlinx.android.synthetic.main.f_auth_forget_password.*
 import kotlinx.android.synthetic.main.f_auth_forget_password.view.*
-import kotlinx.android.synthetic.main.f_auth_forget_password.view.email_EditText_forgot
 
 /**
  * ForgotPassword dataBinding class

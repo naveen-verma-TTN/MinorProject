@@ -16,6 +16,22 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         private val TAG: String = AuthViewModel::class.java.name
     }
 
+    fun checkIfUserSignInOrNot(): LiveData<Boolean> {
+        val result: MutableLiveData<Boolean> = MutableLiveData()
+        FirebaseAuthHelper.checkIfUserSignInOrNot()
+            .observeForever { response ->
+                when (response) {
+                    is Success -> {
+                        result.value = response.value as Boolean
+                    }
+                    is Failure -> {
+                        result.value = false
+                    }
+                }
+            }
+        return result
+    }
+
     fun onRegisterClicked(username: String, email: String, pass: String): LiveData<Result<Any?>>? {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
             FirebaseAuthHelper.onRegisterClicked(username, email, pass)
@@ -32,18 +48,19 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         return result
     }
 
+
     fun onLoginClicked(email: String, pass: String): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
-        FirebaseAuthHelper.onLoginClicked(email, pass).observeForever { response->
-            when(response){
-                is Success -> {
-                    result.value = Success(response)
-                }
-                is Failure -> {
-                    result.value = Failure(response.e)
+            FirebaseAuthHelper.onLoginClicked(email, pass).observeForever { response ->
+                when (response) {
+                    is Success -> {
+                        result.value = Success(response)
+                    }
+                    is Failure -> {
+                        result.value = Failure(response.e)
+                    }
                 }
             }
-        }
         return result
     }
 

@@ -12,13 +12,15 @@ import android.view.View.VISIBLE
 import androidx.annotation.RequiresApi
 import androidx.databinding.BaseObservable
 import androidx.fragment.app.FragmentActivity
-import com.google.firebase.auth.FirebaseAuth
+import androidx.lifecycle.Observer
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.User
+import com.minorProject.cloudGallery.model.repo.Failure
+import com.minorProject.cloudGallery.model.repo.Success
 import com.minorProject.cloudGallery.util.HelperClass.validEmail
+import com.minorProject.cloudGallery.viewModels.UserViewModel
 import com.minorProject.cloudGallery.views.activities.HomePageActivity
 import com.minorProject.cloudGallery.views.activities.SplashScreenActivity
-import com.minorProject.cloudGallery.viewModels.UserViewModel
 import kotlinx.android.synthetic.main.f_user_details.view.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -42,24 +44,25 @@ class UserDetailBinderClass(
     /**
      * fun to save values to the userDefault object
      */
-    private fun saveValues(view: View) {
+    private fun saveValues(user: User, view: View) {
         userDefault = User(
-            UserAdditionalEmail =
-            view.user_detail_page_email.text.toString().trim(),
-            UserPhoneNumber =
-            view.user_detail_page_phone.text.toString().trim(),
-            UserDOB =
-            view.user_detail_page_dob.text.toString().trim(),
-            UserAddress =
-            view.user_detail_page_address.text.toString().trim()
+            UserId = user.UserId,
+            UserName = user.UserName,
+            UserEmail = user.UserEmail,
+            UserProfile = user.UserProfile,
+            AccountCreatedOn = user.AccountCreatedOn,
+            UserAdditionalEmail = view.user_detail_page_email.text.toString().trim(),
+            UserPhoneNumber = view.user_detail_page_phone.text.toString().trim(),
+            UserDOB = view.user_detail_page_dob.text.toString().trim(),
+            UserAddress = view.user_detail_page_address.text.toString().trim()
         )
     }
 
     /**
      * fun to enable/disable EditText and other action button (edit, submit, cancel)
      */
-    fun toggleButton(view: View) {
-        saveValues(view)
+    fun toggleButton(user: User, view: View) {
+        saveValues(user, view)
         if (!isEnable) {
             isEnable = true
             isVisibility = GONE
@@ -73,13 +76,13 @@ class UserDetailBinderClass(
     /**
      * fun to reset the values using userDefault
      */
-    fun resetValues(view: View) {
+    fun resetValues(user: User, view: View) {
         view.user_detail_page_email.setText(userDefault.UserAdditionalEmail)
         view.user_detail_page_phone.setText(userDefault.UserPhoneNumber)
         view.user_detail_page_dob.text = userDefault.UserDOB
         view.user_detail_page_address.setText(userDefault.UserAddress)
         notifyChange()
-        toggleButton(view)
+        toggleButton(user, view)
     }
 
     /**
@@ -107,7 +110,7 @@ class UserDetailBinderClass(
     /**
      * fun to update the user details
      */
-    fun writeDataOnFireStore(view: View, viewModel: UserViewModel) {
+    fun writeDataOnFireStore(user: User, view: View, userViewModel: UserViewModel) {
         val context = view.context
         if (!TextUtils.isEmpty(view.user_detail_page_email.text) and !validEmail(
                 view.user_detail_page_email.text.toString()
@@ -118,17 +121,21 @@ class UserDetailBinderClass(
             view.user_detail_page_phone.error =
                 "Invalid Phone number. Phone number should be 10-digit number."
         } else {
-            saveValues(view)
-            viewModel.updateUserDetails(userDefault).observe(
+            saveValues(user, view)
+            userViewModel.updateUserDetailsToFireStore(userDefault).observe(
                 activity,
-                androidx.lifecycle.Observer { success ->
-                    if (success) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!")
-                        toggleButton(view)
-                    } else {
-                        Log.d(TAG, "Error writing document")
-                        toggleButton(view)
+                Observer { response ->
+                    when (response) {
+                        is Success -> {
+                            Log.d(TAG, "DocumentSnapshot successfully written!")
+                            toggleButton(response.value as User, view)
+                        }
+                        is Failure -> {
+                            Log.d(TAG, "Error writing document")
+                            toggleButton(user, view)
+                        }
                     }
+
                 }
             )
         }
@@ -137,17 +144,23 @@ class UserDetailBinderClass(
     /**
      * fun to logOut from the firebase account and open the SplashScreenActivity
      */
-    fun logout(view: View) {
-        val mAuth: FirebaseAuth? = FirebaseAuth.getInstance()
-        if (mAuth?.currentUser != null) {
-            val intent = Intent(view.context, SplashScreenActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-            val bundle = Bundle()
-            bundle.putString("Key", "LOGOUT")
-            intent.putExtras(bundle)
-            mAuth.signOut()
-            view.context.startActivity(intent)
-            (view.context as HomePageActivity).finish()
-        }
+    fun logout(userViewModel: UserViewModel, view: View) {
+        userViewModel.logout().observe(activity,
+            Observer { response ->
+                when (response) {
+                    is Success -> {
+                        val intent = Intent(view.context, SplashScreenActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                        val bundle = Bundle()
+                        bundle.putString("Key", "LOGOUT")
+                        intent.putExtras(bundle)
+                        view.context.startActivity(intent)
+                        (view.context as HomePageActivity).finish()
+                    }
+                    is Failure -> {
+                        Log.e(TAG, response.e.toString())
+                    }
+                }
+            })
     }
 }

@@ -9,7 +9,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -18,6 +17,15 @@ object FirebaseAuthHelper {
     private val mAuth = FirebaseAuth.getInstance()
 
     private val TAG: String = FirebaseAuthHelper::class.java.name
+
+    fun checkIfUserSignInOrNot(): LiveData<Result<Any?>> {
+        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
+        result.value = Success(false)
+        if (mAuth.currentUser != null) {
+            result.value = Success(true)
+        }
+        return result
+    }
 
     @SuppressLint("SimpleDateFormat")
     fun onRegisterClicked(username: String, email: String, pass: String): LiveData<Result<Any?>> {
@@ -51,8 +59,8 @@ object FirebaseAuthHelper {
                         .set(data)
                         .addOnSuccessListener {
                             Log.d(TAG, "DocumentSnapshot successfully written!")
-                            verifyEmail().observeForever { response->
-                                when(response){
+                            verifyEmail().observeForever { response ->
+                                when (response) {
                                     is Success -> {
                                         result.value = Success(response)
                                     }
@@ -74,12 +82,12 @@ object FirebaseAuthHelper {
         return result
     }
 
-    private fun verifyEmail(): LiveData<Result<Any?>>{
+    private fun verifyEmail(): LiveData<Result<Any?>> {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         mAuth.currentUser!!.sendEmailVerification()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                  result.value = Success(true)
+                    result.value = Success(true)
                 } else {
                     Log.e(
                         ContentValues.TAG,
@@ -92,7 +100,7 @@ object FirebaseAuthHelper {
         return result
     }
 
-    fun onLoginClicked(email: String, pwd: String): LiveData<Result<Any?>>{
+    fun onLoginClicked(email: String, pwd: String): LiveData<Result<Any?>> {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         mAuth.signInWithEmailAndPassword(email, pwd)
             .addOnCompleteListener { task ->

@@ -13,6 +13,5 @@ data class User(
     var UserAdditionalEmail: String = "",
     var UserPhoneNumber: String = "",
     var UserDOB: String = "",
-    var UserAddress: String = "",
-    var UserTotalStorage: String = ""
+    var UserAddress: String = ""
 )

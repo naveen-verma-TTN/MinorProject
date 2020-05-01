@@ -4,14 +4,11 @@ import android.content.Intent
 import android.text.InputType
 import android.text.TextUtils
 import android.util.Log
-import android.util.Patterns
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.lifecycle.Observer
-import com.google.firebase.auth.FirebaseAuth
 import com.minorProject.cloudGallery.BR
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.User
@@ -24,10 +21,7 @@ import com.minorProject.cloudGallery.viewModels.AuthViewModel
 import com.minorProject.cloudGallery.views.activities.HomePageActivity
 import com.minorProject.cloudGallery.views.activities.SplashScreenActivity
 import com.minorProject.cloudGallery.views.fragments.auth.LoginScreenFragment
-import kotlinx.android.synthetic.main.f_auth_forget_password.view.*
 import kotlinx.android.synthetic.main.f_auth_login_screen.view.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 /**
  * Login dataBinding class

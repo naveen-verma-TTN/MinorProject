@@ -1,37 +1,27 @@
 package com.minorProject.cloudGallery.model.bindingClass
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.text.InputType
 import android.text.TextUtils
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.lifecycle.Observer
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.FirebaseFirestore
 import com.minorProject.cloudGallery.BR
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.User
 import com.minorProject.cloudGallery.model.repo.Failure
 import com.minorProject.cloudGallery.model.repo.Success
-import com.minorProject.cloudGallery.util.HelperClass
 import com.minorProject.cloudGallery.util.HelperClass.snack
 import com.minorProject.cloudGallery.util.HelperClass.validEmail
 import com.minorProject.cloudGallery.util.HelperClass.validPassword
 import com.minorProject.cloudGallery.viewModels.AuthViewModel
 import com.minorProject.cloudGallery.views.fragments.auth.RegistrationFragment
-import kotlinx.android.synthetic.main.f_auth_login_screen.view.*
 import kotlinx.android.synthetic.main.f_auth_login_screen.view.password_EditText
 import kotlinx.android.synthetic.main.f_auth_login_screen.view.password_toggle
 import kotlinx.android.synthetic.main.f_auth_registration.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * Registration dataBinding class

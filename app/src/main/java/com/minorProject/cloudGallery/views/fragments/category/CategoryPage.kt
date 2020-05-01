@@ -2,23 +2,22 @@ package com.minorProject.cloudGallery.views.fragments.category
 
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.viewModels.CategoryViewModel
-import com.minorProject.cloudGallery.views.adapters.CategoryPageItemClick
 import com.minorProject.cloudGallery.views.adapters.CategoryPageAdapter
+import com.minorProject.cloudGallery.views.adapters.CategoryPageItemClick
 import kotlinx.android.synthetic.main.f_category.*
-import kotlinx.android.synthetic.main.f_category.view.home_recycler
+import kotlinx.android.synthetic.main.f_category.view.*
 
 /**
  * CategoryPage fragment

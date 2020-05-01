@@ -1,11 +1,11 @@
 package com.minorProject.cloudGallery.views.fragments.auth
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -13,15 +13,9 @@ import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.databinding.FAuthForgetPasswordBinding
 import com.minorProject.cloudGallery.model.bindingClass.ForgotPasswordBinderClass
 import com.minorProject.cloudGallery.viewModels.AuthViewModel
-import com.minorProject.cloudGallery.viewModels.CategoryViewModel
-import com.minorProject.cloudGallery.viewModels.UserViewModel
 import com.minorProject.cloudGallery.views.adapters.OnSwipeTouchListener
 import com.minorProject.cloudGallery.views.adapters.SwipeTouchListener
 import kotlinx.android.synthetic.main.f_auth_forget_password.*
-import kotlinx.android.synthetic.main.f_auth_forget_password.forgotPassword_title
-import kotlinx.android.synthetic.main.f_auth_forget_password.login_title
-import kotlinx.android.synthetic.main.f_auth_forget_password.register_title
-import kotlinx.android.synthetic.main.f_auth_login_screen.*
 
 /**
  * ForgotPassword fragment

@@ -15,8 +15,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.databinding.FUserProfileBinding
 import com.minorProject.cloudGallery.model.bean.Category
-import com.minorProject.cloudGallery.viewModels.CategoryViewModel
 import com.minorProject.cloudGallery.model.bindingClass.UserDetailBinderClass
+import com.minorProject.cloudGallery.viewModels.CategoryViewModel
 import com.minorProject.cloudGallery.viewModels.UserViewModel
 import kotlinx.android.synthetic.main.custom_collapse_toolbar.*
 
@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.custom_collapse_toolbar.*
  */
 class UserProfile : Fragment() {
     private lateinit var categoryViewModel: CategoryViewModel
-    private lateinit var viewModel: UserViewModel
+    private lateinit var userViewModel: UserViewModel
     private lateinit var binding: FUserProfileBinding
 
     companion object {
@@ -35,7 +35,7 @@ class UserProfile : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!)
+        userViewModel = ViewModelProviders.of(activity!!)
             .get(UserViewModel::class.java)
 
         categoryViewModel = ViewModelProviders.of(activity!!)
@@ -50,7 +50,7 @@ class UserProfile : Fragment() {
             inflater, R.layout.f_user_profile, container, false
         )
         binding.userDetail.context = this
-        binding.userDetail.viewModel = viewModel
+        binding.userDetail.viewModel = userViewModel
         binding.userDetail.binder =
             UserDetailBinderClass(
                 activity!!
@@ -59,14 +59,14 @@ class UserProfile : Fragment() {
         binding.collapseToolbar.context = this
 
         binding.collapseToolbar.context = this
-        binding.collapseToolbar.viewModel = viewModel
+        binding.collapseToolbar.viewModel = userViewModel
         binding.collapseToolbar.binder =
             UserDetailBinderClass(
                 activity!!
             )
 
         binding.progressMenu.context = this
-        binding.progressMenu.viewModel = viewModel
+        binding.progressMenu.viewModel = userViewModel
         binding.progressMenu.binder =
             UserDetailBinderClass(
                 activity!!
@@ -77,17 +77,34 @@ class UserProfile : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUpListeners()
+
+        setUpObservers()
+
+    }
+
+    /**
+     * fun for set up Listeners
+     */
+    private fun setUpListeners() {
+        avatar.setOnClickListener {
+            selectImageInAlbum()
+        }
+    }
+
+    /**
+     * fun for setting up observers
+     */
+    private fun setUpObservers() {
         // Observer to observe the change in userMutableLiveData and update the ui
-        viewModel.userMutableLiveData.observe(
+        userViewModel.getUserDetails().observe(
             requireActivity(),
             Observer { user ->
                 binding.userDetail.user = user
                 binding.collapseToolbar.user = user
                 binding.progressMenu.user = user
-
             }
         )
-
         // Observer to observe the change in allCategories and update the size and progress-bar
         categoryViewModel.allCategories.observe(
             requireActivity(),
@@ -104,10 +121,6 @@ class UserProfile : Fragment() {
 
                 binding.progressMenu.progress = progress.toInt()
             })
-
-        avatar.setOnClickListener {
-            selectImageInAlbum()
-        }
     }
 
     /**
@@ -140,7 +153,7 @@ class UserProfile : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
-            viewModel.setProfilePic(data?.data!!)
+            userViewModel.setProfilePic(data?.data!!)
         }
     }
 }

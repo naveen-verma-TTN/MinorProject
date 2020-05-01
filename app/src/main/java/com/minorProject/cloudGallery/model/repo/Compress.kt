@@ -1,4 +1,4 @@
-package com.minorProject.cloudGallery.util
+package com.minorProject.cloudGallery.model.repo
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import androidx.annotation.RequiresApi
-import com.minorProject.cloudGallery.model.bindingClass.ForgotPasswordBinderClass
 import java.io.*
 
 /**
