@@ -1,7 +1,9 @@
 package com.minorProject.cloudGallery.util
 
+import android.content.Context
 import android.util.Patterns
 import android.view.View
+import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -30,8 +32,7 @@ object HelperClass{
         return matcher.matches()
     }
 
-    enum class AuthState{
-        SHOW_PROGRESS,
-        HIDE_PROGRESS
+    fun Context.ShowToast(message: String){
+        Toast.makeText(this,message,Toast.LENGTH_LONG).show()
     }
 }

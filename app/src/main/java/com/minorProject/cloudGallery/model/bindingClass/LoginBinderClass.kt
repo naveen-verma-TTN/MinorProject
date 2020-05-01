@@ -71,37 +71,43 @@ class LoginBinderClass(private val loginScreenFragment: LoginScreenFragment) : B
         val email = getUserEmail()
         val pass = getUserPassword()
         val context = view.context
-        if (TextUtils.isEmpty(email)) {
-            view.email_EditText_login.error = context.getString(R.string.empty_email)
-        } else if (!validEmail(email.toString())) {
-            view.email_EditText_login.error = context.getString(R.string.invaild_email)
-        } else if (TextUtils.isEmpty(pass)) {
-            view.password_EditText.error = context.getString(R.string.empty_password)
-        } else if (!(validPassword(pass.toString()) && pass.toString().length >= 6)) {
-            view.password_EditText.error = context.getString(R.string.invaild_password)
-        } else {
-            view.progressbar.visibility = View.VISIBLE
-            authViewModel.onLoginClicked(email!!, pass!!).observe(loginScreenFragment,
-                Observer { response ->
-                    when (response) {
-                        is Success -> {
-                            Log.d(TAG, context.getString(R.string.user_email_success))
-                            view.progressbar.visibility = View.GONE
-                            updateUI(
-                                view
-                            )
+        when {
+            TextUtils.isEmpty(email) -> {
+                view.email_EditText_login.error = context.getString(R.string.empty_email)
+            }
+            !validEmail(email.toString()) -> {
+                view.email_EditText_login.error = context.getString(R.string.invaild_email)
+            }
+            TextUtils.isEmpty(pass) -> {
+                view.password_EditText.error = context.getString(R.string.empty_password)
+            }
+            !(validPassword(pass.toString()) && pass.toString().length >= 6) -> {
+                view.password_EditText.error = context.getString(R.string.invaild_password)
+            }
+            else -> {
+                view.progressbar.visibility = View.VISIBLE
+                authViewModel.onLoginClicked(email!!, pass!!).observe(loginScreenFragment,
+                    Observer { response ->
+                        when (response) {
+                            is Success -> {
+                                Log.d(TAG, context.getString(R.string.user_email_success))
+                                view.progressbar.visibility = View.GONE
+                                updateUI(
+                                    view
+                                )
+                            }
+                            is Failure -> {
+                                Log.w(
+                                    TAG,
+                                    context.getString(R.string.user_email_failure),
+                                    response.e
+                                )
+                                view.progressbar.visibility = View.GONE
+                                view.snack(response.e.cause?.message.toString())
+                            }
                         }
-                        is Failure -> {
-                            Log.w(
-                                TAG,
-                                context.getString(R.string.user_email_failure),
-                                response.e
-                            )
-                            view.progressbar.visibility = View.GONE
-                            view.snack(response.e.cause?.message.toString())
-                        }
-                    }
-                })
+                    })
+            }
         }
     }
 

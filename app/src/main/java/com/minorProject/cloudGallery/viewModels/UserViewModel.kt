@@ -11,9 +11,10 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.minorProject.cloudGallery.model.bean.User
 import com.minorProject.cloudGallery.model.repo.Failure
-import com.minorProject.cloudGallery.model.repo.FirebaseDatabaseHelper
+import com.minorProject.cloudGallery.model.repo.FirebaseUserDatabaseHelper
 import com.minorProject.cloudGallery.model.repo.Result
 import com.minorProject.cloudGallery.model.repo.Success
+import com.minorProject.cloudGallery.util.HelperClass.ShowToast
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val context = getApplication<Application>().applicationContext
@@ -30,7 +31,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun getUserDetails(): LiveData<User?> = user
 
     private fun readUserDetailsFromFireStore() =
-        FirebaseDatabaseHelper.readUserDetailsFromFireStore().observeForever { response ->
+        FirebaseUserDatabaseHelper.readUserDetailsFromFireStore().observeForever { response ->
             when (response) {
                 is Success -> {
                     user.value = response.value as User
@@ -43,7 +44,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setProfilePic(data: Uri) {
-        FirebaseDatabaseHelper.setProfilePic(context, user.value!!, data)
+        FirebaseUserDatabaseHelper.setProfilePic(context, user.value!!, data)
             .observeForever { response ->
                 when (response) {
                     is Success -> {
@@ -58,14 +59,16 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     fun updateUserDetailsToFireStore(userDefault: User): LiveData<Result<Any?>> {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
-        FirebaseDatabaseHelper.updateUserDetailsToFireStore(userDefault)
+        FirebaseUserDatabaseHelper.updateUserDetailsToFireStore(userDefault)
             .observeForever { response ->
                 when (response) {
                     is Success -> {
                         user.value = response.value as User
                         result.value = Success(response.value)
+                        context.ShowToast("User details updated!")
                     }
                     is Failure -> {
+                        context.ShowToast("Failed to update user details!")
                         Log.e(TAG, response.e.message.toString())
                         result.value = Failure(response.e)
                     }
@@ -76,7 +79,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     fun logout(): LiveData<Result<Any?>> {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
-        FirebaseDatabaseHelper.logout()
+        FirebaseUserDatabaseHelper.logout()
             .observeForever { response ->
                 when (response) {
                     is Success -> {

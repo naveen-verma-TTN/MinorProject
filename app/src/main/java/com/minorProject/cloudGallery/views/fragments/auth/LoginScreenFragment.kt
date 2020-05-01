@@ -26,7 +26,7 @@ class LoginScreenFragment : Fragment(), View.OnClickListener, SwipeTouchListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        authViewModel = ViewModelProviders.of(activity!!)
+        authViewModel = ViewModelProviders.of(requireActivity())
             .get(AuthViewModel::class.java)
     }
 
@@ -37,6 +37,8 @@ class LoginScreenFragment : Fragment(), View.OnClickListener, SwipeTouchListener
         val binding: FAuthLoginScreenBinding = DataBindingUtil.inflate(
             inflater, R.layout.f_auth_login_screen, container, false
         )
+
+        // f_auth_login_screen layout
         binding.fragment = this
         binding.viewModel = authViewModel
         binding.binder = LoginBinderClass(this)
@@ -47,17 +49,20 @@ class LoginScreenFragment : Fragment(), View.OnClickListener, SwipeTouchListener
         super.onViewCreated(view, savedInstanceState)
 
         navController = Navigation.findNavController(view)
-        view.setOnTouchListener(
-            OnSwipeTouchListener(
-                view.context,
-                this
-            )
-        )
 
         setUpListeners()
     }
 
+    /**
+     * fun for set up Listeners
+     */
     private fun setUpListeners() {
+        view?.setOnTouchListener(
+            OnSwipeTouchListener(
+                requireView().context,
+                this
+            )
+        )
         register_title.setOnClickListener(this)
         forgotPassword_title.setOnClickListener(this)
     }

@@ -20,10 +20,6 @@ class CategoryPageDetailAdapter internal constructor(
 ) : RecyclerView.Adapter<CategoryPageDetailAdapter.CategoryViewHolder>() {
     private var tracker: SelectionTracker<Long>? = null
 
-    private companion object {
-        private val TAG: String = CategoryPageDetailItemClick::class.java.name
-    }
-
     //setting up the stable id's to different items in recyclerview
     init {
         setHasStableIds(true)

@@ -14,9 +14,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.databinding.FUserProfileBinding
-import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bindingClass.UserDetailBinderClass
-import com.minorProject.cloudGallery.viewModels.CategoryViewModel
+import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.viewModels.UserViewModel
 import kotlinx.android.synthetic.main.custom_collapse_toolbar.*
 
@@ -24,22 +23,21 @@ import kotlinx.android.synthetic.main.custom_collapse_toolbar.*
  * UserProfile fragment
  */
 class UserProfile : Fragment() {
-    private lateinit var categoryViewModel: CategoryViewModel
+    private lateinit var categoriesViewModel: CategoriesViewModel
     private lateinit var userViewModel: UserViewModel
     private lateinit var binding: FUserProfileBinding
 
     companion object {
         private const val REQUEST_SELECT_IMAGE_IN_ALBUM = 102
-        private val TAG: String = UserProfile::class.java.name
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userViewModel = ViewModelProviders.of(activity!!)
+        userViewModel = ViewModelProviders.of(requireActivity())
             .get(UserViewModel::class.java)
 
-        categoryViewModel = ViewModelProviders.of(activity!!)
-            .get(CategoryViewModel::class.java)
+        categoriesViewModel = ViewModelProviders.of(requireActivity())
+            .get(CategoriesViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -49,31 +47,35 @@ class UserProfile : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.f_user_profile, container, false
         )
+
+        //f_user_profile layout
         binding.userDetail.context = this
         binding.userDetail.viewModel = userViewModel
         binding.userDetail.binder =
             UserDetailBinderClass(
-                activity!!
+                requireActivity()
             )
 
-        binding.collapseToolbar.context = this
-
+        //custom_collapse_toolbar layout
         binding.collapseToolbar.context = this
         binding.collapseToolbar.viewModel = userViewModel
         binding.collapseToolbar.binder =
             UserDetailBinderClass(
-                activity!!
+                requireActivity()
             )
 
+        //custom_user_page_progress_bar_menu layout
         binding.progressMenu.context = this
         binding.progressMenu.viewModel = userViewModel
         binding.progressMenu.binder =
             UserDetailBinderClass(
-                activity!!
+                requireActivity()
             )
+
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -95,6 +97,7 @@ class UserProfile : Fragment() {
     /**
      * fun for setting up observers
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setUpObservers() {
         // Observer to observe the change in userMutableLiveData and update the ui
         userViewModel.getUserDetails().observe(
@@ -106,10 +109,9 @@ class UserProfile : Fragment() {
             }
         )
         // Observer to observe the change in allCategories and update the size and progress-bar
-        categoryViewModel.allCategories.observe(
+        categoriesViewModel.getTotalSize().observe(
             requireActivity(),
-            Observer { category ->
-                val size = getTotalStorageSize(category)
+            Observer { size ->
                 val totalSize = "%.2f".format(size).toDouble().toString() + " MB / 500 MB"
 
                 binding.progressMenu.size = totalSize
@@ -124,27 +126,12 @@ class UserProfile : Fragment() {
     }
 
     /**
-     * fun to get total Storage space size --- for specific user
-     */
-    private fun getTotalStorageSize(category: ArrayList<Category>?): Double? {
-        var size= 0.0
-        category?.forEach { item ->
-            if (item.ImagesList != null) {
-                item.ImagesList.forEach { image ->
-                    size += (image.size/ (1024 * 1024))
-                }
-            }
-        }
-        return size
-    }
-
-    /**
      * select image from gallery
      */
     private fun selectImageInAlbum() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
-        if (intent.resolveActivity(activity!!.packageManager) != null) {
+        if (intent.resolveActivity(requireActivity().packageManager) != null) {
             startActivityForResult(intent, REQUEST_SELECT_IMAGE_IN_ALBUM)
         }
     }

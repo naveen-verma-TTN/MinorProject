@@ -1,4 +1,4 @@
-package com.minorProject.cloudGallery.views.fragments.category
+package com.minorProject.cloudGallery.util
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter

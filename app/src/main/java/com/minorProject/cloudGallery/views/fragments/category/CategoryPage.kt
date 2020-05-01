@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
-import com.minorProject.cloudGallery.viewModels.CategoryViewModel
+import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.views.adapters.CategoryPageAdapter
 import com.minorProject.cloudGallery.views.adapters.CategoryPageItemClick
 import kotlinx.android.synthetic.main.f_category.*
@@ -24,14 +24,14 @@ import kotlinx.android.synthetic.main.f_category.view.*
  */
 @RequiresApi(Build.VERSION_CODES.O)
 class CategoryPage : Fragment(), CategoryPageItemClick {
-    private lateinit var viewModel: CategoryViewModel
+    private lateinit var categoriesViewModel: CategoriesViewModel
     private lateinit var adapter: CategoryPageAdapter
     private var list: ArrayList<Category> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!)
-            .get(CategoryViewModel::class.java)
+        categoriesViewModel = ViewModelProviders.of(requireActivity())
+            .get(CategoriesViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -47,23 +47,37 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
 
         initRecyclerView(view)
 
+        setUpListeners()
+
+        setUpObservers()
+    }
+
+    /**
+     * fun for set up Listeners
+     */
+    private fun setUpListeners() {
         home_fab.setOnClickListener {
-            val transaction = activity!!.supportFragmentManager.beginTransaction()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.addToBackStack(null)
             val dialogFragment = AddCategory.newInstance(
-                viewModel
+                categoriesViewModel
             )
             dialogFragment.show(transaction, null)
         }
+    }
 
-        //Observer to observe allCategories to update recyclerview's category list
-        viewModel.allCategories.observe(
+    /**
+     * Observer to observe allCategories to update recyclerview's category list
+     */
+    private fun setUpObservers() {
+        categoriesViewModel.getCategories().observe(
             requireActivity(),
             Observer { category ->
                 adapter.setList(category)
                 adapter.notifyDataSetChanged()
             })
     }
+
 
     /**
      * Initialize the recycler View
@@ -85,7 +99,7 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
      */
     override fun onItemClicked(category: Category, position: Int) {
         val categoryDetailPage = CategoryDetailPage.newInstance(category)
-        activity!!.supportFragmentManager.beginTransaction().addToBackStack("CategoryDetailPage")
+        requireActivity().supportFragmentManager.beginTransaction().addToBackStack("CategoryDetailPage")
             .add(R.id.home_layout, categoryDetailPage).commit()
     }
 }

@@ -14,9 +14,6 @@ import java.io.*
  */
 @Suppress("DEPRECATION")
 object Compress {
-
-    private val TAG: String = Compress::class.java.name
-
     private const val THUMBNAIL_SIZE = 250.0
 
     @RequiresApi(Build.VERSION_CODES.O)

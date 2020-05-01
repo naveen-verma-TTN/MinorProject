@@ -19,8 +19,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.*
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StableIdKeyProvider
@@ -32,14 +31,16 @@ import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
 import com.minorProject.cloudGallery.model.repo.Compress
-import com.minorProject.cloudGallery.viewModels.CategoryViewModel
+import com.minorProject.cloudGallery.model.repo.Failure
+import com.minorProject.cloudGallery.model.repo.Result
+import com.minorProject.cloudGallery.model.repo.Success
+import com.minorProject.cloudGallery.util.ViewAnimation
+import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.views.adapters.CategoryPageDetailAdapter
 import com.minorProject.cloudGallery.views.adapters.CategoryPageDetailItemClick
 import com.stfalcon.imageviewer.StfalconImageViewer
 import kotlinx.android.synthetic.main.f_category_detail_page.*
 import kotlinx.android.synthetic.main.f_category_detail_page.view.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * CategoryDetailPage fragment
@@ -47,7 +48,8 @@ import kotlin.collections.ArrayList
 @Suppress("DEPRECATION")
 @RequiresApi(Build.VERSION_CODES.O)
 class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
-    private lateinit var viewModel: CategoryViewModel
+    private var isMode = false
+    private lateinit var categoriesViewModel: CategoriesViewModel
     private var isRotate = false
     private lateinit var adapter: CategoryPageDetailAdapter
     private var list: ArrayList<Image> = ArrayList()
@@ -56,11 +58,11 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
     private var tracker: SelectionTracker<Long>? = null
 
     companion object {
-        private const val TAG: String = "CategoryDetailPage"
-
         private const val REQUEST_SELECT_IMAGE_IN_ALBUM = 102
         private const val REQUEST_SELECT_IMAGE_IN_CAMERA = 101
         private const val PERMISSION_REQUEST_CODE = 110
+
+        private val TAG = CategoriesViewModel::class.java.name
 
         // create new instance of AddCategory fragment
         fun newInstance(category: Category): CategoryDetailPage {
@@ -74,9 +76,10 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!)
-            .get(CategoryViewModel::class.java)
+        categoriesViewModel = ViewModelProviders.of(requireActivity())
+            .get(CategoriesViewModel::class.java)
 
+        //Restore tracker instance
         tracker?.onRestoreInstanceState(savedInstanceState)
     }
 
@@ -102,43 +105,23 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
         super.onViewCreated(view, savedInstanceState)
         category = arguments?.get("CATEGORY") as Category
 
-        toolbar.title = category.CategoryName.toUpperCase(Locale.getDefault())
-
-        toolbar.setNavigationIcon(R.drawable.back_button)
-
-        toolbar.setNavigationOnClickListener {
-            activity!!.supportFragmentManager.popBackStack()
+        setUpToolbar(R.drawable.back_button, category.CategoryName, R.color.colorAccent, false) {
+            requireActivity().supportFragmentManager.popBackStack()
         }
+
+        setUpListeners()
+
+        setUpFabAnimation()
 
         initRecyclerView(view)
 
-        // Rotation animation of floating action button
-        ViewAnimation.init(home_detail_fab_camera)
-        ViewAnimation.init(home_detail_fab_gallery)
+        setUpObservers()
+    }
 
-        home_detail_fab_cloud.setOnClickListener { v ->
-            isRotate = ViewAnimation.rotateFab(v, !isRotate)
-            if (isRotate) {
-                ViewAnimation.showIn(home_detail_fab_camera)
-                ViewAnimation.showIn(home_detail_fab_gallery)
-            } else {
-                ViewAnimation.showOut(home_detail_fab_camera)
-                ViewAnimation.showOut(home_detail_fab_gallery)
-            }
-        }
-
-        //Observer to observe allCategories and update recycler view list
-        viewModel.allCategories.observe(
-            requireActivity(),
-            Observer { category ->
-                list = getImageList(category)!!
-                if (toolbar != null)
-                    toolbar.subtitle = list.size.toString()
-                adapter.setList(list)
-                adapter.notifyDataSetChanged()
-            })
-
-
+    /**
+     * fun for set up Listeners
+     */
+    private fun setUpListeners() {
         home_detail_fab_gallery.setOnClickListener {
             selectImageInAlbum()
         }
@@ -146,28 +129,33 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
         home_detail_fab_camera.setOnClickListener {
             if (checkPermission()) takePhotoFromCamera() else requestPermission()
         }
+    }
 
+    /**
+     * fun to setup the Observers
+     */
+    private fun setUpObservers() {
         // tracker observer
         tracker?.addObserver(
             object : SelectionTracker.SelectionObserver<Long>() {
                 override fun onSelectionChanged() {
+                    isMode = true
                     val nItems: Int? = tracker?.selection?.size()
                     if (nItems != null && nItems > 0) {
                         if (toolbar != null) {
-                            toolbar.navigationIcon = resources.getDrawable(R.drawable.close)
-
-                            toolbar.setNavigationOnClickListener {
-                                tracker!!.clearSelection()
-                            }
-
-                            toolbar.menu.findItem(R.id.delete).isVisible = true
+                            setUpToolbar(
+                                R.drawable.close,
+                                "$nItems items selected",
+                                R.color.colorPrimary,
+                                true
+                            ) { tracker!!.clearSelection() }
 
                             toolbar.setOnMenuItemClickListener {
                                 return@setOnMenuItemClickListener when (it.itemId) {
                                     R.id.delete -> {
                                         tracker!!.selection.forEach { item ->
-                                            viewModel.deleteImagesFromFirebase(list[item.toInt()])
-                                            Log.e(TAG, "Delete: $item")
+                                            // deletion of image(s)
+                                            categoriesViewModel.deleteImagesFromFirebase(list[item.toInt()])
                                         }
                                         tracker!!.clearSelection()
                                         true
@@ -177,49 +165,63 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
                                     }
                                 }
                             }
-
-                            toolbar.title = "$nItems items selected"
-                            toolbar.setBackgroundDrawable(
-                                ColorDrawable(getColor(view.context, R.color.colorPrimary))
-                            )
                         }
                     } else {
                         if (toolbar != null) {
-                            toolbar.title = category.CategoryName.toUpperCase(Locale.getDefault())
-
-                            toolbar.setNavigationIcon(R.drawable.back_button)
-
                             if (toolbar.menu.findItem(R.id.delete) != null)
-                                toolbar.menu.findItem(R.id.delete).isVisible = false
-
-                            toolbar.setNavigationOnClickListener {
-                                activity!!.supportFragmentManager.popBackStack()
-                            }
-                            toolbar.setBackgroundDrawable(
-                                ColorDrawable(getColor(view.context, R.color.colorAccent))
-                            )
+                                setUpToolbar(
+                                    R.drawable.back_button,
+                                    category.CategoryName,
+                                    R.color.colorAccent,
+                                    false
+                                ) { activity!!.supportFragmentManager.popBackStack() }
                         }
 
                     }
                 }
             })
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.detail_page_menu, menu)
+        //Observer to observe allCategories and update recycler view list
+        categoriesViewModel.getCategories().observe(
+            requireActivity(),
+            Observer { categories ->
+                list = getCurrentCategoryItem(categories,category.CategoryName)
+                if (toolbar != null)
+                    toolbar.subtitle = list.size.toString()
+                adapter.setList(list)
+                adapter.notifyDataSetChanged()
+            })
     }
 
     /**
-     * fun to get image list from category list
-     */
-    private fun getImageList(categoryList: ArrayList<Category>?): ArrayList<Image>? {
-        var list: ArrayList<Image>? = ArrayList()
-        categoryList?.forEach { item ->
-            if (item.CategoryName.equals(category.CategoryName, true) && item.ImagesList != null) {
-                list = item.ImagesList
+     *fun to get image list from category list
+     **/
+    private fun getCurrentCategoryItem(
+        categoriesList: ArrayList<Category>,
+        categoryName: String
+    ): ArrayList<Image> {
+        var result: ArrayList<Image> = ArrayList()
+        categoriesList.forEach { item ->
+            if (item.CategoryName.equals(categoryName, true) && item.ImagesList != null) {
+                result = item.ImagesList
             }
         }
-        return list
+        return result
+    }
+
+    /**
+     * Click callback from interface---to display image in fullscreen
+     */
+    override fun onItemClicked(imageUrl: String, position: Int) {
+        if (isMode && tracker!!.selection.size() > 0) {
+            return
+        } else if (isMode && tracker!!.selection.size() == 0) {
+            isMode = false
+        } else if (!tracker!!.hasSelection() && !isMode) {
+            StfalconImageViewer.Builder(context, list) { view, image ->
+                Glide.with(this).load(image.link).into(view)
+            }.withStartPosition(position).withHiddenStatusBar(false).show()
+        }
     }
 
 
@@ -251,17 +253,55 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
         adapter.setTracker(tracker)
     }
 
-    ///////..................Problem...............//////////////////////////
+    /**
+     * fun to setupToolbar
+     */
+    private fun setUpToolbar(
+        icon: Int,
+        title: String,
+        color: Int,
+        visible: Boolean,
+        function: () -> Unit
+    ) {
+        toolbar.title = title
 
-    override fun onItemClicked(imageUrl: String, position: Int) {
-        if (!tracker!!.hasSelection()) {
-            StfalconImageViewer.Builder(context, list) { view, image ->
-                Glide.with(this).load(image.link).into(view)
-            }.withStartPosition(position).withHiddenStatusBar(false).show()
+        toolbar.setBackgroundDrawable(
+            ColorDrawable(getColor(requireView().context, color))
+        )
+
+        if (toolbar.menu.findItem(R.id.delete) != null)
+            toolbar.menu.findItem(R.id.delete).isVisible = visible
+
+        toolbar.setNavigationIcon(icon)
+
+        toolbar.setNavigationOnClickListener {
+            function.invoke()
         }
     }
 
-    ///////.................................//////////////////////////
+    /**
+     * Rotation animation of floating action button
+     */
+    private fun setUpFabAnimation() {
+
+        ViewAnimation.init(home_detail_fab_camera)
+        ViewAnimation.init(home_detail_fab_gallery)
+
+        home_detail_fab_cloud.setOnClickListener { v ->
+            isRotate = ViewAnimation.rotateFab(v, !isRotate)
+            if (isRotate) {
+                ViewAnimation.showIn(home_detail_fab_camera)
+                ViewAnimation.showIn(home_detail_fab_gallery)
+            } else {
+                ViewAnimation.showOut(home_detail_fab_camera)
+                ViewAnimation.showOut(home_detail_fab_gallery)
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.detail_page_menu, menu)
+    }
 
     /**
      * select image from gallery
@@ -269,7 +309,7 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
     private fun selectImageInAlbum() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
-        if (intent.resolveActivity(activity!!.packageManager) != null) {
+        if (intent.resolveActivity(requireActivity().packageManager) != null) {
             startActivityForResult(intent, REQUEST_SELECT_IMAGE_IN_ALBUM)
         }
     }
@@ -287,7 +327,7 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
         if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM) {
             if (data != null) {
                 val contentURI = data.data
-                viewModel.saveImageToFireStore(contentURI, category.CategoryName)
+                categoriesViewModel.saveImageToFireStore(contentURI, category.CategoryName)
             }
 
         } else if (requestCode == REQUEST_SELECT_IMAGE_IN_CAMERA) {
@@ -295,7 +335,7 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
                 val bitmap: Bitmap = data.extras!!.get("data") as Bitmap
                 val contentURI: Uri =
                     Compress.getImageUri(bitmap, "image_", "${System.currentTimeMillis()}.jpg")
-                viewModel.saveImageToFireStore(contentURI, category.CategoryName)
+                categoriesViewModel.saveImageToFireStore(contentURI, category.CategoryName)
             }
         }
     }

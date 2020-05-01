@@ -27,7 +27,7 @@ class ForgotPasswordFragment : Fragment(), View.OnClickListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        authViewModel = ViewModelProviders.of(activity!!)
+        authViewModel = ViewModelProviders.of(requireActivity())
             .get(AuthViewModel::class.java)
     }
 
@@ -38,6 +38,8 @@ class ForgotPasswordFragment : Fragment(), View.OnClickListener,
         val binding: FAuthForgetPasswordBinding = DataBindingUtil.inflate(
             inflater, R.layout.f_auth_forget_password, container, false
         )
+
+        // f_auth_forget_password layout
         binding.fragment = this
         binding.viewModel = authViewModel
         binding.binder = ForgotPasswordBinderClass(this)
@@ -48,17 +50,17 @@ class ForgotPasswordFragment : Fragment(), View.OnClickListener,
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        view.setOnTouchListener(
-            OnSwipeTouchListener(
-                view.context,
-                this
-            )
-        )
-
         setUpListeners()
     }
 
     private fun setUpListeners() {
+        view?.setOnTouchListener(
+            OnSwipeTouchListener(
+                requireView().context,
+                this
+            )
+        )
+
         login_title.setOnClickListener(this)
         register_title.setOnClickListener(this)
     }

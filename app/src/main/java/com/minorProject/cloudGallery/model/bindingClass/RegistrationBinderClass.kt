@@ -31,10 +31,6 @@ class RegistrationBinderClass(private val registrationFragment: RegistrationFrag
     private var user: User =
         User()
 
-    companion object {
-        private val TAG: String = RegistrationBinderClass::class.java.name
-    }
-
     fun setUserName(name: String?) {
         user.UserName = name!!
         notifyPropertyChanged(BR.userEmail)

@@ -112,32 +112,35 @@ class UserDetailBinderClass(
      */
     fun writeDataOnFireStore(user: User, view: View, userViewModel: UserViewModel) {
         val context = view.context
-        if (!TextUtils.isEmpty(view.user_detail_page_email.text) and !validEmail(
+        when {
+            !TextUtils.isEmpty(view.user_detail_page_email.text) and !validEmail(
                 view.user_detail_page_email.text.toString()
-            )
-        ) {
-            view.user_detail_page_email.error = context.getString(R.string.invaild_email)
-        } else if (!TextUtils.isEmpty(view.user_detail_page_phone.text) && view.user_detail_page_phone.length() != 10) {
-            view.user_detail_page_phone.error =
-                "Invalid Phone number. Phone number should be 10-digit number."
-        } else {
-            saveValues(user, view)
-            userViewModel.updateUserDetailsToFireStore(userDefault).observe(
-                activity,
-                Observer { response ->
-                    when (response) {
-                        is Success -> {
-                            Log.d(TAG, "DocumentSnapshot successfully written!")
-                            toggleButton(response.value as User, view)
+            ) -> {
+                view.user_detail_page_email.error = context.getString(R.string.invaild_email)
+            }
+            !TextUtils.isEmpty(view.user_detail_page_phone.text) && view.user_detail_page_phone.length() != 10 -> {
+                view.user_detail_page_phone.error =
+                    "Invalid Phone number. Phone number should be 10-digit number."
+            }
+            else -> {
+                saveValues(user, view)
+                userViewModel.updateUserDetailsToFireStore(userDefault).observe(
+                    activity,
+                    Observer { response ->
+                        when (response) {
+                            is Success -> {
+                                Log.d(TAG, "DocumentSnapshot successfully written!")
+                                toggleButton(response.value as User, view)
+                            }
+                            is Failure -> {
+                                Log.d(TAG, "Error writing document")
+                                toggleButton(user, view)
+                            }
                         }
-                        is Failure -> {
-                            Log.d(TAG, "Error writing document")
-                            toggleButton(user, view)
-                        }
-                    }
 
-                }
-            )
+                    }
+                )
+            }
         }
     }
 

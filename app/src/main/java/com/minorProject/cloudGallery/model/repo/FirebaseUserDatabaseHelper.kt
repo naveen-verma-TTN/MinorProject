@@ -16,8 +16,8 @@ import com.google.firebase.storage.StorageReference
 import com.minorProject.cloudGallery.model.bean.User
 import java.util.*
 
-object FirebaseDatabaseHelper {
-    private val TAG: String = FirebaseDatabaseHelper::class.java.name
+object FirebaseUserDatabaseHelper {
+    private val TAG: String = FirebaseUserDatabaseHelper::class.java.name
 
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private var storage: FirebaseStorage? = null

@@ -53,7 +53,7 @@ object FirebaseAuthHelper {
                         AccountCreatedOn = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
                             .format(Date())
                     )
-                    FirebaseDatabaseHelper.updateUserDetailsToFireStore(user).observeForever {
+                    FirebaseUserDatabaseHelper.updateUserDetailsToFireStore(user).observeForever {
                         when(it){
                             is Success ->{
                                 verifyEmail().observeForever { response ->

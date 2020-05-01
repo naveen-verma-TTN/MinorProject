@@ -1,20 +1,14 @@
 package com.minorProject.cloudGallery.viewModels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.minorProject.cloudGallery.model.repo.Failure
 import com.minorProject.cloudGallery.model.repo.FirebaseAuthHelper
 import com.minorProject.cloudGallery.model.repo.Result
 import com.minorProject.cloudGallery.model.repo.Success
 
-class AuthViewModel(application: Application) : AndroidViewModel(application) {
-    private val context = getApplication<Application>().applicationContext
-
-    companion object{
-        private val TAG: String = AuthViewModel::class.java.name
-    }
+class AuthViewModel : ViewModel() {
 
     fun checkIfUserSignInOrNot(): LiveData<Boolean> {
         val result: MutableLiveData<Boolean> = MutableLiveData()

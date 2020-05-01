@@ -15,9 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.minorProject.cloudGallery.R
-import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
-import com.minorProject.cloudGallery.viewModels.CategoryViewModel
+import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.views.adapters.ImageAdapter
 import com.minorProject.cloudGallery.views.adapters.ImageItemClickListener
 import com.stfalcon.imageviewer.StfalconImageViewer
@@ -28,7 +27,6 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.Comparator
 import kotlin.collections.ArrayList
 
 /**
@@ -41,12 +39,13 @@ class Timeline : Fragment(),
     /*ItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {*/
     private var imageList: ArrayList<Image> = ArrayList()
     private var adapter: ImageAdapter? = null
-    private lateinit var viewModel: CategoryViewModel
+    private  lateinit var recyclerView: TimeLineRecyclerView
+    private lateinit var categoriesViewModel: CategoriesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!)
-            .get(CategoryViewModel::class.java)
+        categoriesViewModel = ViewModelProviders.of(requireActivity())
+            .get(CategoriesViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -60,8 +59,13 @@ class Timeline : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView: TimeLineRecyclerView = view.findViewById(R.id.recycler_view)
+        initRecyclerView()
 
+        setUpObservers()
+    }
+
+    private fun initRecyclerView() {
+        recyclerView = requireView().findViewById(R.id.recycler_view)
         //---------------------For future-use
 /*        val itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
             RecyclerItemTouchHelper(
@@ -70,32 +74,12 @@ class Timeline : Fragment(),
                 this
             )
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView)*/
-
-
         recyclerView.layoutManager = LinearLayoutManager(
-            view.context,
+            view?.context,
             LinearLayoutManager.VERTICAL,
             false
         )
-
-        viewModel.allCategories.observe(
-            requireActivity(),
-            Observer { category ->
-                //RemoveAll RecyclerSectionItemDecoration.SectionCallback
-                recyclerView.removeDecoration(recyclerView)
-
-                imageList = getImageList(category)!!
-
-                sortList(imageList)
-                //Add RecyclerSectionItemDecoration.SectionCallback
-                recyclerView.addItemDecoration(getSectionCallback(imageList))
-
-                adapter?.setList(imageList)
-                adapter?.notifyDataSetChanged()
-            })
-
         recyclerView.itemAnimator = DefaultItemAnimator()
-
         //Set Adapter
         adapter = ImageAdapter(
             imageList,
@@ -105,18 +89,24 @@ class Timeline : Fragment(),
     }
 
     /**
-     * fun to getAll Images from Category list
+     * fun for setting up observers
      */
-    private fun getImageList(categoryList: ArrayList<Category>?): ArrayList<Image>? {
-        val list: ArrayList<Image>? = ArrayList()
-        categoryList?.forEach { item ->
-            if (item.ImagesList != null) {
-                item.ImagesList.forEach { image ->
-                    list!!.add(image)
-                }
-            }
-        }
-        return list
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setUpObservers() {
+        categoriesViewModel.getImageList().observe(
+            requireActivity(),
+            Observer { images ->
+                //RemoveAll RecyclerSectionItemDecoration.SectionCallback
+                recyclerView.removeDecoration(recyclerView)
+
+                imageList = images
+
+                //Add RecyclerSectionItemDecoration.SectionCallback
+                recyclerView.addItemDecoration(getSectionCallback(imageList))
+
+                adapter?.setList(imageList)
+                adapter?.notifyDataSetChanged()
+            })
     }
 
     /**
@@ -124,23 +114,8 @@ class Timeline : Fragment(),
      */
     override fun onItemClicked(position: Int) {
         StfalconImageViewer.Builder<Image>(context, imageList) { view, image ->
-            Glide.with(view!!.context).load(image.link).into(view)
+            Glide.with(requireView().context).load(image.link).into(view)
         }.withStartPosition(position).withHiddenStatusBar(false).show()
-    }
-
-    /**
-     * fun to sort the image list according to the upload time
-     * <Images uploaded recently will be on top of the list followed by other images>
-     */
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun sortList(imageList: ArrayList<Image>) {
-        imageList.sortWith(Comparator { o1: Image, o2: Image ->
-            if (o1.uploadTime.toDate().toInstant().isAfter(o2.uploadTime.toDate().toInstant())) {
-                -1
-            } else {
-                1
-            }
-        })
     }
 
 

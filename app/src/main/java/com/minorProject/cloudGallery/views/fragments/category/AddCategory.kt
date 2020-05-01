@@ -14,7 +14,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import com.minorProject.cloudGallery.R
-import com.minorProject.cloudGallery.viewModels.CategoryViewModel
+import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import kotlinx.android.synthetic.main.d_add_category.*
 import kotlinx.android.synthetic.main.d_add_category.view.*
 
@@ -23,20 +23,20 @@ import kotlinx.android.synthetic.main.d_add_category.view.*
  */
 class AddCategory : DialogFragment(), View.OnClickListener {
     companion object {
-        private lateinit var viewModel: CategoryViewModel
+        private lateinit var categoriesViewModel: CategoriesViewModel
 
         // fun to create new instance of AddCategory DialogFragment
         @JvmStatic
-        fun newInstance(_viewModel: CategoryViewModel) = AddCategory()
+        fun newInstance(_viewModel: CategoriesViewModel) = AddCategory()
             .apply {
-                    viewModel = _viewModel
+                categoriesViewModel = _viewModel
                 }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog: Dialog = super.onCreateDialog(savedInstanceState)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         return dialog
     }
@@ -75,8 +75,8 @@ class AddCategory : DialogFragment(), View.OnClickListener {
                         ).show()
                     }
                     else -> {
-                        val categoryName = view!!.category_name.text.toString()
-                        viewModel.createCategory(categoryName)
+                        val categoryName = requireView().category_name.text.toString()
+                        categoriesViewModel.createCategory(categoryName)
                         this.dismiss()
                     }
                 }
@@ -88,10 +88,11 @@ class AddCategory : DialogFragment(), View.OnClickListener {
     /**
      * fun to see if the same name category exist or not
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun containValue(text: String): Boolean {
         var flag = false
-        viewModel.allCategories.value?.forEach { it ->
-            if(it.CategoryName.equals(text.trim(),true)){
+        categoriesViewModel.getCategories().value?.forEach { it ->
+            if(it.CategoryName.trim().equals(text.trim(),true)){
                 flag = true
             }
         }

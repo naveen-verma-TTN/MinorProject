@@ -29,7 +29,7 @@ class RegistrationFragment : Fragment(), View.OnClickListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        authViewModel = ViewModelProviders.of(this)
+        authViewModel = ViewModelProviders.of(requireActivity())
             .get(AuthViewModel::class.java)
     }
 
@@ -40,6 +40,8 @@ class RegistrationFragment : Fragment(), View.OnClickListener,
         val binding: FAuthRegistrationBinding = DataBindingUtil.inflate(
             inflater, R.layout.f_auth_registration, container, false
         )
+
+        // f_auth_registration layout
         binding.fragment = this
         binding.viewModel = authViewModel
         binding.binder = RegistrationBinderClass(this)
@@ -50,17 +52,19 @@ class RegistrationFragment : Fragment(), View.OnClickListener,
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
-        view.setOnTouchListener(
-            OnSwipeTouchListener(
-                view.context,
-                this
-            )
-        )
-
         setUpListeners()
     }
 
+    /**
+     * fun for set up Listeners
+     */
     private fun setUpListeners() {
+        view?.setOnTouchListener(
+            OnSwipeTouchListener(
+                requireView().context,
+                this
+            )
+        )
         login_title.setOnClickListener(this)
         register_Button.setOnClickListener(this)
         forgotPassword_title.setOnClickListener(this)

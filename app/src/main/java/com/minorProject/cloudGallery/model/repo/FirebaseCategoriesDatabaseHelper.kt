@@ -1,15 +1,14 @@
-package com.minorProject.cloudGallery.viewModels
+@file:Suppress("UNCHECKED_CAST", "CAST_NEVER_SUCCEEDS")
 
-import android.app.Application
+package com.minorProject.cloudGallery.model.repo
+
+import android.content.Context
 import android.net.Uri
-import android.os.Build
 import android.util.Log
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
@@ -22,43 +21,27 @@ import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
 
-/**
- * CategoryViewModel class
- */
-@Suppress("UNCHECKED_CAST", "CAST_NEVER_SUCCEEDS")
-@RequiresApi(Build.VERSION_CODES.O)
-class CategoryViewModel(application: Application) : AndroidViewModel(application) {
-    val allCategories: MutableLiveData<ArrayList<Category>> = MutableLiveData()
-    private var categoryList: ArrayList<Category> = ArrayList()
+object FirebaseCategoriesDatabaseHelper {
+    private val TAG: String = FirebaseCategoriesDatabaseHelper::class.java.name
+
     private var storage: FirebaseStorage? = null
     private var storageReference: StorageReference? = null
-    private var firebaseFireStore : FirebaseFirestore
+    private var firebaseFireStore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     private lateinit var notificationManager: NotificationManagerCompat
-    private val channelId = "Progress Notification"
+    private const val channelId = "Progress Notification"
     private lateinit var notification: NotificationCompat.Builder
 
-    private val context = getApplication<Application>().applicationContext
-
-    companion object {
-        private val TAG: String = CategoryViewModel::class.java.name
-    }
-
     init {
-        firebaseFireStore = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
-        readCategoriesFromFireStore()
     }
 
-    /**
-     * Read different categories from firebase store
-     */
-    private fun readCategoriesFromFireStore() {
-        val fireStore = FirebaseFirestore.getInstance()
-        fireStore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
-        categoryList.clear()
-        fireStore.collection("Categories")
+    fun readCategoriesFromFireStore(): LiveData<Result<Any?>> {
+        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
+        val categoryList: ArrayList<Category> = ArrayList()
+        firebaseFireStore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
+        firebaseFireStore.collection("Categories")
             .whereEqualTo("UserId", mAuth.uid.toString())
             .get()
             .addOnSuccessListener { documents ->
@@ -84,14 +67,16 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                             null
                         }
                     )
-
                     categoryList.add(category)
                 }
-                allCategories.value = categoryList
+                result.value = Success(categoryList)
             }
             .addOnFailureListener { exception ->
                 Log.e(TAG, "Error getting documents: ", exception)
+                result.value = Failure(exception)
             }
+
+        return result
     }
 
     /**
@@ -113,18 +98,18 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
         return list
     }
 
-
     /**
      * function to create new Category
      */
-    fun createCategory(categoryName: String) {
+    fun createCategory(context: Context, categoryName: String): LiveData<Result<Any?>> {
+        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         val documentId = "${mAuth.uid}_$categoryName"
 
         val category = Category(
             mAuth.uid!!,
             categoryName,
             Timestamp.now(),
-            null,
+            context.getString(R.string.default_category_link),
             null
         )
 
@@ -139,29 +124,32 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
             firebaseFireStore.collection("Categories").document(documentId)
         docIdRef.set(categoryHashMap)
             .addOnSuccessListener {
-                Toast.makeText(
-                    getApplication(),
-                    "$categoryName is successfully inserted",
-                    Toast.LENGTH_LONG
-                ).show()
-                categoryList.add(category)
-                allCategories.value = categoryList
+                result.value = Success(category)
             }
-            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error writing document", e)
+                result.value = Failure(e)
+            }
+        return result
     }
 
     /**
      * function to save image on FireBase Storage and and send the image's information
      * to fireStore cloud database.
      */
-    fun saveImageToFireStore(filePath: Uri?, categoryName: String) {
+    fun saveImageToFireStore(
+        context: Context,
+        filePath: Uri?,
+        categoryName: String
+    ): LiveData<Result<Any?>> {
+        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         storageReference = storage?.reference
         val filename = "image_" + "${System.currentTimeMillis()}.jpg"
         val path =
             "${mAuth.uid}/Category/" + categoryName + "/" + filename
         if (filePath != null) {
             val ref = storageReference!!.child(path)
-            sendNotification(filename)
+            sendNotification(context, filename)
             notificationManager.notify(1, notification.build())
             ref.putFile(filePath)
                 .addOnCompleteListener { task ->
@@ -184,14 +172,13 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                                     if (task.isSuccessful) {
                                         val document = task.result
                                         if (document!!.exists()) {
-                                            docIdRef.update("ListImage",
+                                            docIdRef.update(
+                                                "ListImage",
                                                 FieldValue.arrayUnion(image),
                                                 "CategoryThumbLink",
                                                 link.toString()
                                             )
                                                 .addOnSuccessListener {
-                                                    readCategoriesFromFireStore()
-
                                                     notification.setContentText("Uploading Completed")
                                                         .setOngoing(false)
 
@@ -199,22 +186,23 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                                                         1,
                                                         notification.build()
                                                     )
+                                                    notificationManager.cancel(1)
+
+                                                    result.value = Success(image)
                                                 }
                                                 .addOnFailureListener { e ->
-                                                    Log.w(TAG, "Error writing document", e)
+                                                    result.value = Failure(e)
                                                 }
                                         } else {
-                                            Log.d(TAG, "Failed with: ", task.exception)
+                                            result.value = Failure(Exception(task.exception))
                                         }
                                     }
                                 }
                             }
                         }
                     } else {
-                        Log.e(
-                            TAG,
-                            "Error happened during the upload process"
-                        )
+                        result.value =
+                            Failure(Exception("Error happened during the upload process"))
                     }
                 }.addOnProgressListener { taskSnapshot ->
                     val progress =
@@ -226,15 +214,18 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
 
                     notificationManager.notify(1, notification.build())
                 }.addOnFailureListener { e ->
-                    Log.e("Uploaded", "failed: ${e.message}")
+                    result.value = Failure(e)
                 }
+        } else {
+            result.value = Failure(Exception("Something went wrong!"))
         }
+        return result
     }
 
     /**
      * setup the notification while uploading images
      */
-    private fun sendNotification(fileName: String) {
+    private fun sendNotification(context: Context, fileName: String) {
         notificationManager = NotificationManagerCompat.from(context)
         notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.icon)
@@ -250,7 +241,8 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
     /**
      * delete the image data from fireStore cloud database
      */
-    fun deleteImagesFromFirebase(image: Image) {
+    fun deleteImagesFromFirebase(image: Image): LiveData<Result<Any?>> {
+        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         val rootRef = FirebaseFirestore.getInstance()
         val docIdRef: DocumentReference =
             rootRef.collection("Categories")
@@ -265,18 +257,16 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                     )
                         .addOnSuccessListener {
                             readCategoriesFromFireStore()
-                            Log.d(
-                                TAG,
-                                "Deletion successfully"
-                            )
+                            result.value = Success(true)
                         }
                         .addOnFailureListener { e ->
-                            Log.w(TAG, "Error in Deletion", e)
+                            result.value = Failure(e)
                         }
                 } else {
-                    Log.d(TAG, "Failed with: ", task.exception)
+                    result.value = Failure(Exception(task.exception))
                 }
             }
         }
+        return result
     }
 }

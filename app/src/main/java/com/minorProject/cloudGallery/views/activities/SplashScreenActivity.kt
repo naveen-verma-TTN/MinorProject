@@ -6,7 +6,7 @@ import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.viewModels.AuthViewModel
@@ -26,8 +26,8 @@ class SplashScreenActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        authViewModel = ViewModelProviders.of(this)
-            .get(AuthViewModel::class.java)
+        authViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+            .create(AuthViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
