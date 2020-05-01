@@ -102,6 +102,10 @@ object FirebaseDatabaseHelper {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         val userHashMap = HashMap<String, Any>()
 
+        userHashMap["UserId"] = user.UserId
+        userHashMap["UserName"] = user.UserName
+        userHashMap["UserEmail"] = user.UserEmail
+        userHashMap["AccountCreatedOn"] = user.AccountCreatedOn
         userHashMap["UserAdditionalEmail"] = user.UserAdditionalEmail
         userHashMap["UserPhoneNumber"] = user.UserPhoneNumber
         userHashMap["UserDOB"] = user.UserDOB
@@ -110,6 +114,7 @@ object FirebaseDatabaseHelper {
             userHashMap["UserProfile"] = user.UserProfile
         }
 
+
         val docIdRef: DocumentReference =
             firebaseFireStore.collection("UserDetails").document(mAuth.uid!!)
         docIdRef.get().addOnCompleteListener { task ->
@@ -117,6 +122,15 @@ object FirebaseDatabaseHelper {
                 val document = task.result
                 if (document!!.exists()) {
                     docIdRef.update(userHashMap)
+                        .addOnSuccessListener {
+                            result.value = Success(user)
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("status", "failed: " + e.message)
+                            result.value = Failure(e)
+                        }
+                } else {
+                    docIdRef.set(userHashMap)
                         .addOnSuccessListener {
                             result.value = Success(user)
                         }

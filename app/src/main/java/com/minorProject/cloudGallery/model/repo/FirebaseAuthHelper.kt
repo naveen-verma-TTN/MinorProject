@@ -8,10 +8,9 @@ import androidx.lifecycle.MediatorLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.FirebaseFirestore
+import com.minorProject.cloudGallery.model.bean.User
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 
 object FirebaseAuthHelper {
     private val mAuth = FirebaseAuth.getInstance()
@@ -47,33 +46,33 @@ object FirebaseAuthHelper {
                     Log.d(TAG, "createUserWithEmail:success")
                     val userId = mAuth.currentUser!!.uid
 
-                    val data = HashMap<String, Any>()
-
-                    data["UserId"] = userId
-                    data["UserName"] = username
-                    data["UserEmail"] = email
-                    data["AccountCreatedOn"] = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-                        .format(Date())
-
-                    FirebaseFirestore.getInstance().collection("UserDetails").document(userId)
-                        .set(data)
-                        .addOnSuccessListener {
-                            Log.d(TAG, "DocumentSnapshot successfully written!")
-                            verifyEmail().observeForever { response ->
-                                when (response) {
-                                    is Success -> {
-                                        result.value = Success(response)
-                                    }
-                                    is Failure -> {
-                                        result.value = Failure(response.e)
+                    val user = User(
+                        UserId = userId,
+                        UserName = username,
+                        UserEmail = email,
+                        AccountCreatedOn = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+                            .format(Date())
+                    )
+                    FirebaseDatabaseHelper.updateUserDetailsToFireStore(user).observeForever {
+                        when(it){
+                            is Success ->{
+                                verifyEmail().observeForever { response ->
+                                    when (response) {
+                                        is Success -> {
+                                            result.value = Success(response)
+                                        }
+                                        is Failure -> {
+                                            result.value = Failure(response.e)
+                                        }
                                     }
                                 }
                             }
+                            is Failure ->{
+                                Log.w(TAG, "UserDetailUpdating:failure", it.e)
+                                result.value = Failure(Exception(it.e))
+                            }
                         }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, "Error writing document", e)
-                            result.value = Failure(e)
-                        }
+                    }
                 } else {
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     result.value = Failure(Exception(task.exception))
