@@ -7,7 +7,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.minorProject.cloudGallery.model.bean.User
 import com.minorProject.cloudGallery.model.repo.Failure
@@ -58,7 +57,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateUserDetailsToFireStore(userDefault: User): LiveData<Result<Any?>> {
-        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
+        val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         FirebaseUserDatabaseHelper.updateUserDetailsToFireStore(userDefault)
             .observeForever { response ->
                 when (response) {
@@ -78,7 +77,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun logout(): LiveData<Result<Any?>> {
-        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
+        val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         FirebaseUserDatabaseHelper.logout()
             .observeForever { response ->
                 when (response) {

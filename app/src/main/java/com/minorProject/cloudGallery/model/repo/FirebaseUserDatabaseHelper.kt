@@ -6,7 +6,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -33,7 +33,7 @@ object FirebaseUserDatabaseHelper {
      * fun to read user details from firebase
      */
     fun readUserDetailsFromFireStore(): LiveData<Result<Any?>> {
-        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
+        val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         firebaseFireStore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
         firebaseFireStore.collection("UserDetails").document(mAuth.currentUser?.uid!!)
             .get()
@@ -59,7 +59,7 @@ object FirebaseUserDatabaseHelper {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     fun setProfilePic(context: Context, user: User, uri: Uri): LiveData<Result<Any?>> {
-        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
+        val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         val ref =
             storageReference!!.child("${mAuth.uid}/UserProfile/" + mAuth.uid)
         ref.putFile(Compress.getThumbnail(uri, context)!!)
@@ -99,7 +99,7 @@ object FirebaseUserDatabaseHelper {
      * fun to update user details
      */
     fun updateUserDetailsToFireStore(user: User): LiveData<Result<Any?>> {
-        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
+        val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         val userHashMap = HashMap<String, Any>()
 
         userHashMap["UserId"] = user.UserId
@@ -150,7 +150,7 @@ object FirebaseUserDatabaseHelper {
      * fun to logOut from the firebase account
      */
     fun logout(): LiveData<Result<Any?>> {
-        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
+        val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         result.value = Failure(Exception("Something went wrong!"))
         if (mAuth.currentUser != null) {
             mAuth.signOut()
