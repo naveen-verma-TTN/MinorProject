@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -19,7 +18,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StableIdKeyProvider
@@ -31,9 +31,6 @@ import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
 import com.minorProject.cloudGallery.model.repo.Compress
-import com.minorProject.cloudGallery.model.repo.Failure
-import com.minorProject.cloudGallery.model.repo.Result
-import com.minorProject.cloudGallery.model.repo.Success
 import com.minorProject.cloudGallery.util.ViewAnimation
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.views.adapters.CategoryPageDetailAdapter

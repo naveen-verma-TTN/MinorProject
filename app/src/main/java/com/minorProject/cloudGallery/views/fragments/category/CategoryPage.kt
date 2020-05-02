@@ -20,7 +20,6 @@ import com.minorProject.cloudGallery.views.adapters.CategoryPageAdapter
 import com.minorProject.cloudGallery.views.adapters.CategoryPageItemClick
 import kotlinx.android.synthetic.main.f_category.*
 import kotlinx.android.synthetic.main.f_category.view.*
-import kotlinx.android.synthetic.main.f_timeline.*
 
 /**
  * CategoryPage fragment
