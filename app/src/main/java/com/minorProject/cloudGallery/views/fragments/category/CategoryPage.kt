@@ -81,6 +81,9 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
                 if(category.size == 0) {
                     empty_view.visibility = View.VISIBLE
                 }
+                else{
+                    empty_view.visibility = View.GONE
+                }
                 adapter.setList(category)
                 adapter.notifyDataSetChanged()
             })
