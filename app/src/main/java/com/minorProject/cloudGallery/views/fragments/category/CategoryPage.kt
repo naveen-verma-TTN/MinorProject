@@ -1,5 +1,6 @@
 package com.minorProject.cloudGallery.views.fragments.category
 
+import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,11 +14,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
+import com.minorProject.cloudGallery.util.ProgressDialog
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.views.adapters.CategoryPageAdapter
 import com.minorProject.cloudGallery.views.adapters.CategoryPageItemClick
 import kotlinx.android.synthetic.main.f_category.*
 import kotlinx.android.synthetic.main.f_category.view.*
+import kotlinx.android.synthetic.main.f_timeline.*
 
 /**
  * CategoryPage fragment
@@ -27,6 +30,7 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
     private lateinit var categoriesViewModel: CategoriesViewModel
     private lateinit var adapter: CategoryPageAdapter
     private var list: ArrayList<Category> = ArrayList()
+    private lateinit var progressDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,9 +49,9 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initRecyclerView(view)
-
         setUpListeners()
+
+        initRecyclerView(view)
 
         setUpObservers()
     }
@@ -56,6 +60,7 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
      * fun for set up Listeners
      */
     private fun setUpListeners() {
+        progressDialog  = ProgressDialog.progressDialog(requireView().context)
         home_fab.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.addToBackStack(null)
@@ -73,6 +78,10 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
         categoriesViewModel.getCategories().observe(
             requireActivity(),
             Observer { category ->
+                progressDialog.hide()
+                if(category.size == 0) {
+                    empty_view.visibility = View.VISIBLE
+                }
                 adapter.setList(category)
                 adapter.notifyDataSetChanged()
             })
@@ -84,6 +93,7 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initRecyclerView(view: View) {
+        progressDialog.show()
         view.home_recycler.layoutManager =
             GridLayoutManager(view.context, 2, RecyclerView.VERTICAL, false)
         adapter =
