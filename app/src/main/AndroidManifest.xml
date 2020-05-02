@@ -31,7 +31,7 @@
         </activity>
 
         <!--        Second Activity      -->
-        <activity android:name="com.minorProject.cloudGallery.views.activities.HomePageActivity"/>
+        <activity android:name=".views.activities.HomePageActivity"/>
 
     </application>
 

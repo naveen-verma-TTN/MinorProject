@@ -25,6 +25,38 @@ android {
         }
     }
 
+    flavorDimensions 'debugVersion'
+    productFlavors {
+        WITH_LEFT_NAVIGATION_BAR_ {
+            dimension = 'debugVersion'
+            resValue 'string', 'APP_NAME', "CLOUD GALLERY WITH LEFT NAVIGATION BAR "
+            versionCode 1
+            versionName "1.0.1"
+        }
+        WITH_BOTTOM_NAVIGATION_BAR_ {
+            dimension = 'debugVersion'
+            resValue 'string', 'APP_NAME', "CLOUD GALLERY WITH BOTTOM NAVIGATION BAR "
+            versionCode 2
+            versionName "1.0.2"
+        }
+    }
+    android {
+        sourceSets {
+            WITH_LEFT_NAVIGATION_BAR_ {
+                java {
+                    srcDirs = ['src/with_left_nav/java']
+                }
+            }
+
+            WITH_BOTTOM_NAVIGATION_BAR_ {
+                java {
+                    srcDirs = ['src/with_bottom_nav/java']
+                }
+            }
+        }
+    }
+
+
     dataBinding {
         enabled true
     }
