@@ -2,6 +2,7 @@ package com.minorProject.cloudGallery.views.fragments.category
 
 import android.Manifest.permission.CAMERA
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -11,6 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -31,13 +33,17 @@ import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
 import com.minorProject.cloudGallery.model.repo.Compress
+import com.minorProject.cloudGallery.util.ProgressDialog
 import com.minorProject.cloudGallery.util.ViewAnimation
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.views.adapters.CategoryPageDetailAdapter
 import com.minorProject.cloudGallery.views.adapters.CategoryPageDetailItemClick
 import com.stfalcon.imageviewer.StfalconImageViewer
+import kotlinx.android.synthetic.main.f_category.*
 import kotlinx.android.synthetic.main.f_category_detail_page.*
 import kotlinx.android.synthetic.main.f_category_detail_page.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * CategoryDetailPage fragment
@@ -51,6 +57,8 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
     private lateinit var adapter: CategoryPageDetailAdapter
     private var list: ArrayList<Image> = ArrayList()
     private lateinit var category: Category
+    private lateinit var progressDialog: Dialog
+    private var empty: ImageView? = null
 
     private var tracker: SelectionTracker<Long>? = null
 
@@ -119,6 +127,8 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
      * fun for set up Listeners
      */
     private fun setUpListeners() {
+        empty = view?.findViewById(R.id.empty_view_category_detail)
+        progressDialog = ProgressDialog.progressDialog(requireView().context)
         home_detail_fab_gallery.setOnClickListener {
             selectImageInAlbum()
         }
@@ -182,12 +192,25 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
         categoriesViewModel.getCategories().observe(
             requireActivity(),
             Observer { categories ->
-                list = getCurrentCategoryItem(categories,category.CategoryName)
+                list = getCurrentCategoryItem(categories, category.CategoryName)
+                updateView(list)
                 if (toolbar != null)
                     toolbar.subtitle = list.size.toString()
                 adapter.setList(list)
                 adapter.notifyDataSetChanged()
             })
+    }
+
+    /**
+     * fun to update the view
+     */
+    private fun updateView(images: ArrayList<Image>) {
+        progressDialog.hide()
+        if (images.size == 0) {
+            empty?.visibility = View.VISIBLE
+        } else {
+            empty?.visibility = View.GONE
+        }
     }
 
     /**
@@ -227,6 +250,7 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initRecyclerView(view: View) {
+        progressDialog.show()
         view.home_detail_recycler.layoutManager =
             GridLayoutManager(view.context, 3, RecyclerView.VERTICAL, false)
         adapter =
@@ -260,7 +284,7 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
         visible: Boolean,
         function: () -> Unit
     ) {
-        toolbar.title = title
+        toolbar.title = title.toUpperCase(Locale.getDefault())
 
         toolbar.setBackgroundDrawable(
             ColorDrawable(getColor(requireView().context, color))

@@ -1,10 +1,12 @@
 package com.minorProject.cloudGallery.views.fragments.timeline
 
+import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -15,11 +17,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.minorProject.cloudGallery.R
+import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
+import com.minorProject.cloudGallery.util.ProgressDialog
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.views.adapters.ImageAdapter
 import com.minorProject.cloudGallery.views.adapters.ImageItemClickListener
 import com.stfalcon.imageviewer.StfalconImageViewer
+import kotlinx.android.synthetic.main.f_category.*
+import kotlinx.android.synthetic.main.f_category_detail_page.*
+import kotlinx.android.synthetic.main.f_timeline.*
 import xyz.sangcomz.stickytimelineview.RecyclerSectionItemDecoration
 import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
@@ -39,8 +46,10 @@ class Timeline : Fragment(),
     /*ItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {*/
     private var imageList: ArrayList<Image> = ArrayList()
     private var adapter: ImageAdapter? = null
-    private  lateinit var recyclerView: TimeLineRecyclerView
+    private lateinit var recyclerView: TimeLineRecyclerView
     private lateinit var categoriesViewModel: CategoriesViewModel
+    private lateinit var progressDialog: Dialog
+    private var empty: ImageView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,12 +68,23 @@ class Timeline : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initListeners()
+
         initRecyclerView()
 
         setUpObservers()
     }
 
+    /**
+     * fun for set up Listeners
+     */
+    private fun initListeners() {
+        progressDialog = ProgressDialog.progressDialog(requireView().context)
+        empty = view?.findViewById(R.id.empty_view_timeline)
+    }
+
     private fun initRecyclerView() {
+        progressDialog.show()
         recyclerView = requireView().findViewById(R.id.recycler_view)
         //---------------------For future-use
 /*        val itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
@@ -101,12 +121,26 @@ class Timeline : Fragment(),
 
                 imageList = images
 
+                updateView(images)
+
                 //Add RecyclerSectionItemDecoration.SectionCallback
                 recyclerView.addItemDecoration(getSectionCallback(imageList))
 
                 adapter?.setList(imageList)
                 adapter?.notifyDataSetChanged()
             })
+    }
+
+    /**
+     * fun to update the view
+     */
+    private fun updateView(images: ArrayList<Image>) {
+        progressDialog.hide()
+        if (images.size == 0) {
+            empty?.visibility = View.VISIBLE
+        } else {
+            empty?.visibility = View.GONE
+        }
     }
 
     /**

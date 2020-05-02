@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -14,12 +15,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
+import com.minorProject.cloudGallery.model.bean.Image
 import com.minorProject.cloudGallery.util.ProgressDialog
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.views.adapters.CategoryPageAdapter
 import com.minorProject.cloudGallery.views.adapters.CategoryPageItemClick
 import kotlinx.android.synthetic.main.f_category.*
 import kotlinx.android.synthetic.main.f_category.view.*
+import kotlinx.android.synthetic.main.f_category_detail_page.*
 
 /**
  * CategoryPage fragment
@@ -30,6 +33,7 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
     private lateinit var adapter: CategoryPageAdapter
     private var list: ArrayList<Category> = ArrayList()
     private lateinit var progressDialog: Dialog
+    private var empty: ImageView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +63,8 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
      * fun for set up Listeners
      */
     private fun setUpListeners() {
-        progressDialog  = ProgressDialog.progressDialog(requireView().context)
+        empty = view?.findViewById(R.id.empty_view_category)
+        progressDialog = ProgressDialog.progressDialog(requireView().context)
         home_fab.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.addToBackStack(null)
@@ -77,18 +82,23 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
         categoriesViewModel.getCategories().observe(
             requireActivity(),
             Observer { category ->
-                progressDialog.hide()
-                if(category.size == 0) {
-                    empty_view.visibility = View.VISIBLE
-                }
-                else{
-                    empty_view.visibility = View.GONE
-                }
+                updateView(category)
                 adapter.setList(category)
                 adapter.notifyDataSetChanged()
             })
     }
 
+    /**
+     * fun to update the view
+     */
+    private fun updateView(images: ArrayList<Category>) {
+        progressDialog.hide()
+        if (images.size == 0) {
+            empty?.visibility = View.VISIBLE
+        } else {
+            empty?.visibility = View.GONE
+        }
+    }
 
     /**
      * Initialize the recycler View
@@ -111,7 +121,8 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
      */
     override fun onItemClicked(category: Category, position: Int) {
         val categoryDetailPage = CategoryDetailPage.newInstance(category)
-        requireActivity().supportFragmentManager.beginTransaction().addToBackStack("CategoryDetailPage")
+        requireActivity().supportFragmentManager.beginTransaction()
+            .addToBackStack("CategoryDetailPage")
             .add(R.id.home_layout, categoryDetailPage).commit()
     }
 }
