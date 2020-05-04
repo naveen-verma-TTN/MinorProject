@@ -252,7 +252,6 @@ object FirebaseCategoriesDatabaseHelper {
         notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.icon)
             .setContentTitle(fileName)
-            .setPriority(Notification.PRIORITY_MAX)
             .setContentText("Uploading")
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
