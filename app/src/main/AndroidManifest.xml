@@ -11,7 +11,6 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/icon"
-        android:name="com.minorProject.cloudGallery.viewModels.Application"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"

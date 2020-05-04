@@ -2,11 +2,17 @@
 
 package com.minorProject.cloudGallery.model.repo
 
+import android.app.Application
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.google.firebase.Timestamp
@@ -150,7 +156,7 @@ object FirebaseCategoriesDatabaseHelper {
         if (filePath != null) {
             val ref = storageReference!!.child(path)
             sendNotification(context, filename)
-            notificationManager.notify(1, notification.build())
+            notificationManager.notify(1001, notification.build())
             ref.putFile(filePath)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -183,10 +189,10 @@ object FirebaseCategoriesDatabaseHelper {
                                                         .setOngoing(false)
 
                                                     notificationManager.notify(
-                                                        1,
+                                                        1001,
                                                         notification.build()
                                                     )
-                                                    notificationManager.cancel(1)
+                                                    notificationManager.cancel(1001)
 
                                                     result.value = Success(image)
                                                 }
@@ -212,7 +218,8 @@ object FirebaseCategoriesDatabaseHelper {
                         .setProgress(100, progress.toInt(), false)
                         .setOngoing(false)
 
-                    notificationManager.notify(1, notification.build())
+                    Log.e("Progress", progress.toString())
+                    notificationManager.notify(1001, notification.build())
                 }.addOnFailureListener { e ->
                     result.value = Failure(e)
                 }
@@ -227,9 +234,25 @@ object FirebaseCategoriesDatabaseHelper {
      */
     private fun sendNotification(context: Context, fileName: String) {
         notificationManager = NotificationManagerCompat.from(context)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val mChannel =
+                NotificationChannel(
+                    channelId,
+                    "Progress Upload Images Notification",
+                    NotificationManager.IMPORTANCE_DEFAULT
+                )
+            mChannel.description = "Progress Upload Images Notification Channel"
+            mChannel.enableLights(true)
+            val manager = getSystemService(
+                context,
+                NotificationManager::class.java
+            )
+            manager!!.createNotificationChannel(mChannel)
+        }
         notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.icon)
             .setContentTitle(fileName)
+            .setPriority(Notification.PRIORITY_MAX)
             .setContentText("Uploading")
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
