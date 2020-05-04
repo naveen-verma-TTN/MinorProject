@@ -1,8 +1,10 @@
 package com.minorProject.cloudGallery.views.fragments.timeline
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,21 +19,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.minorProject.cloudGallery.R
-import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
 import com.minorProject.cloudGallery.util.ProgressDialog
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.views.adapters.ImageAdapter
 import com.minorProject.cloudGallery.views.adapters.ImageItemClickListener
 import com.stfalcon.imageviewer.StfalconImageViewer
-import kotlinx.android.synthetic.main.f_category.*
-import kotlinx.android.synthetic.main.f_category_detail_page.*
-import kotlinx.android.synthetic.main.f_timeline.*
 import xyz.sangcomz.stickytimelineview.RecyclerSectionItemDecoration
 import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
+import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
@@ -147,9 +145,10 @@ class Timeline : Fragment(),
      * fun to show the images in fullscreen
      */
     override fun onItemClicked(position: Int) {
-        StfalconImageViewer.Builder<Image>(context, imageList) { view, image ->
-            Glide.with(requireView().context).load(image.link).into(view)
-        }.withStartPosition(position).withHiddenStatusBar(false).show()
+        StfalconImageViewer.Builder(context, imageList) { _view, image ->
+            Glide.with(requireView().context).load(image.link).into(_view)
+        }.withStartPosition(position).withHiddenStatusBar(false)
+            .show()
     }
 
 
@@ -170,9 +169,7 @@ class Timeline : Fragment(),
                 if (imageList.isNotEmpty())
                     return SectionInfo(
                         dateFormatting(
-                            imageList[position].uploadTime.toDate().toInstant()
-                                .atZone(ZoneId.systemDefault())
-                                .toLocalDate()
+                            imageList[position].uploadTime.toDate()
                         ),
                         imageList[position].category.toUpperCase(Locale.getDefault()),
                         ContextCompat.getDrawable(view!!.context, R.drawable.icon)
@@ -181,12 +178,17 @@ class Timeline : Fragment(),
             }
 
             //fun to Formatting the date (eg. 17 Jan, 2020)
+            @SuppressLint("SimpleDateFormat")
             @RequiresApi(Build.VERSION_CODES.O)
-            fun dateFormatting(date: LocalDate): String {
-                val formatter = DateTimeFormatter.ofPattern("dd MMM, yyyy")
-                return date.format(formatter)
+            fun dateFormatting(date: Date): String {
+                return DateFormat.format("dd MMM, yyyy", date).toString()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        progressDialog.dismiss()
     }
 
     //---------------------For future-use

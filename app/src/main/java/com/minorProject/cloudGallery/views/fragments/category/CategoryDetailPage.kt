@@ -352,7 +352,7 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
             }
 
         } else if (requestCode == REQUEST_SELECT_IMAGE_IN_CAMERA) {
-            if (data != null) {
+            if (data != null && data.hasExtra("data")) {
                 val bitmap: Bitmap = data.extras!!.get("data") as Bitmap
                 val contentURI: Uri =
                     Compress.getImageUri(bitmap, "image_", "${System.currentTimeMillis()}.jpg")
@@ -380,6 +380,11 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
             arrayOf(WRITE_EXTERNAL_STORAGE, CAMERA),
             PERMISSION_REQUEST_CODE
         )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        progressDialog.dismiss()
     }
 
 

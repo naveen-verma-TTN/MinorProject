@@ -15,14 +15,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
-import com.minorProject.cloudGallery.model.bean.Image
 import com.minorProject.cloudGallery.util.ProgressDialog
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.views.adapters.CategoryPageAdapter
 import com.minorProject.cloudGallery.views.adapters.CategoryPageItemClick
 import kotlinx.android.synthetic.main.f_category.*
 import kotlinx.android.synthetic.main.f_category.view.*
-import kotlinx.android.synthetic.main.f_category_detail_page.*
 
 /**
  * CategoryPage fragment
@@ -114,6 +112,11 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
                 this
             )
         home_recycler.adapter = adapter
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+            progressDialog.dismiss()
     }
 
     /**

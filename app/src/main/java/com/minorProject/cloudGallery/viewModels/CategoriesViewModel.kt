@@ -125,7 +125,7 @@ class CategoriesViewModel(application: Application) : AndroidViewModel(applicati
     @RequiresApi(Build.VERSION_CODES.O)
     private fun sortList(imageList: ArrayList<Image>) {
         imageList.sortWith(Comparator { o1: Image, o2: Image ->
-            if (o1.uploadTime.toDate().toInstant().isAfter(o2.uploadTime.toDate().toInstant())) {
+            if (o1.uploadTime.toDate().after(o2.uploadTime.toDate())) {
                 -1
             } else {
                 1
