@@ -8,12 +8,15 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
 import com.minorProject.cloudGallery.model.repo.Failure
 import com.minorProject.cloudGallery.model.repo.FirebaseCategoriesDatabaseHelper
+import com.minorProject.cloudGallery.model.repo.Result
 import com.minorProject.cloudGallery.model.repo.Success
 import com.minorProject.cloudGallery.util.HelperClass.ShowToast
+import com.minorProject.cloudGallery.views.fragments.category.CategoryDetailPage
 
 @RequiresApi(Build.VERSION_CODES.O)
 class CategoriesViewModel(application: Application) : AndroidViewModel(application) {
@@ -137,20 +140,37 @@ class CategoriesViewModel(application: Application) : AndroidViewModel(applicati
      * fun to delete images from firebase cloud database
      */
     fun deleteImagesFromFirebase(
-        image: Image,
-        link: String?
-    ) {
-        FirebaseCategoriesDatabaseHelper.deleteImagesFromFirebase(image,link)
-            .observeForever { response ->
-                when (response) {
-                    is Success -> {
-                        readCategoriesFromFireStore()
-                    }
-                    is Failure -> {
-                        context.ShowToast("Failed to delete Image!")
-                        Log.e(TAG, response.e.message.toString())
+        image: ArrayList<Image>,
+        deletionPosition: androidx.recyclerview.selection.Selection<Long>
+    ) : LiveData<Result<Any?>> {
+        val result: MutableLiveData<Result<Any?>> = MutableLiveData()
+        val deletionList = ArrayList<Image>()
+        deletionPosition.forEach { item ->
+            deletionList.add(image[item.toInt()])
+        }
+
+        val updatedList = image.asIterable().minus(deletionList)
+
+        var link: String = context.getString(R.string.default_category_link)
+        if (updatedList.isNotEmpty()) {
+            link = updatedList[updatedList.size - 1].link
+        }
+
+        deletionList.forEach { dImage ->
+            FirebaseCategoriesDatabaseHelper.deleteImagesFromFirebase(dImage, link)
+                .observeForever { response ->
+                    when (response) {
+                        is Success -> {
+                            readCategoriesFromFireStore()
+                            result.value = Success(deletionList.count())
+                        }
+                        is Failure -> {
+                            Log.e(TAG, response.e.message.toString())
+                            result.value = Failure(response.e)
+                        }
                     }
                 }
-            }
+        }
+        return result
     }
 }

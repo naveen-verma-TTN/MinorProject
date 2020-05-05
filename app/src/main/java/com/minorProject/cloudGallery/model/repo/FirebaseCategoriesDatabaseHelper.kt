@@ -12,7 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
@@ -42,7 +42,7 @@ object FirebaseCategoriesDatabaseHelper {
     }
 
     fun readCategoriesFromFireStore(): LiveData<Result<Any?>> {
-        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
+        val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         val categoryList: ArrayList<Category> = ArrayList()
         firebaseFireStore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
         firebaseFireStore.collection("Categories")
@@ -106,7 +106,7 @@ object FirebaseCategoriesDatabaseHelper {
      * function to create new Category
      */
     fun createCategory(context: Context, categoryName: String): LiveData<Result<Any?>> {
-        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
+        val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         val documentId = "${mAuth.uid}_$categoryName"
 
         val category = Category(
@@ -146,7 +146,7 @@ object FirebaseCategoriesDatabaseHelper {
         filePath: Uri?,
         categoryName: String
     ): LiveData<Result<Any?>> {
-        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
+        val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         storageReference = storage?.reference
         val filename = "image_" + "${System.currentTimeMillis()}.jpg"
         val path =
@@ -265,7 +265,7 @@ object FirebaseCategoriesDatabaseHelper {
         image: Image,
         link: String?
     ): LiveData<Result<Any?>> {
-        val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
+        val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         val rootRef = FirebaseFirestore.getInstance()
         val docIdRef: DocumentReference =
             rootRef.collection("Categories")
@@ -281,7 +281,6 @@ object FirebaseCategoriesDatabaseHelper {
                         link
                     )
                         .addOnSuccessListener {
-                            readCategoriesFromFireStore()
                             result.value = Success(true)
                         }
                         .addOnFailureListener { e ->

@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.Toast
@@ -33,6 +34,9 @@ import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
 import com.minorProject.cloudGallery.model.repo.Compress
+import com.minorProject.cloudGallery.model.repo.Failure
+import com.minorProject.cloudGallery.model.repo.Success
+import com.minorProject.cloudGallery.util.HelperClass.ShowToast
 import com.minorProject.cloudGallery.util.ProgressDialog
 import com.minorProject.cloudGallery.util.ViewAnimation
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
@@ -159,21 +163,20 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
                             toolbar.setOnMenuItemClickListener {
                                 return@setOnMenuItemClickListener when (it.itemId) {
                                     R.id.delete -> {
-                                        tracker!!.selection.forEach { item ->
-                                            // deletion of image(s)
-                                            categoriesViewModel.deleteImagesFromFirebase(
-                                                list[item.toInt()],
-                                                if (list.size != 1 && item.toInt() != list.size-1){
-                                                    list[list.size - 1].link
+                                        categoriesViewModel.deleteImagesFromFirebase(
+                                            list,
+                                            tracker!!.selection
+                                        ).observe(requireActivity(),
+                                            Observer { count ->
+                                                when (count) {
+                                                    is Success -> {
+                                                        requireView().context.ShowToast("${count.value} images successfully deleted!")
+                                                    }
+                                                    is Failure -> {
+                                                        requireView().context.ShowToast("Failed to delete Image!")
+                                                    }
                                                 }
-                                               else if (list.size != 1) {
-                                                    list[list.size - 2].link
-                                                } else {
-                                                    context?.getString(R.string.default_category_link)
-                                                }
-
-                                            )
-                                        }
+                                            })
                                         tracker!!.clearSelection()
                                         true
                                     }
