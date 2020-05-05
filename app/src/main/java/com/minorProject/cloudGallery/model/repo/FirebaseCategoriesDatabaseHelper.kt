@@ -2,8 +2,6 @@
 
 package com.minorProject.cloudGallery.model.repo
 
-import android.app.Application
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -263,7 +261,10 @@ object FirebaseCategoriesDatabaseHelper {
     /**
      * delete the image data from fireStore cloud database
      */
-    fun deleteImagesFromFirebase(image: Image): LiveData<Result<Any?>> {
+    fun deleteImagesFromFirebase(
+        image: Image,
+        link: String?
+    ): LiveData<Result<Any?>> {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         val rootRef = FirebaseFirestore.getInstance()
         val docIdRef: DocumentReference =
@@ -275,7 +276,9 @@ object FirebaseCategoriesDatabaseHelper {
                 if (document!!.exists()) {
                     docIdRef.update(
                         "ListImage",
-                        FieldValue.arrayRemove(image)
+                        FieldValue.arrayRemove(image),
+                        "CategoryThumbLink",
+                        link
                     )
                         .addOnSuccessListener {
                             readCategoriesFromFireStore()

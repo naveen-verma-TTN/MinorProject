@@ -39,7 +39,6 @@ import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.views.adapters.CategoryPageDetailAdapter
 import com.minorProject.cloudGallery.views.adapters.CategoryPageDetailItemClick
 import com.stfalcon.imageviewer.StfalconImageViewer
-import kotlinx.android.synthetic.main.f_category.*
 import kotlinx.android.synthetic.main.f_category_detail_page.*
 import kotlinx.android.synthetic.main.f_category_detail_page.view.*
 import java.util.*
@@ -162,7 +161,18 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
                                     R.id.delete -> {
                                         tracker!!.selection.forEach { item ->
                                             // deletion of image(s)
-                                            categoriesViewModel.deleteImagesFromFirebase(list[item.toInt()])
+                                            categoriesViewModel.deleteImagesFromFirebase(
+                                                list[item.toInt()],
+                                                if (list.size != 1 && item.toInt() != list.size-1){
+                                                    list[list.size - 1].link
+                                                }
+                                               else if (list.size != 1) {
+                                                    list[list.size - 2].link
+                                                } else {
+                                                    context?.getString(R.string.default_category_link)
+                                                }
+
+                                            )
                                         }
                                         tracker!!.clearSelection()
                                         true

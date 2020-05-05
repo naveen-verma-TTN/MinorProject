@@ -136,8 +136,11 @@ class CategoriesViewModel(application: Application) : AndroidViewModel(applicati
     /**
      * fun to delete images from firebase cloud database
      */
-    fun deleteImagesFromFirebase(image: Image) {
-        FirebaseCategoriesDatabaseHelper.deleteImagesFromFirebase(image)
+    fun deleteImagesFromFirebase(
+        image: Image,
+        link: String?
+    ) {
+        FirebaseCategoriesDatabaseHelper.deleteImagesFromFirebase(image,link)
             .observeForever { response ->
                 when (response) {
                     is Success -> {
