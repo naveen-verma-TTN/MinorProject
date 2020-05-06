@@ -30,7 +30,8 @@
         </activity>
 
         <!--        Second Activity      -->
-        <activity android:name=".views.activities.HomePageActivity"/>
+        <activity android:name=".views.activities.HomePageActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
     </application>
 

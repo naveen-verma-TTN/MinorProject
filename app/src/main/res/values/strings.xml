@@ -8,9 +8,9 @@
     <string name="email_address_editText">Email Address</string>
     <string name="submit">Submit</string>
     <string name="password_editText">Password</string>
-    <string name="signin">SignIn</string>
+    <string name="signin">Sign In</string>
     <string name="user_name_editText">User Name</string>
-    <string name="signup">SignUp</string>
+    <string name="signup">Sign Up</string>
     <string name="empty_username">User Name shouldn\'t be empty</string>
     <string name="empty_email">Email Address shouldn\'t be empty</string>
     <string name="invaild_email">Invalid email. Please enter valid email.</string>
