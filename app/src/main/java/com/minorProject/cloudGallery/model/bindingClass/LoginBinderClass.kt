@@ -22,6 +22,9 @@ import com.minorProject.cloudGallery.views.activities.HomePageActivity
 import com.minorProject.cloudGallery.views.activities.SplashScreenActivity
 import com.minorProject.cloudGallery.views.fragments.auth.LoginScreenFragment
 import kotlinx.android.synthetic.main.f_auth_login_screen.view.*
+import kotlinx.android.synthetic.main.f_auth_login_screen.view.password_EditText
+import kotlinx.android.synthetic.main.f_auth_login_screen.view.password_toggle
+import kotlinx.android.synthetic.main.f_auth_registration.view.*
 
 /**
  * Login dataBinding class
@@ -74,15 +77,19 @@ class LoginBinderClass(private val loginScreenFragment: LoginScreenFragment) : B
         when {
             TextUtils.isEmpty(email) -> {
                 view.email_EditText_login.error = context.getString(R.string.empty_email)
+                view.email_EditText_login.requestFocus()
             }
             !validEmail(email.toString()) -> {
                 view.email_EditText_login.error = context.getString(R.string.invaild_email)
+                view.email_EditText_login.requestFocus()
             }
             TextUtils.isEmpty(pass) -> {
                 view.password_EditText.error = context.getString(R.string.empty_password)
+                view.password_EditText.requestFocus()
             }
             !(validPassword(pass.toString()) && pass.toString().length >= 6) -> {
                 view.password_EditText.error = context.getString(R.string.invaild_password)
+                view.password_EditText.requestFocus()
             }
             else -> {
                 view.progressbar.visibility = View.VISIBLE

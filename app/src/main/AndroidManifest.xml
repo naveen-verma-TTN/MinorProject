@@ -21,7 +21,9 @@
         tools:ignore="AllowBackup">
 
         <!--        First Activity      -->
-        <activity android:name="com.minorProject.cloudGallery.views.activities.SplashScreenActivity">
+        <activity android:name="com.minorProject.cloudGallery.views.activities.SplashScreenActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

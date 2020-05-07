@@ -1,5 +1,6 @@
 package com.minorProject.cloudGallery.views.fragments.auth
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil

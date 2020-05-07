@@ -50,9 +50,11 @@ class ForgotPasswordBinderClass(private val forgotPasswordFragment: ForgotPasswo
         when {
             TextUtils.isEmpty(view.email_EditText_forgot.text) -> {
                 view.email_EditText_forgot.error = context.getString(R.string.empty_email)
+                view.email_EditText_forgot.requestFocus()
             }
             !validEmail(email.toString()) -> {
                 view.email_EditText_forgot.error = context.getString(R.string.invaild_email)
+                view.email_EditText_forgot.requestFocus()
             }
             else -> {
                 view.progressbar_forget_pass.visibility = View.VISIBLE

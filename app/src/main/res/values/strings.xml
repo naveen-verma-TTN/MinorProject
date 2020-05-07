@@ -54,4 +54,9 @@
     <string name="category_name">Category Name</string>
     <string name="default_category_link"><![CDATA[https://firebasestorage.googleapis.com/v0/b/cloud-gallery-minor-project.appspot.com/o/Admin%2Ficon.png?alt=media&token=f966a01b-739e-44e3-89e8-897e662a39a0]]></string>
     <string name="empty_list_category">Empty list! Please category by clicking on the button below</string>
+    <string name="or">OR</string>
+    <string name="register_message"><![CDATA[Swipe Left To LogIn \n&\nRight To Forget Password]]></string>
+    <string name="login_message">Swipe Right To Register</string>
+    <string name="forgot_password_message">Swipe Left To Register</string>
+
 </resources>

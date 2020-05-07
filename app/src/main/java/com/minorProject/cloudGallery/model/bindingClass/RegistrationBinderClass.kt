@@ -19,8 +19,6 @@ import com.minorProject.cloudGallery.util.HelperClass.validEmail
 import com.minorProject.cloudGallery.util.HelperClass.validPassword
 import com.minorProject.cloudGallery.viewModels.AuthViewModel
 import com.minorProject.cloudGallery.views.fragments.auth.RegistrationFragment
-import kotlinx.android.synthetic.main.f_auth_login_screen.view.password_EditText
-import kotlinx.android.synthetic.main.f_auth_login_screen.view.password_toggle
 import kotlinx.android.synthetic.main.f_auth_registration.view.*
 
 /**
@@ -89,18 +87,23 @@ class RegistrationBinderClass(private val registrationFragment: RegistrationFrag
         when {
             TextUtils.isEmpty(username) -> {
                 view.username_EditText.error = context.getString(R.string.empty_username)
+                view.username_EditText.requestFocus()
             }
             TextUtils.isEmpty(email) -> {
                 view.email_EditText.error = context.getString(R.string.empty_email)
+                view.email_EditText.requestFocus()
             }
             !validEmail(email!!) -> {
                 view.email_EditText.error = context.getString(R.string.invaild_email)
+                view.email_EditText.requestFocus()
             }
             TextUtils.isEmpty(pass) -> {
                 view.password_EditText.error = context.getString(R.string.empty_password)
+                view.password_EditText.requestFocus()
             }
             !(validPassword(pass) && pass?.length!! >= 6) -> {
                 view.password_EditText.error = context.getString(R.string.invaild_password)
+                view.password_EditText.requestFocus()
             }
             else -> {
                 view.progressbar_register.visibility = View.VISIBLE
