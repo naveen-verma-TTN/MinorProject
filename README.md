@@ -16,7 +16,7 @@
   </p>
   <a href="https://imgur.com/ODhSEXr.jpg" longdesc="AppIcon"><img src="https://imgur.com/ODhSEXr.jpg" width="50"></a></p>
   
-  <a href="https://imgur.com/QTE3H82.jpg"><img src="https://imgur.com/QTE3H82.jpg" width="200"></a>
+  <a href="https://imgur.com/QTE3H82"><img src="https://imgur.com/QTE3H82.jpg" width="200"></a>
   <a href="https://imgur.com/enKS0uK"><img src="https://imgur.com/enKS0uK.jpg" width="200"></a>
   <a href="https://imgur.com/FCA28mP"><img src="https://imgur.com/FCA28mP.jpg" width="200"></a>
   <a href="https://imgur.com/RrEYEVs"><img src="https://imgur.com/RrEYEVs.jpg" width="200"></a>
