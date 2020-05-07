@@ -59,7 +59,7 @@ object FirebaseCategoriesDatabaseHelper {
                         UserID = map["UserId"] as String,
                         CategoryName = map["CategoryName"] as String,
                         CategoryUploadTime = map["CategoryUploadTime"] as Timestamp,
-                        CategoryThumbLink = map["CategoryThumbLink"] as String?,
+                        CategoryThumbLink = map["CategoryThumbLink"] as String,
                         // convert HashMap to ArrayList<Image>
                         ImagesList = if (map["ListImage"] != null) {
                             val imageHashMap: List<HashMap<String, Image>> =
@@ -122,6 +122,7 @@ object FirebaseCategoriesDatabaseHelper {
         categoryHashMap["UserId"] = category.UserID
         categoryHashMap["CategoryName"] = category.CategoryName
         categoryHashMap["CategoryUploadTime"] = category.CategoryUploadTime
+        categoryHashMap["CategoryThumbLink"] = category.CategoryThumbLink
 
         firebaseFireStore = FirebaseFirestore.getInstance()
         val docIdRef: DocumentReference =

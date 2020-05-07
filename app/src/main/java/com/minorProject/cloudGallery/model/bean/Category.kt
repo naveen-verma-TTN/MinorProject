@@ -12,7 +12,7 @@ data class Category(
     val UserID: String,
     val CategoryName: String,
     val CategoryUploadTime: Timestamp,
-    var CategoryThumbLink: String?,
+    var CategoryThumbLink: String,
     val ImagesList: ArrayList<Image>?
 ) : Parcelable
 
