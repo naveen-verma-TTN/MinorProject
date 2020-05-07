@@ -2,10 +2,10 @@
 > Android application to store the images on cloud (Firebase store) and show the uploded images in application gallery.
 
 ## Sdk Specifications
-> Api level 29 (Android 10)</br></br>
-> Target Sdk Version 29</br></br>
-> Compile SDK version 29</br></br>
-> Minimum SDK version 23 (Android 6)</br></br>
+> <i>Api level</i> <b>29 (Android 10)</b> -
+> <i>Target Sdk Version</i> <b>29</b> -
+> <i>Compile SDK version</i> <b>29</b> -
+> <i>Minimum SDK version</i> <b>23 (Android 6)</b>
 
 ## Laguage Specifications
 > <b>Kotlin</b> and <b>Xml</b> for the layouts
