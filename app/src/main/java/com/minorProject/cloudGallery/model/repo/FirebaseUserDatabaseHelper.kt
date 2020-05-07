@@ -14,9 +14,10 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.minorProject.cloudGallery.model.bean.User
+import com.minorProject.cloudGallery.model.repo.helper.Compress
 import java.util.*
 
-object FirebaseUserDatabaseHelper {
+object FirebaseUserDatabaseHelper : FirebaseUserRepository {
     private val TAG: String = FirebaseUserDatabaseHelper::class.java.name
 
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -32,7 +33,7 @@ object FirebaseUserDatabaseHelper {
     /**
      * fun to read user details from firebase
      */
-    fun readUserDetailsFromFireStore(): LiveData<Result<Any?>> {
+    override fun readUserDetailsFromFireStore(): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         firebaseFireStore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
         firebaseFireStore.collection("UserDetails").document(mAuth.currentUser?.uid!!)
@@ -58,7 +59,7 @@ object FirebaseUserDatabaseHelper {
      * fun to update user profile picture
      */
     @RequiresApi(Build.VERSION_CODES.O)
-    fun setProfilePic(context: Context, user: User, uri: Uri): LiveData<Result<Any?>> {
+    override fun setProfilePic(context: Context, user: User, uri: Uri): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         val ref =
             storageReference!!.child("${mAuth.uid}/UserProfile/" + mAuth.uid)
@@ -98,7 +99,7 @@ object FirebaseUserDatabaseHelper {
     /**
      * fun to update user details
      */
-    fun updateUserDetailsToFireStore(user: User): LiveData<Result<Any?>> {
+    override fun updateUserDetailsToFireStore(user: User): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         val userHashMap = HashMap<String, Any>()
 
@@ -149,7 +150,7 @@ object FirebaseUserDatabaseHelper {
     /**
      * fun to logOut from the firebase account
      */
-    fun logout(): LiveData<Result<Any?>> {
+    override fun logout(): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         result.value = Failure(Exception("Something went wrong!"))
         if (mAuth.currentUser != null) {

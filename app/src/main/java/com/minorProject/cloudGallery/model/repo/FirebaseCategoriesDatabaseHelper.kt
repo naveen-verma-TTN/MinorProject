@@ -25,7 +25,7 @@ import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
 
-object FirebaseCategoriesDatabaseHelper {
+object FirebaseCategoriesDatabaseHelper : FirebaseCategoriesRepository {
     private val TAG: String = FirebaseCategoriesDatabaseHelper::class.java.name
 
     private var storage: FirebaseStorage? = null
@@ -41,7 +41,7 @@ object FirebaseCategoriesDatabaseHelper {
         storage = FirebaseStorage.getInstance()
     }
 
-    fun readCategoriesFromFireStore(): LiveData<Result<Any?>> {
+    override fun readCategoriesFromFireStore(): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         val categoryList: ArrayList<Category> = ArrayList()
         firebaseFireStore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
@@ -105,7 +105,7 @@ object FirebaseCategoriesDatabaseHelper {
     /**
      * function to create new Category
      */
-    fun createCategory(context: Context, categoryName: String): LiveData<Result<Any?>> {
+    override fun createCategory(context: Context, categoryName: String): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         val documentId = "${mAuth.uid}_$categoryName"
 
@@ -142,7 +142,7 @@ object FirebaseCategoriesDatabaseHelper {
      * function to save image on FireBase Storage and and send the image's information
      * to fireStore cloud database.
      */
-    fun saveImageToFireStore(
+    override fun saveImageToFireStore(
         context: Context,
         filePath: Uri?,
         categoryName: String
@@ -262,7 +262,7 @@ object FirebaseCategoriesDatabaseHelper {
     /**
      * delete the image data from fireStore cloud database
      */
-    fun deleteImagesFromFirebase(
+    override fun deleteImagesFromFirebase(
         image: Image,
         link: String?
     ): LiveData<Result<Any?>> {

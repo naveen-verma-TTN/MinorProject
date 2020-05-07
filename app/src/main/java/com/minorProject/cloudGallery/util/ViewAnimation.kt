@@ -12,9 +12,6 @@ class ViewAnimation {
         fun rotateFab(v: View, rotate: Boolean): Boolean {
             v.animate().setDuration(200)
                 .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        super.onAnimationEnd(animation)
-                    }
                 })
                 .rotation(if (rotate) 135f else 0f)
             return rotate
@@ -28,9 +25,6 @@ class ViewAnimation {
                 .setDuration(200)
                 .translationY(0f)
                 .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        super.onAnimationEnd(animation)
-                    }
                 })
                 .alpha(1f)
                 .start()

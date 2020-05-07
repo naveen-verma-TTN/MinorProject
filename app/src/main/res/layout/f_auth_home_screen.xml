@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".views.fragments.auth.AuthHomeFragment">
+    tools:context=".view.fragments.auth.AuthHomeFragment">
 
     <fragment
         android:id="@+id/nav_host_fragment"

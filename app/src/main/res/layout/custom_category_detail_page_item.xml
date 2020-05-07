@@ -9,7 +9,7 @@
 
         <variable
             name="itemClick"
-            type="com.minorProject.cloudGallery.views.adapters.CategoryPageDetailItemClick" />
+            type="com.minorProject.cloudGallery.view.adapters.CategoryPageDetailItemClick" />
         <variable
             name="image"
             type="com.minorProject.cloudGallery.model.bean.Image" />

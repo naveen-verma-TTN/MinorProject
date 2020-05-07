@@ -1,26 +1,27 @@
 package com.minorProject.cloudGallery.viewModels
 
-import android.app.Application
+import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
 import com.minorProject.cloudGallery.model.repo.Failure
-import com.minorProject.cloudGallery.model.repo.FirebaseCategoriesDatabaseHelper
+import com.minorProject.cloudGallery.model.repo.FirebaseCategoriesRepository
 import com.minorProject.cloudGallery.model.repo.Result
 import com.minorProject.cloudGallery.model.repo.Success
 import com.minorProject.cloudGallery.util.HelperClass.ShowToast
-import com.minorProject.cloudGallery.views.fragments.category.CategoryDetailPage
 
 @RequiresApi(Build.VERSION_CODES.O)
-class CategoriesViewModel(application: Application) : AndroidViewModel(application) {
-    private val context = getApplication<Application>().applicationContext
+class CategoriesViewModel(
+    private val context: Context,
+    private val repository: FirebaseCategoriesRepository
+) : ViewModel() {
     private val categories: MutableLiveData<ArrayList<Category>> = MutableLiveData()
     private val imageList: MutableLiveData<ArrayList<Image>> = MutableLiveData()
 
@@ -38,7 +39,7 @@ class CategoriesViewModel(application: Application) : AndroidViewModel(applicati
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun readCategoriesFromFireStore() =
-        FirebaseCategoriesDatabaseHelper.readCategoriesFromFireStore().observeForever { response ->
+        repository.readCategoriesFromFireStore().observeForever { response ->
             when (response) {
                 is Success -> {
                     categories.value = response.value as ArrayList<Category>
@@ -52,7 +53,7 @@ class CategoriesViewModel(application: Application) : AndroidViewModel(applicati
         }
 
     fun createCategory(categoryName: String) {
-        FirebaseCategoriesDatabaseHelper.createCategory(context, categoryName)
+        repository.createCategory(context, categoryName)
             .observeForever { response ->
                 when (response) {
                     is Success -> {
@@ -71,7 +72,7 @@ class CategoriesViewModel(application: Application) : AndroidViewModel(applicati
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun saveImageToFireStore(contentURI: Uri?, categoryName: String) {
-        FirebaseCategoriesDatabaseHelper.saveImageToFireStore(context, contentURI, categoryName)
+        repository.saveImageToFireStore(context, contentURI, categoryName)
             .observeForever { response ->
                 when (response) {
                     is Success -> {
@@ -142,7 +143,7 @@ class CategoriesViewModel(application: Application) : AndroidViewModel(applicati
     fun deleteImagesFromFirebase(
         image: ArrayList<Image>,
         deletionPosition: androidx.recyclerview.selection.Selection<Long>
-    ) : LiveData<Result<Any?>> {
+    ): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         val deletionList = ArrayList<Image>()
         deletionPosition.forEach { item ->
@@ -157,7 +158,7 @@ class CategoriesViewModel(application: Application) : AndroidViewModel(applicati
         }
 
         deletionList.forEach { dImage ->
-            FirebaseCategoriesDatabaseHelper.deleteImagesFromFirebase(dImage, link)
+            repository.deleteImagesFromFirebase(dImage, link)
                 .observeForever { response ->
                     when (response) {
                         is Success -> {

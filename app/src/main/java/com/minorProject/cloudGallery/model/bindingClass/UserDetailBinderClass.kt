@@ -18,9 +18,9 @@ import com.minorProject.cloudGallery.model.bean.User
 import com.minorProject.cloudGallery.model.repo.Failure
 import com.minorProject.cloudGallery.model.repo.Success
 import com.minorProject.cloudGallery.util.HelperClass.validEmail
+import com.minorProject.cloudGallery.view.activities.HomePageActivity
 import com.minorProject.cloudGallery.viewModels.UserViewModel
-import com.minorProject.cloudGallery.views.activities.HomePageActivity
-import com.minorProject.cloudGallery.views.activities.SplashScreenActivity
+import com.minorProject.cloudGallery.view.activities.SplashScreenActivity
 import kotlinx.android.synthetic.main.f_user_details.view.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

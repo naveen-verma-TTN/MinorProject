@@ -11,6 +11,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/icon"
+        android:name=".MyApplication"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
@@ -21,7 +22,7 @@
         tools:ignore="AllowBackup">
 
         <!--        First Activity      -->
-        <activity android:name="com.minorProject.cloudGallery.views.activities.SplashScreenActivity"
+        <activity android:name="com.minorProject.cloudGallery.view.activities.SplashScreenActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -32,7 +33,7 @@
         </activity>
 
         <!--        Second Activity      -->
-        <activity android:name=".views.activities.HomePageActivity"
+        <activity android:name=".view.activities.HomePageActivity"
             android:windowSoftInputMode="adjustPan"/>
 
     </application>

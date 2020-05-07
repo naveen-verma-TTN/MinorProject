@@ -8,13 +8,14 @@ import com.google.android.material.snackbar.Snackbar
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-object HelperClass{
-     fun View.snack(message: String, duration: Int = Snackbar.LENGTH_LONG) {
+object HelperClass {
+    fun View.snack(message: String, duration: Int = Snackbar.LENGTH_LONG) {
         Snackbar.make(this, message, duration).show()
     }
 
     private const val PASSWORD_PATTERN =
         "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$"
+
     /**
      * function to validate email pattern
      */
@@ -32,7 +33,7 @@ object HelperClass{
         return matcher.matches()
     }
 
-    fun Context.ShowToast(message: String){
-        Toast.makeText(this,message,Toast.LENGTH_LONG).show()
+    fun Context.ShowToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }

@@ -10,7 +10,7 @@
             type="Integer" />
         <variable
             name="categoryPageItemClick"
-            type="com.minorProject.cloudGallery.views.adapters.CategoryPageItemClick" />
+            type="com.minorProject.cloudGallery.view.adapters.CategoryPageItemClick" />
         <variable
             name="category"
             type="com.minorProject.cloudGallery.model.bean.Category" />

@@ -7,7 +7,7 @@
 
         <variable
             name="context"
-            type="com.minorProject.cloudGallery.views.fragments.profile.UserProfile" />
+            type="com.minorProject.cloudGallery.view.fragments.profile.UserProfile" />
 
         <variable
             name="viewModel"
@@ -27,7 +27,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".views.fragments.profile.UserDetails">
+        android:background="@color/white"
+        tools:context=".view.fragments.profile.UserDetails">
 
         <LinearLayout
             android:layout_width="match_parent"

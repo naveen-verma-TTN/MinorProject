@@ -17,14 +17,11 @@ import com.minorProject.cloudGallery.model.repo.Success
 import com.minorProject.cloudGallery.util.HelperClass.snack
 import com.minorProject.cloudGallery.util.HelperClass.validEmail
 import com.minorProject.cloudGallery.util.HelperClass.validPassword
+import com.minorProject.cloudGallery.view.activities.HomePageActivity
 import com.minorProject.cloudGallery.viewModels.AuthViewModel
-import com.minorProject.cloudGallery.views.activities.HomePageActivity
-import com.minorProject.cloudGallery.views.activities.SplashScreenActivity
-import com.minorProject.cloudGallery.views.fragments.auth.LoginScreenFragment
+import com.minorProject.cloudGallery.view.activities.SplashScreenActivity
+import com.minorProject.cloudGallery.view.fragments.auth.LoginScreenFragment
 import kotlinx.android.synthetic.main.f_auth_login_screen.view.*
-import kotlinx.android.synthetic.main.f_auth_login_screen.view.password_EditText
-import kotlinx.android.synthetic.main.f_auth_login_screen.view.password_toggle
-import kotlinx.android.synthetic.main.f_auth_registration.view.*
 
 /**
  * Login dataBinding class
@@ -56,12 +53,13 @@ class LoginBinderClass(private val loginScreenFragment: LoginScreenFragment) : B
     /**
      * function to show/hide the password
      */
-    fun passToggle(view: View){
-        view.password_toggle.setOnTouchListener{ _, event ->
+    fun passToggle(view: View) {
+        view.password_toggle.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_UP -> view.password_EditText.inputType =
                     InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                MotionEvent.ACTION_DOWN -> view.password_EditText.inputType = InputType.TYPE_CLASS_TEXT
+                MotionEvent.ACTION_DOWN -> view.password_EditText.inputType =
+                    InputType.TYPE_CLASS_TEXT
             }
             true
         }
@@ -125,7 +123,7 @@ class LoginBinderClass(private val loginScreenFragment: LoginScreenFragment) : B
         /**
          * function to updateUI
          */
-        fun updateUI(view : View) {
+        fun updateUI(view: View) {
             val intent = Intent(view.context, HomePageActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             view.context.startActivity(intent)

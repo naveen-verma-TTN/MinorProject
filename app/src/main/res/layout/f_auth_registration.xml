@@ -7,7 +7,7 @@
 
         <variable
             name="fragment"
-            type="com.minorProject.cloudGallery.views.fragments.auth.RegistrationFragment" />
+            type="com.minorProject.cloudGallery.view.fragments.auth.RegistrationFragment" />
 
         <variable
             name="viewModel"
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="top"
-        tools:context=".views.fragments.auth.LoginScreenFragment">
+        tools:context=".view.fragments.auth.LoginScreenFragment">
 
 
         <TextView

@@ -17,7 +17,7 @@ import com.minorProject.cloudGallery.model.repo.Success
 import com.minorProject.cloudGallery.util.HelperClass.snack
 import com.minorProject.cloudGallery.util.HelperClass.validEmail
 import com.minorProject.cloudGallery.viewModels.AuthViewModel
-import com.minorProject.cloudGallery.views.fragments.auth.ForgotPasswordFragment
+import com.minorProject.cloudGallery.view.fragments.auth.ForgotPasswordFragment
 import kotlinx.android.synthetic.main.f_auth_forget_password.view.*
 
 /**

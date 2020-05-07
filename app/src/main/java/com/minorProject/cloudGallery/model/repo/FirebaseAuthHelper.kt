@@ -12,12 +12,12 @@ import com.minorProject.cloudGallery.model.bean.User
 import java.text.SimpleDateFormat
 import java.util.*
 
-object FirebaseAuthHelper {
+object FirebaseAuthHelper : FirebaseAuthRepository {
     private val mAuth = FirebaseAuth.getInstance()
 
     private val TAG: String = FirebaseAuthHelper::class.java.name
 
-    fun checkIfUserSignInOrNot(): LiveData<Result<Any?>> {
+    override fun checkIfUserSignInOrNot(): LiveData<Result<Any?>> {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         result.value = Success(false)
         if (mAuth.currentUser != null) {
@@ -27,7 +27,11 @@ object FirebaseAuthHelper {
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun onRegisterClicked(username: String, email: String, pass: String): LiveData<Result<Any?>> {
+    override fun onRegisterClicked(
+        username: String,
+        email: String,
+        pass: String
+    ): LiveData<Result<Any?>> {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         mAuth.createUserWithEmailAndPassword(email, pass)
             .addOnCompleteListener { task ->
@@ -54,8 +58,8 @@ object FirebaseAuthHelper {
                             .format(Date())
                     )
                     FirebaseUserDatabaseHelper.updateUserDetailsToFireStore(user).observeForever {
-                        when(it){
-                            is Success ->{
+                        when (it) {
+                            is Success -> {
                                 verifyEmail().observeForever { response ->
                                     when (response) {
                                         is Success -> {
@@ -67,7 +71,7 @@ object FirebaseAuthHelper {
                                     }
                                 }
                             }
-                            is Failure ->{
+                            is Failure -> {
                                 Log.w(TAG, "UserDetailUpdating:failure", it.e)
                                 result.value = Failure(Exception(it.e))
                             }
@@ -81,7 +85,7 @@ object FirebaseAuthHelper {
         return result
     }
 
-    private fun verifyEmail(): LiveData<Result<Any?>> {
+    override fun verifyEmail(): LiveData<Result<Any?>> {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         mAuth.currentUser!!.sendEmailVerification()
             .addOnCompleteListener { task ->
@@ -99,7 +103,7 @@ object FirebaseAuthHelper {
         return result
     }
 
-    fun onLoginClicked(email: String, pwd: String): LiveData<Result<Any?>> {
+    override fun onLoginClicked(email: String, pwd: String): LiveData<Result<Any?>> {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         mAuth.signInWithEmailAndPassword(email, pwd)
             .addOnCompleteListener { task ->
@@ -112,7 +116,7 @@ object FirebaseAuthHelper {
         return result
     }
 
-    fun onForgetPassword(email: String?): LiveData<Result<Any?>> {
+    override fun onForgetPassword(email: String?): LiveData<Result<Any?>> {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         mAuth.sendPasswordResetEmail(email.toString())
             .addOnCompleteListener { task ->

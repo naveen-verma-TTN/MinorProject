@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:id="@+id/timeline_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".views.fragments.timeline.Timeline">
+    tools:context=".view.fragments.timeline.Timeline">
 
 
     <xyz.sangcomz.stickytimelineview.TimeLineRecyclerView

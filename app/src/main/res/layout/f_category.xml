@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/home_layout"
     android:background="@color/white"
-    tools:context=".views.fragments.category.CategoryPage">
+    tools:context=".view.fragments.category.CategoryPage">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

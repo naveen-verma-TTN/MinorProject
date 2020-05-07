@@ -1,22 +1,24 @@
 package com.minorProject.cloudGallery.viewModels
 
-import android.app.Application
+import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.minorProject.cloudGallery.model.bean.User
 import com.minorProject.cloudGallery.model.repo.Failure
-import com.minorProject.cloudGallery.model.repo.FirebaseUserDatabaseHelper
+import com.minorProject.cloudGallery.model.repo.FirebaseUserRepository
 import com.minorProject.cloudGallery.model.repo.Result
 import com.minorProject.cloudGallery.model.repo.Success
 import com.minorProject.cloudGallery.util.HelperClass.ShowToast
 
-class UserViewModel(application: Application) : AndroidViewModel(application) {
-    private val context = getApplication<Application>().applicationContext
+class UserViewModel(
+    private val context: Context,
+    private val repository: FirebaseUserRepository
+) : ViewModel() {
     private val user: MutableLiveData<User> = MutableLiveData()
 
     companion object {
@@ -30,7 +32,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun getUserDetails(): LiveData<User?> = user
 
     private fun readUserDetailsFromFireStore() =
-        FirebaseUserDatabaseHelper.readUserDetailsFromFireStore().observeForever { response ->
+        repository.readUserDetailsFromFireStore().observeForever { response ->
             when (response) {
                 is Success -> {
                     user.value = response.value as User
@@ -43,7 +45,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setProfilePic(data: Uri) {
-        FirebaseUserDatabaseHelper.setProfilePic(context, user.value!!, data)
+        repository.setProfilePic(context, user.value!!, data)
             .observeForever { response ->
                 when (response) {
                     is Success -> {
@@ -58,7 +60,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     fun updateUserDetailsToFireStore(userDefault: User): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
-        FirebaseUserDatabaseHelper.updateUserDetailsToFireStore(userDefault)
+        repository.updateUserDetailsToFireStore(userDefault)
             .observeForever { response ->
                 when (response) {
                     is Success -> {
@@ -78,7 +80,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     fun logout(): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
-        FirebaseUserDatabaseHelper.logout()
+        repository.logout()
             .observeForever { response ->
                 when (response) {
                     is Success -> {

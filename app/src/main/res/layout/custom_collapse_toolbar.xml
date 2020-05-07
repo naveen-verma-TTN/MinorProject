@@ -4,7 +4,7 @@
 
         <variable
             name="context"
-            type="com.minorProject.cloudGallery.views.fragments.profile.UserProfile" />
+            type="com.minorProject.cloudGallery.view.fragments.profile.UserProfile" />
 
         <variable
             name="viewModel"
