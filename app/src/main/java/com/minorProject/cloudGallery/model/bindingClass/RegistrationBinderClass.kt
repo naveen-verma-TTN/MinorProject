@@ -17,8 +17,8 @@ import com.minorProject.cloudGallery.model.repo.Success
 import com.minorProject.cloudGallery.util.HelperClass.snack
 import com.minorProject.cloudGallery.util.HelperClass.validEmail
 import com.minorProject.cloudGallery.util.HelperClass.validPassword
-import com.minorProject.cloudGallery.viewModels.AuthViewModel
 import com.minorProject.cloudGallery.view.fragments.auth.RegistrationFragment
+import com.minorProject.cloudGallery.viewModels.AuthViewModel
 import kotlinx.android.synthetic.main.f_auth_registration.view.*
 
 /**

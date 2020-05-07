@@ -14,7 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,9 +21,9 @@ import com.bumptech.glide.Glide
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Image
 import com.minorProject.cloudGallery.util.ProgressDialog
-import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.view.adapters.ImageAdapter
 import com.minorProject.cloudGallery.view.adapters.ImageItemClickListener
+import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.viewModels.MyViewModelFactory
 import com.stfalcon.imageviewer.StfalconImageViewer
 import xyz.sangcomz.stickytimelineview.RecyclerSectionItemDecoration
@@ -48,7 +47,10 @@ class Timeline : Fragment(),
     private var empty: ImageView? = null
 
     private val categoriesViewModel by lazy {
-        ViewModelProvider(requireActivity(), MyViewModelFactory()).get(CategoriesViewModel::class.java)
+        ViewModelProvider(
+            requireActivity(),
+            MyViewModelFactory()
+        ).get(CategoriesViewModel::class.java)
     }
 
     override fun onCreateView(

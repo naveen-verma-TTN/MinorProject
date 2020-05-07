@@ -32,15 +32,15 @@ import com.bumptech.glide.Glide
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
-import com.minorProject.cloudGallery.model.repo.helper.Compress
 import com.minorProject.cloudGallery.model.repo.Failure
 import com.minorProject.cloudGallery.model.repo.Success
+import com.minorProject.cloudGallery.model.repo.helper.Compress
 import com.minorProject.cloudGallery.util.HelperClass.ShowToast
 import com.minorProject.cloudGallery.util.ProgressDialog
 import com.minorProject.cloudGallery.util.ViewAnimation
-import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.view.adapters.CategoryPageDetailAdapter
 import com.minorProject.cloudGallery.view.adapters.CategoryPageDetailItemClick
+import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.viewModels.MyViewModelFactory
 import com.stfalcon.imageviewer.StfalconImageViewer
 import kotlinx.android.synthetic.main.f_category_detail_page.*
@@ -65,7 +65,10 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
     private var tracker: SelectionTracker<Long>? = null
 
     private val categoriesViewModel by lazy {
-        ViewModelProvider(requireActivity(), MyViewModelFactory()).get(CategoriesViewModel::class.java)
+        ViewModelProvider(
+            requireActivity(),
+            MyViewModelFactory()
+        ).get(CategoriesViewModel::class.java)
     }
 
     companion object {

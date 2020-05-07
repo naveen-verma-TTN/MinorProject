@@ -10,15 +10,16 @@
         <variable
             name="itemClick"
             type="com.minorProject.cloudGallery.view.adapters.CategoryPageDetailItemClick" />
+
         <variable
             name="image"
             type="com.minorProject.cloudGallery.model.bean.Image" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/detail_layout"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:id="@+id/detail_layout"
         android:longClickable="false"
         android:onClick="@{()->itemClick.onItemClicked(image.link, position)}">
 

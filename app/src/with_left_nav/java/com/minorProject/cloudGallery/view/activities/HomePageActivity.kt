@@ -60,7 +60,7 @@ class HomePageActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
             }
         }
 
-    menu.setOnItemSelectedListener {
+        menu.setOnItemSelectedListener {
             when (it) {
                 R.id.timeline -> {
                     viewpager.currentItem = 0
@@ -85,10 +85,9 @@ class HomePageActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
     }
 
     override fun onBackPressed() {
-        if(viewpager.currentItem == 1){
+        if (viewpager.currentItem == 1) {
             super.onBackPressed()
-        }
-        else{
+        } else {
             viewpager.currentItem = 1
         }
     }

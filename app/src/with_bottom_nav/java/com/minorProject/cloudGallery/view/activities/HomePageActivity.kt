@@ -1,6 +1,5 @@
 package com.minorProject.cloudGallery.view.activities
 
-import android.R.attr.*
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -67,10 +66,9 @@ class HomePageActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
     }
 
     override fun onBackPressed() {
-        if(viewpager.currentItem == 1){
+        if (viewpager.currentItem == 1) {
             super.onBackPressed()
-        }
-        else{
+        } else {
             viewpager.currentItem = 1
         }
     }

@@ -12,7 +12,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.databinding.FUserProfileBinding
 import com.minorProject.cloudGallery.model.bindingClass.UserDetailBinderClass
@@ -32,7 +31,10 @@ class UserProfile : Fragment() {
     }
 
     private val categoriesViewModel by lazy {
-        ViewModelProvider(requireActivity(), MyViewModelFactory()).get(CategoriesViewModel::class.java)
+        ViewModelProvider(
+            requireActivity(),
+            MyViewModelFactory()
+        ).get(CategoriesViewModel::class.java)
     }
 
     companion object {

@@ -18,9 +18,9 @@ import com.minorProject.cloudGallery.util.HelperClass.snack
 import com.minorProject.cloudGallery.util.HelperClass.validEmail
 import com.minorProject.cloudGallery.util.HelperClass.validPassword
 import com.minorProject.cloudGallery.view.activities.HomePageActivity
-import com.minorProject.cloudGallery.viewModels.AuthViewModel
 import com.minorProject.cloudGallery.view.activities.SplashScreenActivity
 import com.minorProject.cloudGallery.view.fragments.auth.LoginScreenFragment
+import com.minorProject.cloudGallery.viewModels.AuthViewModel
 import kotlinx.android.synthetic.main.f_auth_login_screen.view.*
 
 /**

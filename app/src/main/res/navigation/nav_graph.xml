@@ -8,60 +8,60 @@
         android:id="@+id/loginScreen3"
         android:name="com.minorProject.cloudGallery.view.fragments.auth.LoginScreenFragment"
         android:label="fragment_login_screen"
-        tools:layout="@layout/f_auth_login_screen" >
+        tools:layout="@layout/f_auth_login_screen">
         <action
             android:id="@+id/action_loginScreen3_to_registration"
             app:destination="@id/registration"
             app:enterAnim="@anim/enter"
             app:exitAnim="@anim/exit"
             app:popEnterAnim="@anim/pop_enter"
-            app:popExitAnim="@anim/pop_exit"/>
+            app:popExitAnim="@anim/pop_exit" />
         <action
             android:id="@+id/action_loginScreen3_to_forgetPassword"
             app:destination="@id/forgetPassword"
             app:enterAnim="@anim/enter"
             app:exitAnim="@anim/exit"
             app:popEnterAnim="@anim/pop_enter"
-            app:popExitAnim="@anim/pop_exit"/>
+            app:popExitAnim="@anim/pop_exit" />
     </fragment>
     <fragment
         android:id="@+id/registration"
         android:name="com.minorProject.cloudGallery.view.fragments.auth.RegistrationFragment"
         android:label="fragment_registration"
-        tools:layout="@layout/f_auth_registration" >
+        tools:layout="@layout/f_auth_registration">
         <action
             android:id="@+id/action_registration_to_loginScreen3"
             app:destination="@id/loginScreen3"
             app:enterAnim="@anim/return_enter"
             app:exitAnim="@anim/return_exit"
             app:popEnterAnim="@anim/pop_enter"
-            app:popExitAnim="@anim/pop_exit"/>
+            app:popExitAnim="@anim/pop_exit" />
         <action
             android:id="@+id/action_registration_to_forgetPassword"
             app:destination="@id/forgetPassword"
             app:enterAnim="@anim/enter"
             app:exitAnim="@anim/exit"
             app:popEnterAnim="@anim/pop_enter"
-            app:popExitAnim="@anim/pop_exit"/>
+            app:popExitAnim="@anim/pop_exit" />
     </fragment>
     <fragment
         android:id="@+id/forgetPassword"
         android:name="com.minorProject.cloudGallery.view.fragments.auth.ForgotPasswordFragment"
         android:label="fragment_forget_password"
-        tools:layout="@layout/f_auth_forget_password" >
+        tools:layout="@layout/f_auth_forget_password">
         <action
             android:id="@+id/action_forgetPassword_to_loginScreen3"
             app:destination="@id/loginScreen3"
             app:enterAnim="@anim/return_enter"
             app:exitAnim="@anim/return_exit"
             app:popEnterAnim="@anim/pop_enter"
-            app:popExitAnim="@anim/pop_exit"/>
+            app:popExitAnim="@anim/pop_exit" />
         <action
             android:id="@+id/action_forgetPassword_to_registration"
             app:destination="@id/registration"
             app:enterAnim="@anim/return_enter"
             app:exitAnim="@anim/return_exit"
             app:popEnterAnim="@anim/pop_enter"
-            app:popExitAnim="@anim/pop_exit"/>
+            app:popExitAnim="@anim/pop_exit" />
     </fragment>
 </navigation>

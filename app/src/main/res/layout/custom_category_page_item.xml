@@ -4,13 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="io.opencensus.resource.Resource"/>
+
+        <import type="io.opencensus.resource.Resource" />
+
         <variable
             name="position"
             type="Integer" />
+
         <variable
             name="categoryPageItemClick"
             type="com.minorProject.cloudGallery.view.adapters.CategoryPageItemClick" />
+
         <variable
             name="category"
             type="com.minorProject.cloudGallery.model.bean.Category" />
@@ -38,11 +42,11 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/allerta"
+                android:gravity="center"
                 android:letterSpacing="0.2"
                 android:text="@{category.categoryName.toUpperCase()}"
                 android:textColor="@color/colorAccent"
                 android:textSize="25sp"
-                android:gravity="center"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

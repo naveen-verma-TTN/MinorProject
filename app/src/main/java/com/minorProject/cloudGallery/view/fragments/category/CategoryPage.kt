@@ -11,15 +11,14 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.util.ProgressDialog
-import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.view.adapters.CategoryPageAdapter
 import com.minorProject.cloudGallery.view.adapters.CategoryPageItemClick
+import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.viewModels.MyViewModelFactory
 import kotlinx.android.synthetic.main.f_category.*
 import kotlinx.android.synthetic.main.f_category.view.*
@@ -35,7 +34,10 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
     private var empty: ImageView? = null
 
     private val categoriesViewModel by lazy {
-        ViewModelProvider(requireActivity(), MyViewModelFactory()).get(CategoriesViewModel::class.java)
+        ViewModelProvider(
+            requireActivity(),
+            MyViewModelFactory()
+        ).get(CategoriesViewModel::class.java)
     }
 
     override fun onCreateView(

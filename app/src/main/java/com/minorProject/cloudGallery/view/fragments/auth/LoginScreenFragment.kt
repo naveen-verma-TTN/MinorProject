@@ -7,15 +7,14 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.databinding.FAuthLoginScreenBinding
 import com.minorProject.cloudGallery.model.bindingClass.LoginBinderClass
-import com.minorProject.cloudGallery.viewModels.AuthViewModel
 import com.minorProject.cloudGallery.view.adapters.OnSwipeTouchListener
 import com.minorProject.cloudGallery.view.adapters.SwipeTouchListener
+import com.minorProject.cloudGallery.viewModels.AuthViewModel
 import com.minorProject.cloudGallery.viewModels.MyViewModelFactory
 import kotlinx.android.synthetic.main.f_auth_login_screen.*
 

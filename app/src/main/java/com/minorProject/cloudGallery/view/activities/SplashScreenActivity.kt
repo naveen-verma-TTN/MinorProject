@@ -9,8 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.minorProject.cloudGallery.R
-import com.minorProject.cloudGallery.viewModels.AuthViewModel
 import com.minorProject.cloudGallery.view.fragments.auth.AuthHomeFragment
+import com.minorProject.cloudGallery.viewModels.AuthViewModel
 import com.minorProject.cloudGallery.viewModels.MyViewModelFactory
 import kotlinx.android.synthetic.main.a_splashscreen.*
 

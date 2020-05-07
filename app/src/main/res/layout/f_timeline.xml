@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/timeline_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:id="@+id/timeline_layout"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragments.timeline.Timeline">
 
 
     <xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        app:timeLineColor="@color/colorAccent"
-        app:timeLineCircleColor="@color/colorPrimary"
-        app:sectionSubTitleTextSize="15dp"
-        app:sectionTitleTextSize="18dp"
-        tools:listitem="@layout/custom_timeline_row_item"
-        app:sectionTitleTextColor="@color/colorAccent"
+        android:layout_height="match_parent"
         app:sectionSubTitleTextColor="@color/colorPrimary"
+        app:sectionSubTitleTextSize="15dp"
+        app:sectionTitleTextColor="@color/colorAccent"
+        app:sectionTitleTextSize="18dp"
+        app:timeLineCircleColor="@color/colorPrimary"
         app:timeLineCircleStrokeColor="@color/white"
-        android:layout_height="match_parent" />
+        app:timeLineColor="@color/colorAccent"
+        tools:listitem="@layout/custom_timeline_row_item" />
 
     <ImageView
         android:id="@+id/empty_view_timeline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
         android:src="@drawable/empty"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.395" />

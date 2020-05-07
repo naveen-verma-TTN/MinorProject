@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <font-family xmlns:app="http://schemas.android.com/apk/res-auto"
-        app:fontProviderAuthority=""
-        app:fontProviderPackage=""
-        app:fontProviderQuery="abril_fatface"
-        app:fontProviderCerts="@array/_certs">
-</font-family>
+    app:fontProviderAuthority=""
+    app:fontProviderCerts="@array/_certs"
+    app:fontProviderPackage=""
+    app:fontProviderQuery="abril_fatface"></font-family>
