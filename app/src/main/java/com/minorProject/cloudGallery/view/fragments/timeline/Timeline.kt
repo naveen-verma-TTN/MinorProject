@@ -17,15 +17,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Image
-import com.minorProject.cloudGallery.util.ProgressDialog
 import com.minorProject.cloudGallery.view.adapters.ImageAdapter
 import com.minorProject.cloudGallery.view.adapters.ImageItemClickListener
+import com.minorProject.cloudGallery.view.fragments.category.FullScreenView
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.viewModels.MyViewModelFactory
-import com.stfalcon.imageviewer.StfalconImageViewer
 import xyz.sangcomz.stickytimelineview.RecyclerSectionItemDecoration
 import xyz.sangcomz.stickytimelineview.TimeLineRecyclerView
 import xyz.sangcomz.stickytimelineview.model.SectionInfo
@@ -43,7 +41,6 @@ class Timeline : Fragment(),
     private var imageList: ArrayList<Image> = ArrayList()
     private var adapter: ImageAdapter? = null
     private lateinit var recyclerView: TimeLineRecyclerView
-    private lateinit var progressDialog: Dialog
     private var empty: ImageView? = null
 
     private val categoriesViewModel by lazy {
@@ -75,12 +72,11 @@ class Timeline : Fragment(),
      * fun for set up Listeners
      */
     private fun initListeners() {
-        progressDialog = ProgressDialog.progressDialog(requireView().context)
         empty = view?.findViewById(R.id.empty_view_timeline)
     }
 
+
     private fun initRecyclerView() {
-        progressDialog.show()
         recyclerView = requireView().findViewById(R.id.recycler_view)
         //---------------------For future-use
 /*        val itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
@@ -131,7 +127,6 @@ class Timeline : Fragment(),
      * fun to update the view
      */
     private fun updateView(images: ArrayList<Image>) {
-        progressDialog.hide()
         if (images.size == 0) {
             empty?.visibility = View.VISIBLE
         } else {
@@ -143,10 +138,11 @@ class Timeline : Fragment(),
      * fun to show the images in fullscreen
      */
     override fun onItemClicked(position: Int) {
-        StfalconImageViewer.Builder(context, imageList) { _view, image ->
-            Glide.with(requireView().context).load(image.link).into(_view)
-        }.withStartPosition(position).withHiddenStatusBar(false)
-            .show()
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        val fullScreenFragment = FullScreenView.newInstance(
+            imageList, position
+        )
+        transaction.replace(R.id.timeline_layout, fullScreenFragment, "fullscreen").commit()
     }
 
 
@@ -182,11 +178,6 @@ class Timeline : Fragment(),
                 return DateFormat.format("dd MMM, yyyy", date).toString()
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        progressDialog.dismiss()
     }
 
     //---------------------For future-use

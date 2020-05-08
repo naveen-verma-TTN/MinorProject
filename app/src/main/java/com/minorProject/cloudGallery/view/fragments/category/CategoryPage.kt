@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
-import com.minorProject.cloudGallery.util.ProgressDialog
 import com.minorProject.cloudGallery.view.adapters.CategoryPageAdapter
 import com.minorProject.cloudGallery.view.adapters.CategoryPageItemClick
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
@@ -30,7 +29,6 @@ import kotlinx.android.synthetic.main.f_category.view.*
 class CategoryPage : Fragment(), CategoryPageItemClick {
     private lateinit var adapter: CategoryPageAdapter
     private var list: ArrayList<Category> = ArrayList()
-    private lateinit var progressDialog: Dialog
     private var empty: ImageView? = null
 
     private val categoriesViewModel by lazy {
@@ -47,6 +45,7 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
         return inflater.inflate(R.layout.f_category, container, false)
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,12 +57,12 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
         setUpObservers()
     }
 
+
     /**
      * fun for set up Listeners
      */
     private fun setUpListeners() {
         empty = view?.findViewById(R.id.empty_view_category)
-        progressDialog = ProgressDialog.progressDialog(requireView().context)
         home_fab.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.addToBackStack(null)
@@ -73,6 +72,8 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
             dialogFragment.show(transaction, null)
         }
     }
+
+
 
     /**
      * Observer to observe allCategories to update recyclerview's category list
@@ -91,7 +92,6 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
      * fun to update the view
      */
     private fun updateView(images: ArrayList<Category>) {
-        progressDialog.hide()
         if (images.size == 0) {
             empty?.visibility = View.VISIBLE
         } else {
@@ -104,7 +104,6 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initRecyclerView(view: View) {
-        progressDialog.show()
         view.home_recycler.layoutManager =
             GridLayoutManager(view.context, 2, RecyclerView.VERTICAL, false)
         adapter =
@@ -115,10 +114,6 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
         home_recycler.adapter = adapter
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        progressDialog.dismiss()
-    }
 
     /**
      * fun callback to open specific category fragment

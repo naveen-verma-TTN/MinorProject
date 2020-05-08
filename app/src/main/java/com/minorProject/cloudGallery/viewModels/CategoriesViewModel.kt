@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.minorProject.cloudGallery.viewModels
 
 import android.content.Context
@@ -6,6 +8,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.minorProject.cloudGallery.R
@@ -38,7 +41,7 @@ class CategoriesViewModel(
     fun getCategories(): LiveData<ArrayList<Category>> = categories
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun readCategoriesFromFireStore() =
+    private fun readCategoriesFromFireStore() {
         repository.readCategoriesFromFireStore().observeForever { response ->
             when (response) {
                 is Success -> {
@@ -51,6 +54,7 @@ class CategoriesViewModel(
                 }
             }
         }
+    }
 
     fun createCategory(categoryName: String) {
         repository.createCategory(context, categoryName)

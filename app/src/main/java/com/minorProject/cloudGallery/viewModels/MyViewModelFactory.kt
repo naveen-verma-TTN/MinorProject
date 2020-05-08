@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.minorProject.cloudGallery.viewModels
 
 import android.os.Build

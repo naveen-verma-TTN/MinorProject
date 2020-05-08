@@ -28,7 +28,6 @@ import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
@@ -36,13 +35,11 @@ import com.minorProject.cloudGallery.model.repo.Failure
 import com.minorProject.cloudGallery.model.repo.Success
 import com.minorProject.cloudGallery.model.repo.helper.Compress
 import com.minorProject.cloudGallery.util.HelperClass.ShowToast
-import com.minorProject.cloudGallery.util.ProgressDialog
 import com.minorProject.cloudGallery.util.ViewAnimation
 import com.minorProject.cloudGallery.view.adapters.CategoryPageDetailAdapter
 import com.minorProject.cloudGallery.view.adapters.CategoryPageDetailItemClick
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.viewModels.MyViewModelFactory
-import com.stfalcon.imageviewer.StfalconImageViewer
 import kotlinx.android.synthetic.main.f_category_detail_page.*
 import kotlinx.android.synthetic.main.f_category_detail_page.view.*
 import java.util.*
@@ -59,7 +56,6 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
     private lateinit var adapter: CategoryPageDetailAdapter
     private var list: ArrayList<Image> = ArrayList()
     private lateinit var category: Category
-    private lateinit var progressDialog: Dialog
     private var empty: ImageView? = null
 
     private var tracker: SelectionTracker<Long>? = null
@@ -134,7 +130,6 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
      */
     private fun setUpListeners() {
         empty = view?.findViewById(R.id.empty_view_category_detail)
-        progressDialog = ProgressDialog.progressDialog(requireView().context)
         home_detail_fab_gallery.setOnClickListener {
             selectImageInAlbum()
         }
@@ -221,7 +216,6 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
      * fun to update the view
      */
     private fun updateView(images: ArrayList<Image>) {
-        progressDialog.hide()
         if (images.size == 0) {
             empty?.visibility = View.VISIBLE
         } else {
@@ -254,9 +248,11 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
         } else if (isMode && tracker!!.selection.size() == 0) {
             isMode = false
         } else if (!tracker!!.hasSelection() && !isMode) {
-            StfalconImageViewer.Builder(context, list) { view, image ->
-                Glide.with(this).load(image.link).into(view)
-            }.withStartPosition(position).withHiddenStatusBar(false).show()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            val fullScreenFragment = FullScreenView.newInstance(
+                list, position
+            )
+            transaction.replace(R.id.timeline_layout, fullScreenFragment, "fullscreen").commit()
         }
     }
 
@@ -266,7 +262,6 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initRecyclerView(view: View) {
-        progressDialog.show()
         view.home_detail_recycler.layoutManager =
             GridLayoutManager(view.context, 3, RecyclerView.VERTICAL, false)
         adapter =
@@ -396,11 +391,6 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
             arrayOf(WRITE_EXTERNAL_STORAGE, CAMERA),
             PERMISSION_REQUEST_CODE
         )
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        progressDialog.dismiss()
     }
 
 
