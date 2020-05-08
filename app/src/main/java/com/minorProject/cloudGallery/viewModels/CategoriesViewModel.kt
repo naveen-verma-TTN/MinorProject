@@ -1,5 +1,3 @@
-@file:Suppress("UNCHECKED_CAST")
-
 package com.minorProject.cloudGallery.viewModels
 
 import android.content.Context
@@ -21,27 +19,44 @@ import com.minorProject.cloudGallery.model.repo.Success
 import com.minorProject.cloudGallery.util.HelperClass.ShowToast
 
 @RequiresApi(Build.VERSION_CODES.O)
+
+/**
+ * Categories ViewModel class
+ */
 class CategoriesViewModel(
     private val context: Context,
     private val repository: FirebaseCategoriesRepository
 ) : ViewModel() {
     private val categories: MutableLiveData<ArrayList<Category>> = MutableLiveData()
     private val imageList: MutableLiveData<ArrayList<Image>> = MutableLiveData()
-
     private val totalStorageSize: MutableLiveData<Double> = MutableLiveData()
+    private val progressStatus: MediatorLiveData<ProgressStatus> = MediatorLiveData()
 
     companion object {
         private val TAG: String = CategoriesViewModel::class.java.name
+
+        /**
+         * enum class for ProgressStatus
+         */
+        enum class ProgressStatus {
+            SHOW_PROGRESS,
+            HIDE_PROGRESS,
+        }
     }
 
     init {
         readCategoriesFromFireStore()
     }
 
+    //fun to get Progress status
+    fun getProgressStatus(): LiveData<ProgressStatus> = progressStatus
+
+    //fun to get all categories
     fun getCategories(): LiveData<ArrayList<Category>> = categories
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    //fun to read all categories from firebase repo
     private fun readCategoriesFromFireStore() {
+        progressStatus.value = ProgressStatus.SHOW_PROGRESS
         repository.readCategoriesFromFireStore().observeForever { response ->
             when (response) {
                 is Success -> {
@@ -53,9 +68,11 @@ class CategoriesViewModel(
                     Log.e(TAG, response.e.message.toString())
                 }
             }
+            progressStatus.value = ProgressStatus.HIDE_PROGRESS
         }
     }
 
+    //fun to create new categories from firebase repo
     fun createCategory(categoryName: String) {
         repository.createCategory(context, categoryName)
             .observeForever { response ->
@@ -74,7 +91,7 @@ class CategoriesViewModel(
             }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    //fun to add new image to category from firebase repo
     fun saveImageToFireStore(contentURI: Uri?, categoryName: String) {
         repository.saveImageToFireStore(context, contentURI, categoryName)
             .observeForever { response ->
@@ -90,6 +107,7 @@ class CategoriesViewModel(
             }
     }
 
+    //fun to get total size for the view to display
     fun getTotalSize(): LiveData<Double> = totalStorageSize
 
     /**
@@ -107,6 +125,7 @@ class CategoriesViewModel(
         return size
     }
 
+    //fun to get List of All images
     fun getImageList(): LiveData<ArrayList<Image>> = imageList
 
     /**
@@ -142,7 +161,7 @@ class CategoriesViewModel(
     }
 
     /**
-     * fun to delete images from firebase cloud database
+     * fun to delete images from firebase repo
      */
     fun deleteImagesFromFirebase(
         image: ArrayList<Image>,

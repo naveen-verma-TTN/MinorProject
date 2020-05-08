@@ -15,6 +15,9 @@ import com.minorProject.cloudGallery.model.repo.Result
 import com.minorProject.cloudGallery.model.repo.Success
 import com.minorProject.cloudGallery.util.HelperClass.ShowToast
 
+/**
+ * User ViewModel class
+ */
 class UserViewModel(
     private val context: Context,
     private val repository: FirebaseUserRepository
@@ -29,8 +32,12 @@ class UserViewModel(
         readUserDetailsFromFireStore()
     }
 
+    // fun to get user details
     fun getUserDetails(): LiveData<User?> = user
 
+    /**
+     * fun to read user details from firebase repo
+     */
     private fun readUserDetailsFromFireStore() =
         repository.readUserDetailsFromFireStore().observeForever { response ->
             when (response) {
@@ -43,6 +50,9 @@ class UserViewModel(
             }
         }
 
+    /**
+     * fun to update user profile picture
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun setProfilePic(data: Uri) {
         repository.setProfilePic(context, user.value!!, data)
@@ -58,6 +68,9 @@ class UserViewModel(
             }
     }
 
+    /**
+     * fun to update user details
+     */
     fun updateUserDetailsToFireStore(userDefault: User): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         repository.updateUserDetailsToFireStore(userDefault)
@@ -78,6 +91,9 @@ class UserViewModel(
         return result
     }
 
+    /**
+     * fun to logout from user account
+     */
     fun logout(): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         repository.logout()

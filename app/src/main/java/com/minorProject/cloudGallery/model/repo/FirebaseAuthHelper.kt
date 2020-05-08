@@ -12,11 +12,17 @@ import com.minorProject.cloudGallery.model.bean.User
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * FirebaseAuth helper class -- for network call
+ */
 object FirebaseAuthHelper : FirebaseAuthRepository {
     private val mAuth = FirebaseAuth.getInstance()
 
     private val TAG: String = FirebaseAuthHelper::class.java.name
 
+    /**
+     * fun to check if user is signed in or not
+     */
     override fun checkIfUserSignInOrNot(): LiveData<Result<Any?>> {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         result.value = Success(false)
@@ -26,6 +32,9 @@ object FirebaseAuthHelper : FirebaseAuthRepository {
         return result
     }
 
+    /**
+     * fun to register user
+     */
     @SuppressLint("SimpleDateFormat")
     override fun onRegisterClicked(
         username: String,
@@ -85,6 +94,9 @@ object FirebaseAuthHelper : FirebaseAuthRepository {
         return result
     }
 
+    /**
+     * fun to verify user account -- optional
+     */
     override fun verifyEmail(): LiveData<Result<Any?>> {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         mAuth.currentUser!!.sendEmailVerification()
@@ -103,6 +115,9 @@ object FirebaseAuthHelper : FirebaseAuthRepository {
         return result
     }
 
+    /**
+     * fun for user login
+     */
     override fun onLoginClicked(email: String, pwd: String): LiveData<Result<Any?>> {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         mAuth.signInWithEmailAndPassword(email, pwd)
@@ -116,6 +131,9 @@ object FirebaseAuthHelper : FirebaseAuthRepository {
         return result
     }
 
+    /**
+     * fun to reset the password
+     */
     override fun onForgetPassword(email: String?): LiveData<Result<Any?>> {
         val result: MediatorLiveData<Result<Any?>> = MediatorLiveData()
         mAuth.sendPasswordResetEmail(email.toString())

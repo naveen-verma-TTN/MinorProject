@@ -16,6 +16,7 @@
         app:sectionSubTitleTextColor="@color/colorPrimary"
         app:sectionSubTitleTextSize="15dp"
         app:sectionTitleTextColor="@color/colorAccent"
+        app:sectionBackgroundColor="@android:color/transparent"
         app:sectionTitleTextSize="18dp"
         app:timeLineCircleColor="@color/colorPrimary"
         app:timeLineCircleStrokeColor="@color/white"

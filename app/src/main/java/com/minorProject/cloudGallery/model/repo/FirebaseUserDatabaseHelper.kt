@@ -17,6 +17,9 @@ import com.minorProject.cloudGallery.model.bean.User
 import com.minorProject.cloudGallery.model.repo.helper.Compress
 import java.util.*
 
+/**
+ * Firebase User Helper class -- for network call
+ */
 object FirebaseUserDatabaseHelper : FirebaseUserRepository {
     private val TAG: String = FirebaseUserDatabaseHelper::class.java.name
 

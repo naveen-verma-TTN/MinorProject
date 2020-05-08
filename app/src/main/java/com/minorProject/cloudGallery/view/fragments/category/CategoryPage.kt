@@ -1,6 +1,5 @@
 package com.minorProject.cloudGallery.view.fragments.category
 
-import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -74,7 +73,6 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
     }
 
 
-
     /**
      * Observer to observe allCategories to update recyclerview's category list
      */
@@ -86,7 +84,22 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
                 adapter.setList(category)
                 adapter.notifyDataSetChanged()
             })
+
+        categoriesViewModel.getProgressStatus().observe(requireActivity(),
+            Observer { status ->
+                when (status) {
+                    CategoriesViewModel.Companion.ProgressStatus.HIDE_PROGRESS -> {
+                        avi.hide()
+                    }
+                    CategoriesViewModel.Companion.ProgressStatus.SHOW_PROGRESS -> {
+                        avi.show()
+                    }
+                    else -> {
+                    }
+                }
+            })
     }
+
 
     /**
      * fun to update the view

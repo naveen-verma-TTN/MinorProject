@@ -8,6 +8,9 @@ import com.google.android.material.snackbar.Snackbar
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
+/**
+ * Helper class for views
+ */
 object HelperClass {
     fun View.snack(message: String, duration: Int = Snackbar.LENGTH_LONG) {
         Snackbar.make(this, message, duration).show()

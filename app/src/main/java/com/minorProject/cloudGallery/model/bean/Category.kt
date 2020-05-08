@@ -16,6 +16,9 @@ data class Category(
     val ImagesList: ArrayList<Image>?
 ) : Parcelable
 
+/**
+ * Image Model class
+ */
 @Parcelize
 data class Image(
     val category: String,

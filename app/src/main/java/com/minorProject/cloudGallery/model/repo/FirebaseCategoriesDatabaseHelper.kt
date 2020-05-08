@@ -25,6 +25,9 @@ import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
 
+/**
+ * Firebase Categories Helper class -- for network call
+ */
 object FirebaseCategoriesDatabaseHelper : FirebaseCategoriesRepository {
     private val TAG: String = FirebaseCategoriesDatabaseHelper::class.java.name
 
@@ -41,6 +44,9 @@ object FirebaseCategoriesDatabaseHelper : FirebaseCategoriesRepository {
         storage = FirebaseStorage.getInstance()
     }
 
+    /**
+     * fun to read all categories from firebase
+     */
     override fun readCategoriesFromFireStore(): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         val categoryList: ArrayList<Category> = ArrayList()
@@ -60,6 +66,7 @@ object FirebaseCategoriesDatabaseHelper : FirebaseCategoriesRepository {
                         CategoryName = map["CategoryName"] as String,
                         CategoryUploadTime = map["CategoryUploadTime"] as Timestamp,
                         CategoryThumbLink = map["CategoryThumbLink"] as String,
+
                         // convert HashMap to ArrayList<Image>
                         ImagesList = if (map["ListImage"] != null) {
                             val imageHashMap: List<HashMap<String, Image>> =

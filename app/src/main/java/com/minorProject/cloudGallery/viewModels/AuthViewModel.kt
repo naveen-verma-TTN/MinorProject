@@ -9,11 +9,17 @@ import com.minorProject.cloudGallery.model.repo.FirebaseAuthRepository
 import com.minorProject.cloudGallery.model.repo.Result
 import com.minorProject.cloudGallery.model.repo.Success
 
+/**
+ * Authentication viewModel class
+ */
 class AuthViewModel(
     private val context: Context,
     private val repository: FirebaseAuthRepository
 ) : ViewModel() {
 
+    /**
+     * fun to check if user is signed in or not
+     */
     fun checkIfUserSignInOrNot(): LiveData<Boolean> {
         val result: MutableLiveData<Boolean> = MutableLiveData()
         repository.checkIfUserSignInOrNot()
@@ -30,6 +36,9 @@ class AuthViewModel(
         return result
     }
 
+    /**
+     * fun to register user
+     */
     fun onRegisterClicked(username: String, email: String, pass: String): LiveData<Result<Any?>>? {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         repository.onRegisterClicked(username, email, pass)
@@ -47,6 +56,9 @@ class AuthViewModel(
     }
 
 
+    /**
+     * fun for user login
+     */
     fun onLoginClicked(email: String, pass: String): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         repository.onLoginClicked(email, pass).observeForever { response ->
@@ -62,6 +74,9 @@ class AuthViewModel(
         return result
     }
 
+    /**
+     * fun to reset the password
+     */
     fun onForgetPassword(email: String?): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
         repository.onForgetPassword(email).observeForever { response ->

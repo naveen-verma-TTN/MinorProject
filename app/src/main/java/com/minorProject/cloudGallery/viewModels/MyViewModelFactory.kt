@@ -11,6 +11,9 @@ import com.minorProject.cloudGallery.model.repo.*
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.viewModels.UserViewModel
 
+/**
+ * custom viewModel factory
+ */
 class MyViewModelFactory : ViewModelProvider.Factory {
 
     @RequiresApi(Build.VERSION_CODES.O)

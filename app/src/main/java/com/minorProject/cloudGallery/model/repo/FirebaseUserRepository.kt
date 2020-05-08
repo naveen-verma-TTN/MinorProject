@@ -5,6 +5,9 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import com.minorProject.cloudGallery.model.bean.User
 
+/**
+ * Firebase User Repository interface
+ */
 interface FirebaseUserRepository {
     fun readUserDetailsFromFireStore(): LiveData<Result<Any?>>
     fun setProfilePic(context: Context, user: User, uri: Uri): LiveData<Result<Any?>>

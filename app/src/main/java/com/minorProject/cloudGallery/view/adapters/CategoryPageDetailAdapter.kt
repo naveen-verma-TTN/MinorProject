@@ -100,7 +100,6 @@ class CategoryPageDetailAdapter internal constructor(
                     .getItemDetails()
             }
             return null
-
         }
     }
 }
