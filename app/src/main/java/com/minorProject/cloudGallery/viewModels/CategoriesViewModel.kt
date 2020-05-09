@@ -177,7 +177,7 @@ class CategoriesViewModel(
 
         var link: String = context.getString(R.string.default_category_link)
         if (updatedList.isNotEmpty()) {
-            link = updatedList[updatedList.size - 1].link
+            link = updatedList[updatedList.size - 1].thumb_link
         }
 
         deletionList.forEach { dImage ->
