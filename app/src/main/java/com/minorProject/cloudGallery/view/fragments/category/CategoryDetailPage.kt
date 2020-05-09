@@ -248,7 +248,6 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
         } else if (isMode && tracker!!.selection.size() == 0) {
             isMode = false
         } else if (!tracker!!.hasSelection() && !isMode) {
-            Log.e("Position",position.toString())
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             val fullScreenFragment = FullScreenView.newInstance(
                 list, position

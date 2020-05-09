@@ -1,6 +1,7 @@
 package com.minorProject.cloudGallery.view.fragments.timeline
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat
