@@ -134,7 +134,6 @@ class UserDetailBinderClass(
                                 toggleButton(user, view)
                             }
                         }
-
                     }
                 )
             }
