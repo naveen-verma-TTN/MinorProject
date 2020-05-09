@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.Toast
@@ -247,6 +248,7 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
         } else if (isMode && tracker!!.selection.size() == 0) {
             isMode = false
         } else if (!tracker!!.hasSelection() && !isMode) {
+            Log.e("Position",position.toString())
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             val fullScreenFragment = FullScreenView.newInstance(
                 list, position

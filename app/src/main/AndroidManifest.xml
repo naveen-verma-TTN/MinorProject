@@ -36,8 +36,7 @@
         <!--        Second Activity      -->
         <activity
             android:name=".view.activities.HomePageActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:configChanges="orientation|screenSize"/>
+            android:windowSoftInputMode="adjustPan"/>
 
     </application>
 
