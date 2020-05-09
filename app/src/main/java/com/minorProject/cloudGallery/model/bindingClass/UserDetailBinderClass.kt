@@ -1,15 +1,16 @@
+@file:Suppress("DEPRECATION")
+
 package com.minorProject.cloudGallery.model.bindingClass
 
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import androidx.annotation.RequiresApi
 import androidx.databinding.BaseObservable
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
@@ -22,8 +23,6 @@ import com.minorProject.cloudGallery.view.activities.HomePageActivity
 import com.minorProject.cloudGallery.view.activities.SplashScreenActivity
 import com.minorProject.cloudGallery.viewModels.UserViewModel
 import kotlinx.android.synthetic.main.f_user_details.view.*
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -88,7 +87,6 @@ class UserDetailBinderClass(
     /**
      * DatePicker to select the date and update the DOB TextView
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun clickDataPicker(view: View) {
         val calendar = Calendar.getInstance()
         val y = calendar.get(Calendar.YEAR)
@@ -98,9 +96,8 @@ class UserDetailBinderClass(
         val dpd = DatePickerDialog(
             view.context,
             DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                val formatter = DateTimeFormatter.ofPattern("dd MMM, yyyy")
-                val date = LocalDate.of(year, monthOfYear + 1, dayOfMonth)
-                val formatted = date.format(formatter)
+                val date = Date(year-1900, monthOfYear, dayOfMonth)
+                val formatted = DateFormat.format("dd MMM, yyyy", date)
                 view.user_detail_page_dob.text = formatted
             }, y, m, d
         )
