@@ -16,7 +16,6 @@ import java.io.*
 object Compress {
     private const val THUMBNAIL_SIZE = 250.0
 
-    @RequiresApi(Build.VERSION_CODES.O)
     @Throws(FileNotFoundException::class, IOException::class)
     fun getThumbnail(uri: Uri, context: Context): Uri? {
         var input: InputStream? = context.contentResolver.openInputStream(uri)
@@ -46,7 +45,6 @@ object Compress {
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getImageUri(inImage: Bitmap, preName: String, suffixName: String): Uri {
         val tempDir: File = Environment.getExternalStorageDirectory()
         tempDir.mkdir()

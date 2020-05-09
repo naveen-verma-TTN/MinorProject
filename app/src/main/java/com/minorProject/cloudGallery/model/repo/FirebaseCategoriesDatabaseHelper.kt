@@ -24,6 +24,8 @@ import com.google.firebase.storage.StorageReference
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
+import com.minorProject.cloudGallery.model.repo.helper.Compress
+import com.minorProject.cloudGallery.util.HelperClass.ShowToast
 
 /**
  * Firebase Categories Helper class -- for network call
@@ -102,7 +104,8 @@ object FirebaseCategoriesDatabaseHelper : FirebaseCategoriesRepository {
                     name = item["name"].toString(),
                     size = item["size"].toString().toDouble(),
                     uploadTime = item["uploadTime"] as Timestamp,
-                    link = item["link"].toString()
+                    link = item["link"].toString(),
+                    thumb_link = item["thumb_link"].toString()
                 )
             )
         }
@@ -152,61 +155,97 @@ object FirebaseCategoriesDatabaseHelper : FirebaseCategoriesRepository {
     override fun saveImageToFireStore(
         context: Context,
         filePath: Uri?,
-        categoryName: String
+        categoryName: String,
+        compress: Boolean,
+        thumbLink: String
     ): LiveData<Result<Any?>> {
         val result: MutableLiveData<Result<Any?>> = MutableLiveData()
-        storageReference = storage?.reference
-        val filename = "image_" + "${System.currentTimeMillis()}.jpg"
-        val path =
-            "${mAuth.uid}/Category/" + categoryName + "/" + filename
         if (filePath != null) {
+            storageReference = storage?.reference
+            var uriPath: Uri? = filePath
+            val path: String
+            val filename: String
+            if (compress) {
+                filename = "thumb_" + "${System.currentTimeMillis()}.jpg"
+                path = "${mAuth.uid}/Category/" + categoryName + "/thumb/" + filename
+                uriPath = Compress.getThumbnail(filePath, context)
+            } else {
+                filename = "image_" + "${System.currentTimeMillis()}.jpg"
+                path = "${mAuth.uid}/Category/" + categoryName + "/" + filename
+                sendNotification(context, filename)
+                notificationManager.notify(1001, notification.build())
+            }
+
             val ref = storageReference!!.child(path)
-            sendNotification(context, filename)
-            notificationManager.notify(1001, notification.build())
-            ref.putFile(filePath)
+
+            ref.putFile(uriPath!!)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         ref.downloadUrl.addOnSuccessListener { link ->
                             ref.metadata.addOnSuccessListener { metaData ->
-                                val image =
-                                    Image(
+                                /**
+                                 * upload thumbnail and then call the same method to upload
+                                 * image in full resolution
+                                 */
+                                if (compress) {
+                                    saveImageToFireStore(
+                                        context,
+                                        filePath,
+                                        categoryName,
+                                        false,
+                                        link.toString()
+                                    ).observeForever { response ->
+                                        when (response) {
+                                            is Success -> {
+                                                result.value = response
+                                            }
+                                            is Failure -> {
+                                                context.ShowToast("Failed to Save thumb Image!")
+                                                Log.e(TAG, response.e.message.toString())
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    // update the original image and thumbnail link
+                                    val image = Image(
                                         categoryName,
                                         filename,
                                         metaData.sizeBytes.toDouble(),
                                         Timestamp.now(),
-                                        link.toString()
+                                        link.toString(),
+                                        thumbLink
                                     )
+                                    val docIdRef: DocumentReference =
+                                        firebaseFireStore.collection("Categories")
+                                            .document(mAuth.uid!! + "_" + categoryName)
+                                    docIdRef.get().addOnCompleteListener { task ->
+                                        if (task.isSuccessful) {
+                                            val document = task.result
+                                            if (document!!.exists()) {
+                                                docIdRef.update(
+                                                    "ListImage",
+                                                    FieldValue.arrayUnion(image),
+                                                    "CategoryThumbLink",
+                                                    thumbLink
+                                                )
+                                                    .addOnSuccessListener {
+                                                        notification.setContentText("Uploading Completed")
+                                                            .setOngoing(false)
 
-                                val docIdRef: DocumentReference =
-                                    firebaseFireStore.collection("Categories")
-                                        .document(mAuth.uid!! + "_" + categoryName)
-                                docIdRef.get().addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        val document = task.result
-                                        if (document!!.exists()) {
-                                            docIdRef.update(
-                                                "ListImage",
-                                                FieldValue.arrayUnion(image),
-                                                "CategoryThumbLink",
-                                                link.toString()
-                                            )
-                                                .addOnSuccessListener {
-                                                    notification.setContentText("Uploading Completed")
-                                                        .setOngoing(false)
+                                                        notificationManager.notify(
+                                                            1001,
+                                                            notification.build()
+                                                        )
+                                                        notificationManager.cancel(1001)
 
-                                                    notificationManager.notify(
-                                                        1001,
-                                                        notification.build()
-                                                    )
-                                                    notificationManager.cancel(1001)
-
-                                                    result.value = Success(image)
-                                                }
-                                                .addOnFailureListener { e ->
-                                                    result.value = Failure(e)
-                                                }
-                                        } else {
-                                            result.value = Failure(Exception(task.exception))
+                                                        result.value = Success(image)
+                                                    }
+                                                    .addOnFailureListener { e ->
+                                                        result.value = Failure(e)
+                                                    }
+                                            } else {
+                                                result.value = Failure(Exception(task.exception))
+                                            }
                                         }
                                     }
                                 }
@@ -220,12 +259,14 @@ object FirebaseCategoriesDatabaseHelper : FirebaseCategoriesRepository {
                     val progress =
                         100.0 * taskSnapshot.bytesTransferred / taskSnapshot
                             .totalByteCount
-                    notification.setContentText(progress.toInt().toString() + " %")
-                        .setProgress(100, progress.toInt(), false)
-                        .setOngoing(false)
-
                     Log.e("Progress", progress.toString())
-                    notificationManager.notify(1001, notification.build())
+                    if (!compress) {
+                        notification.setContentText(progress.toInt().toString() + " %")
+                            .setProgress(100, progress.toInt(), false)
+                            .setOngoing(false)
+                        notificationManager.notify(1001, notification.build())
+                    }
+
                 }.addOnFailureListener { e ->
                     result.value = Failure(e)
                 }

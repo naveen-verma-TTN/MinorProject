@@ -56,7 +56,7 @@
                     android:background="@color/white"
                     android:padding="10dp"
                     android:src="@mipmap/icon"
-                    tools:imageUrl="@{image.link}" />
+                    tools:imageUrl="@{image.thumb_link}" />
             </RelativeLayout>
         </FrameLayout>
 

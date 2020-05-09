@@ -29,7 +29,7 @@
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:src="@mipmap/icon"
-            tools:imageUrl="@{image.link}" />
+            tools:imageUrl="@{image.thumb_link}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -93,7 +93,7 @@ class CategoriesViewModel(
 
     //fun to add new image to category from firebase repo
     fun saveImageToFireStore(contentURI: Uri?, categoryName: String) {
-        repository.saveImageToFireStore(context, contentURI, categoryName)
+        repository.saveImageToFireStore(context, contentURI, categoryName, true, "")
             .observeForever { response ->
                 when (response) {
                     is Success -> {

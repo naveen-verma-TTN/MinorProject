@@ -14,7 +14,9 @@ interface FirebaseCategoriesRepository {
     fun saveImageToFireStore(
         context: Context,
         filePath: Uri?,
-        categoryName: String
+        categoryName: String,
+        compress: Boolean,
+        thumbLink: String
     ): LiveData<Result<Any?>>
 
     fun deleteImagesFromFirebase(image: Image, link: String?): LiveData<Result<Any?>>

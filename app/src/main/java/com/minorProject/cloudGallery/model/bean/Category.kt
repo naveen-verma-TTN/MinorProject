@@ -25,5 +25,6 @@ data class Image(
     val name: String,
     val size: Double,
     val uploadTime: Timestamp,
-    var link: String
+    var link: String,
+    var thumb_link: String
 ) : Parcelable
