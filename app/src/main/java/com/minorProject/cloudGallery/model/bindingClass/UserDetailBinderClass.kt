@@ -96,7 +96,7 @@ class UserDetailBinderClass(
         val dpd = DatePickerDialog(
             view.context,
             DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                val date = Date(year-1900, monthOfYear, dayOfMonth)
+                val date = Date(year - 1900, monthOfYear, dayOfMonth)
                 val formatted = DateFormat.format("dd MMM, yyyy", date)
                 view.user_detail_page_dob.text = formatted
             }, y, m, d
