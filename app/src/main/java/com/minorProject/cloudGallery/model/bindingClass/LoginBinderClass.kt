@@ -125,7 +125,6 @@ class LoginBinderClass(private val loginScreenFragment: LoginScreenFragment) : B
          */
         fun updateUI(view: View) {
             val intent = Intent(view.context, HomePageActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             view.context.startActivity(intent)
             (view.context as SplashScreenActivity).finish()
         }
