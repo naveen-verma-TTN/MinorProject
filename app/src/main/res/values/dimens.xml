@@ -1,3 +1,4 @@
 <resources>
     <dimen name="loginViewsMargin">30dp</dimen>
+    <dimen name="app_bar_height">276dp</dimen>
 </resources>

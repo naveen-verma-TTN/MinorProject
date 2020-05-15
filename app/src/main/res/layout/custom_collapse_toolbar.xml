@@ -1,4 +1,5 @@
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -19,36 +20,14 @@
             type="com.minorProject.cloudGallery.model.bindingClass.UserDetailBinderClass" />
     </data>
 
-    <com.google.android.material.appbar.CollapsingToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:contentScrim="?attr/colorPrimary"
-        app:expandedTitleGravity="top"
-        app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
-
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/userback_up" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#664B1B1B"
-            android:fitsSystemWindows="true"
-            android:scaleType="centerCrop" />
-
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_collapseMode="pin" />
-
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="40dp"
+        android:paddingBottom="20dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/avatar"
@@ -65,10 +44,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="40dp"
-            android:maxLines="1"
             android:ellipsize="end"
             android:fontFamily="@font/allerta_stencil"
+            android:maxLines="1"
             android:text="@{user.userName.toUpperCase()}"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white"
@@ -79,15 +57,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="15dp"
-            android:gravity="center"
-            android:maxLines="1"
             android:ellipsize="end"
             android:fontFamily="@font/allerta"
+            android:gravity="center"
+            android:maxLines="1"
             android:text="@{user.userEmail}"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/white" />
 
-    </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </LinearLayout>
 
 </layout>
