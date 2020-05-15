@@ -1,5 +1,5 @@
 # Cloud Gallery (Minor Project)
-> Android application to store the images on cloud (Firebase store) and show the uploded images in application gallery.
+> Android application to store the images on the cloud (Firebase store) and show the uploaded images in the application gallery.
 
 ## Sdk Specifications
 > <i>Api level</i> <b>29 (Android 10)</b> -
