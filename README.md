@@ -10,7 +10,7 @@
 ## Laguage Specifications
 > <b>Kotlin</b> and <b>Xml</b> for the layouts
 
-## ScreenShorts:
+## ScreenShots:
   <p float="left">
   <b>AppIcon</b>
   </p>
