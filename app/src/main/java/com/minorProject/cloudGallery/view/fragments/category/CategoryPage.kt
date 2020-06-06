@@ -133,8 +133,15 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
      */
     override fun onItemClicked(category: Category, position: Int) {
         val categoryDetailPage = CategoryDetailPage.newInstance(category)
+
         requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.animator.slide_in_right,
+                R.animator.slide_out_left,
+                R.animator.slide_in_left,
+                R.animator.slide_out_right
+            )
             .addToBackStack("CategoryDetailPage")
-            .add(R.id.home_layout, categoryDetailPage).commit()
+            .add(R.id.home_page_layout, categoryDetailPage).commit()
     }
 }

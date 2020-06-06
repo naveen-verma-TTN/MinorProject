@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.transition.TransitionInflater
 import android.view.*
 import android.widget.ImageView
 import android.widget.Toast
@@ -39,6 +40,7 @@ import com.minorProject.cloudGallery.view.adapters.CategoryPageDetailAdapter
 import com.minorProject.cloudGallery.view.adapters.CategoryPageDetailItemClick
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.viewModels.MyViewModelFactory
+import kotlinx.android.synthetic.main.f_category.*
 import kotlinx.android.synthetic.main.f_category_detail_page.*
 import kotlinx.android.synthetic.main.f_category_detail_page.view.*
 import java.util.*
@@ -70,6 +72,7 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
         private const val REQUEST_SELECT_IMAGE_IN_ALBUM = 102
         private const val REQUEST_SELECT_IMAGE_IN_CAMERA = 101
         private const val PERMISSION_REQUEST_CODE = 110
+        private const val EXTRA_TRANSITION_NAME = "TRANSITION_NAME"
 
         private val TAG = CategoriesViewModel::class.java.name
 
@@ -85,6 +88,11 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        postponeEnterTransition()
+        sharedElementEnterTransition = TransitionInflater.from(context)
+            .inflateTransition(android.R.transition.move)
+
         //Restore tracker instance
         tracker?.onRestoreInstanceState(savedInstanceState)
     }
@@ -129,6 +137,7 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
      */
     private fun setUpListeners() {
         empty = view?.findViewById(R.id.empty_view_category_detail)
+
         home_detail_fab_gallery.setOnClickListener {
             selectImageInAlbum()
         }
