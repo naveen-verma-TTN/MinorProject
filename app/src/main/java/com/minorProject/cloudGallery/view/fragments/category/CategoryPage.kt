@@ -1,5 +1,6 @@
 package com.minorProject.cloudGallery.view.fragments.category
 
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater

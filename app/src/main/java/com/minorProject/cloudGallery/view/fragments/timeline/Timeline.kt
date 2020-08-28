@@ -1,6 +1,7 @@
 package com.minorProject.cloudGallery.view.fragments.timeline
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat
@@ -18,9 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Image
+import com.minorProject.cloudGallery.view.activities.FullScreenImageDisplay
 import com.minorProject.cloudGallery.view.adapters.ImageAdapter
 import com.minorProject.cloudGallery.view.adapters.ImageItemClickListener
-import com.minorProject.cloudGallery.view.fragments.category.FullScreenView
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.viewModels.MyViewModelFactory
 import xyz.sangcomz.stickytimelineview.RecyclerSectionItemDecoration
@@ -137,11 +138,10 @@ class Timeline : Fragment(),
      * fun to show the images in fullscreen
      */
     override fun onItemClicked(position: Int) {
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        val fullScreenFragment = FullScreenView.newInstance(
-            imageList, position
-        )
-        transaction.replace(R.id.timeline_layout, fullScreenFragment, "fullscreen").commit()
+        val intent = Intent(context, FullScreenImageDisplay::class.java)
+        intent.putExtra(FullScreenImageDisplay.FULLSCREEN_IMAGE_DISPLAY_IMAGE_LIST, imageList)
+        intent.putExtra(FullScreenImageDisplay.FULLSCREEN_IMAGE_DISPLAY_IMAGE_POSITION, position)
+        startActivity(intent)
     }
 
 

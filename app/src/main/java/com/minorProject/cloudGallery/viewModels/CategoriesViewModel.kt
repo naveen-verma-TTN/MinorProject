@@ -197,4 +197,25 @@ class CategoriesViewModel(
         }
         return result
     }
+
+    /**
+     * delete category from fireStore cloud database
+     */
+    fun deleteCategory(userId: String, categoryName: String) : LiveData<Result<Any?>> {
+        val result: MutableLiveData<Result<Any?>> = MutableLiveData()
+        repository.deleteCategoryFromFirebase(userId + "_" + categoryName)
+            .observeForever { response ->
+                when (response) {
+                    is Success -> {
+                        readCategoriesFromFireStore()
+                        result.value = Success("Successfully deleted $categoryName")
+                    }
+                    is Failure -> {
+                        Log.e(TAG, response.e.message.toString())
+                        result.value = Failure(response.e)
+                    }
+                }
+            }
+    return result
+    }
 }

@@ -22,12 +22,12 @@ import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.minorProject.cloudGallery.R
 import com.minorProject.cloudGallery.model.bean.Category
 import com.minorProject.cloudGallery.model.bean.Image
@@ -36,13 +36,12 @@ import com.minorProject.cloudGallery.model.repo.Success
 import com.minorProject.cloudGallery.model.repo.helper.Compress
 import com.minorProject.cloudGallery.util.HelperClass.ShowToast
 import com.minorProject.cloudGallery.util.ViewAnimation
+import com.minorProject.cloudGallery.view.activities.FullScreenImageDisplay
 import com.minorProject.cloudGallery.view.adapters.CategoryPageDetailAdapter
 import com.minorProject.cloudGallery.view.adapters.CategoryPageDetailItemClick
 import com.minorProject.cloudGallery.viewModels.CategoriesViewModel
 import com.minorProject.cloudGallery.viewModels.MyViewModelFactory
-import kotlinx.android.synthetic.main.f_category.*
 import kotlinx.android.synthetic.main.f_category_detail_page.*
-import kotlinx.android.synthetic.main.f_category_detail_page.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -176,6 +175,27 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
                                             Observer { count ->
                                                 when (count) {
                                                     is Success -> {
+                                                        if (list.size == 1) {
+                                                            categoriesViewModel.deleteCategory(
+                                                                category.UserID,
+                                                                category.CategoryName
+                                                            ).observe(requireActivity(),
+                                                                Observer { response ->
+                                                                    when (response) {
+                                                                        is Success -> {
+                                                                            requireView().context.ShowToast(
+                                                                                "${category.CategoryName} successfully deleted!"
+                                                                            )
+                                                                            fragmentManager?.popBackStack()
+                                                                        }
+                                                                        is Failure -> {
+                                                                            requireView().context.ShowToast(
+                                                                                "Failed to delete category!"
+                                                                            )
+                                                                        }
+                                                                    }
+                                                                })
+                                                        }
                                                         requireView().context.ShowToast("${count.value} images successfully deleted!")
                                                     }
                                                     is Failure -> {
@@ -256,11 +276,13 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
         } else if (isMode && tracker!!.selection.size() == 0) {
             isMode = false
         } else if (!tracker!!.hasSelection() && !isMode) {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            val fullScreenFragment = FullScreenView.newInstance(
-                list, position
+            val intent = Intent(context, FullScreenImageDisplay::class.java)
+            intent.putExtra(FullScreenImageDisplay.FULLSCREEN_IMAGE_DISPLAY_IMAGE_LIST, list)
+            intent.putExtra(
+                FullScreenImageDisplay.FULLSCREEN_IMAGE_DISPLAY_IMAGE_POSITION,
+                position
             )
-            transaction.replace(R.id.timeline_layout, fullScreenFragment, "fullscreen").commit()
+            startActivity(intent)
         }
     }
 
@@ -270,27 +292,43 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initRecyclerView(view: View) {
-        view.home_detail_recycler.layoutManager =
-            GridLayoutManager(view.context, 3, RecyclerView.VERTICAL, false)
+        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
+        home_detail_recycler.layoutManager = layoutManager
+
         adapter =
             CategoryPageDetailAdapter(
                 list,
                 this
             )
-
+        home_detail_recycler.setHasFixedSize(true)
         home_detail_recycler.adapter = adapter
 
         // Initialization tracker for multi-image selection
         tracker = SelectionTracker.Builder(
             "selection-1",
-            view.home_detail_recycler,
-            StableIdKeyProvider(view.home_detail_recycler),
-            CategoryPageDetailAdapter.LookUp(view.home_detail_recycler),
+            home_detail_recycler,
+            RecyclerViewIdKeyProvider(home_detail_recycler),
+            CategoryPageDetailAdapter.LookUp(home_detail_recycler),
             StorageStrategy.createLongStorage()
         ).withSelectionPredicate(
             SelectionPredicates.createSelectAnything()
         ).build()
         adapter.setTracker(tracker)
+    }
+
+    class RecyclerViewIdKeyProvider(private val recyclerView: RecyclerView) :
+        ItemKeyProvider<Long>(SCOPE_MAPPED) {
+
+        override fun getKey(position: Int): Long? {
+            return recyclerView.adapter?.getItemId(position)
+                ?: throw IllegalStateException("RecyclerView adapter is not set!")
+        }
+
+        override fun getPosition(key: Long): Int {
+            val viewHolder = recyclerView.findViewHolderForItemId(key)
+            return viewHolder?.layoutPosition ?: RecyclerView.NO_POSITION
+        }
     }
 
     /**

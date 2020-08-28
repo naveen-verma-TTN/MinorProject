@@ -342,4 +342,21 @@ object FirebaseCategoriesDatabaseHelper : FirebaseCategoriesRepository {
         }
         return result
     }
+
+    /**
+     * delete category from fireStore cloud database
+     */
+    override fun deleteCategoryFromFirebase(categoryId: String): LiveData<Result<Any?>> {
+        val result: MutableLiveData<Result<Any?>> = MutableLiveData()
+        val rootRef = FirebaseFirestore.getInstance()
+        rootRef.collection("Categories").document(categoryId)
+            .delete()
+            .addOnSuccessListener {
+                result.value = Success(true)
+            }
+            .addOnFailureListener { e ->
+                result.value = Failure(Exception(e))
+            }
+        return result
+    }
 }

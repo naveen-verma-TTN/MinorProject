@@ -20,4 +20,5 @@ interface FirebaseCategoriesRepository {
     ): LiveData<Result<Any?>>
 
     fun deleteImagesFromFirebase(image: Image, link: String?): LiveData<Result<Any?>>
+    fun deleteCategoryFromFirebase(categoryId: String): LiveData<Result<Any?>>
 }
