@@ -118,8 +118,14 @@ class CategoryPage : Fragment(), CategoryPageItemClick {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initRecyclerView(view: View) {
+        val orientation = resources.configuration.orientation
+        val span = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            3
+        } else {
+            2
+        }
         view.home_recycler.layoutManager =
-            GridLayoutManager(view.context, 2, RecyclerView.VERTICAL, false)
+            GridLayoutManager(view.context, span, RecyclerView.VERTICAL, false)
         adapter =
             CategoryPageAdapter(
                 list,

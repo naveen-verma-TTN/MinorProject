@@ -1,5 +1,7 @@
 package com.minorProject.cloudGallery.view.adapters
 
+import android.app.Application
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -7,16 +9,21 @@ import android.view.ViewGroup
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.minorProject.cloudGallery.databinding.CustomCategoryDetailPageItemBinding
 import com.minorProject.cloudGallery.model.bean.Image
 import kotlinx.android.synthetic.main.custom_category_detail_page_item.view.*
+
 
 /**
  * CategoryPageDetail Adapter class
  */
 class CategoryPageDetailAdapter internal constructor(
     private var image: ArrayList<Image>,
-    private val categoryPageDetailItemClick: CategoryPageDetailItemClick
+    private val categoryPageDetailItemClick: CategoryPageDetailItemClick,
+    private val application: Application
 ) : RecyclerView.Adapter<CategoryPageDetailAdapter.CategoryViewHolder>() {
     private var tracker: SelectionTracker<Long>? = null
 
@@ -38,13 +45,13 @@ class CategoryPageDetailAdapter internal constructor(
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         holder.bind(image[position], categoryPageDetailItemClick, position)
+
         if (tracker!!.isSelected(position.toLong())) {
             holder.itemView.detail_imageView.setColorFilter(Color.parseColor("#86000000"))
         } else {
             holder.itemView.detail_imageView.colorFilter = null
         }
     }
-
 
     override fun getItemCount(): Int {
         return image.size
@@ -103,6 +110,9 @@ class CategoryPageDetailAdapter internal constructor(
         }
     }
 }
+
+data class Attribute(val height: Int, val width: Int)
+
 
 /**
  * CategoryPageDetailItemClick interface

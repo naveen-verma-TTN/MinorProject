@@ -34,7 +34,6 @@
         <!-- Second Activity -->
         <activity
             android:name=".view.activities.HomePageActivity"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <!-- Second Third -->
         <activity

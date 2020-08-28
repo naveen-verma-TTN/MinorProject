@@ -4,6 +4,7 @@ import android.Manifest.permission.CAMERA
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -26,6 +27,7 @@ import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.minorProject.cloudGallery.R
@@ -292,17 +294,33 @@ class CategoryDetailPage : Fragment(), CategoryPageDetailItemClick {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initRecyclerView(view: View) {
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
+        val orientation = resources.configuration.orientation
+        val span = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            4
+        } else {
+            3
+        }
+        val layoutManager = GridLayoutManager(view.context, span, RecyclerView.VERTICAL, false)
         home_detail_recycler.layoutManager = layoutManager
+        home_detail_recycler.itemAnimator = null
 
         adapter =
             CategoryPageDetailAdapter(
                 list,
-                this
+                this,
+                requireActivity().application
             )
         home_detail_recycler.setHasFixedSize(true)
         home_detail_recycler.adapter = adapter
+
+        home_detail_recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    home_detail_recycler.invalidateItemDecorations();
+                }
+            }
+        })
 
         // Initialization tracker for multi-image selection
         tracker = SelectionTracker.Builder(
