@@ -3,6 +3,7 @@ package com.minorProject.cloudGallery.view.activities
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -13,6 +14,7 @@ import com.minorProject.cloudGallery.view.fragments.auth.AuthHomeFragment
 import com.minorProject.cloudGallery.viewModels.AuthViewModel
 import com.minorProject.cloudGallery.viewModels.MyViewModelFactory
 import kotlinx.android.synthetic.main.a_splashscreen.*
+import org.jetbrains.anko.longToast
 
 /**
  * SplashScreen Activity (First Page)
